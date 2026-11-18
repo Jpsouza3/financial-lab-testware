@@ -15,9 +15,13 @@ pnpm-debug.log*
 .env
 .env.local
 .env.*
+!.env.example
 
 .DS_Store
 Thumbs.db
 
 .vscode/
 .idea/
+
+# spec-to-test (casos de teste, planos)
+.test-generation/

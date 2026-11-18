@@ -1,6 +1,6 @@
 # HTTP Client Architecture
 
-The following diagram shows the relationships between the core HTTP abstractions.
+The following diagram shows the relationships between the core HTTP abstractions, a service and contract validation. Only `PlaywrightHttpClient` knows `APIRequestContext` (ADR-001).
 
 ```mermaid
 ---
@@ -14,48 +14,62 @@ config:
 classDiagram
 direction TB
     class HttpClient {
-	    +get(url: string, body?: RequestBody, options?: RequestOptions) HttpResponse~T~
-	    +post(url: string, body?: RequestBody, options?: RequestOptions) HttpResponse~T~
-	    +put(url: string, body?: RequestBody, options?: RequestOptions) HttpResponse~T~
-	    +delete(url: string, body?: RequestBody, options?: RequestOptions) HttpResponse~T~
+	    +get(url, options?) HttpResponse~T~
+	    +post(url, body?, options?) HttpResponse~T~
+	    +put(url, body?, options?) HttpResponse~T~
+	    +patch(url, body?, options?) HttpResponse~T~
+	    +delete(url, options?) HttpResponse~T~
     }
 
     class PlaywrightHttpClient {
-	    -buildHeader(options?: RequestOptions) Record~string,string~
-	    -buildRequestBody(body? : RequestBody) object
-	    -handleResponse(response: APIResponse) HttpResponse~T~
 	    +setToken(token: string)
+	    +clearToken()
+	    -send(method, url, body?, options?) HttpResponse~T~
+	    -toPlaywrightBody(body?) object
+	    -buildHeaders(body?, options?) Record~string,string~
+	    -toHttpResponse(response: APIResponse) HttpResponse~T~
     }
 
     class APIRequestContext {
     }
 
-    class ContractValidator {
-	    +validate(schema: JSONSchemaType~T~, data: unknown)
-    }
-
     class RequestOptions {
-	    +headers?: Record~string,string~;
-	    +params?: Record~string,string~;
-	    +basicAuth?: BasicAuth;
-    }
-
-    class BasicAuth {
-	    +username: string;
-	    +password: string;
+	    +headers?: Record~string,string~
+	    +params?: Record~string,QueryValue~
+	    +auth?: RequestAuth
+	    +timeout?: number
     }
 
     class HttpResponse~T~ {
-	    +body: T;
-	    +raw: APIResponse;
+	    +status: number
+	    +ok: boolean
+	    +headers: Record~string,string~
+	    +body: T
+	    +text: string
+    }
+
+    class AccountInterface {
+    }
+
+    class AccountService {
+    }
+
+    class ContractValidator {
+	    +validate(schema: Schema~T~, data: unknown)
+	    +errors(schema, data) string[]
+    }
+
+    class Schema~T~ {
     }
 
 	<<interface>> HttpClient
+	<<interface>> AccountInterface
 
     HttpClient <|.. PlaywrightHttpClient
     PlaywrightHttpClient "1" --> "1" APIRequestContext
-    PlaywrightHttpClient ..> RequestOptions
-    PlaywrightHttpClient ..> HttpResponse
-    ContractValidator ..> HttpResponse
-    RequestOptions "1" --> "0..1" BasicAuth
+    HttpClient ..> RequestOptions
+    HttpClient ..> HttpResponse
+    AccountInterface <|.. AccountService
+    AccountService --> HttpClient
+    ContractValidator ..> Schema
 ```

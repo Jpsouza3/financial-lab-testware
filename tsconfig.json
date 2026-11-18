@@ -1,15 +1,21 @@
 {
   "compilerOptions": {
     "target": "ES2022",
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
+    "module": "preserve",
+    "moduleResolution": "bundler",
     "strict": true,
-    "types": ["node", "@playwright/test"],
+    "noEmit": true,
+    "types": ["node"],
     "esModuleInterop": true,
     "skipLibCheck": true
   },
   "include": [
     "core",
+    "domains",
+    "interfaces",
+    "services",
+    "fixtures",
+    "scripts",
     "tests",
     "playwright.config.ts"
   ]
