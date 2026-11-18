@@ -1,0 +1,26 @@
+{
+  "id": "syn-0007",
+  "seq": 7,
+  "seed": 1006,
+  "recipe": "single-break",
+  "commit_kind": "breaking",
+  "catalog_ids": [
+    "B-RVL-01",
+    "N-07a",
+    "N-01f"
+  ],
+  "changed_files": [
+    "financial-lab-account.Business/Services/StatementService.cs",
+    "financial-lab-antifraud.Api/Rules/RuleValidator.cs"
+  ],
+  "changed_services": [
+    "account",
+    "antifraud"
+  ],
+  "files_changed_count": 2,
+  "lines_added": 7,
+  "lines_removed": 7,
+  "lines_changed": 14,
+  "base_sha": "bf20772106e19f1a64edc272aed89b20ad04d0ec",
+  "generated_at": "2026-11-18T23:15:51.998Z"
+}

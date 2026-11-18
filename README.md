@@ -1,5 +1,7 @@
 # financial-lab-testware
 
+[![api-tests](https://github.com/Jpsouza3/financial-lab-testware/actions/workflows/api-tests.yml/badge.svg)](https://github.com/Jpsouza3/financial-lab-testware/actions/workflows/api-tests.yml)
+
 A lightweight API testing template built with Playwright and TypeScript.
 
 The goal is to provide a reusable foundation for API tests while keeping test code clean and focused on business rules.
@@ -87,3 +89,22 @@ A skill [`spec-to-test`](.claude/skills/spec-to-test/README.md) está versionada
 Saída em `.test-generation/<slug>/` (`01-test-cases.md`, `02-plan.md`). A implementação é feita em outra sessão: "Implemente `.test-generation/<slug>/02-plan.md` seguindo o ARCHITECTURE.md".
 
 Spec remota no GitHub: `gh` instalado e autenticado com um **token fine-grained read-only**, com acesso só ao repositório das specs e permissão `Contents: Read-only`. Autentique com `gh auth login --with-token < token.txt`. Tokens clássicos ou OAuth são recusados pela skill, porque têm escopo de escrita. Spec local dispensa o `gh`. As regras de `gh` permitidas/negadas estão em `.claude/settings.json`.
+
+## Seleção preditiva de testes
+
+Base para treinar um seletor de testes a partir de mudanças no SUT (`financial-lab`). Detalhes em [`docs/dataset.md`](docs/dataset.md) e nas ADRs 004 a 006.
+
+| Comando | O que faz |
+|---|---|
+| `npm test` | Suíte completa: projeto `api` (paralelo) e depois `global` (estado global do antifraude) |
+| `npm run mutation:validate -- --compile` | Confere que cada item do catálogo aplica e compila na base |
+| `npm run mutation:generate -- --count 20 --seed 1` | Gera um lote de commits sintéticos (`mutation/commits/`) |
+| `npm run mutation:run -- --slots 2` | Executa os commits pendentes contra a suíte `suite-T0` (`mutation/results/`) |
+| `npm run mutation:run -- --baseline 20` | Execuções da base sem mudança, para medir flakiness |
+| `npm run dataset` | Consolida `data/dataset.csv`, `data/changes.csv` e `data/flakiness.csv` |
+| `npm run dataset:report` | Critérios de qualidade do dataset (`data/dataset-report.json`) |
+| `git diff --name-only a..b \| npm run -s select-tests -- --format grep` | Testes selecionados para uma mudança |
+| `npm run replay` | Recall de falhas e economia de tempo do seletor, com split temporal |
+
+O SUT é localizado por `SUT_PATH` (padrão `../financial-lab-account`). O CI usa a ref de `.sut-ref`.
+

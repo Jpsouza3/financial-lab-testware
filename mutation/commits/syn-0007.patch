@@ -1,0 +1,46 @@
+diff --git a/financial-lab-account.Business/Services/StatementService.cs b/financial-lab-account.Business/Services/StatementService.cs
+index b680386..88f91e1 100644
+--- a/financial-lab-account.Business/Services/StatementService.cs
++++ b/financial-lab-account.Business/Services/StatementService.cs
+@@ -64,9 +64,9 @@ public class StatementService(IAccountRepository repository, TimeProvider clock)
+ 
+     private static int ParseInt(string? value, int fallback, int min, int max, string error)
+     {
+-        if (value is null)
+-            return fallback;
+-        return int.TryParse(value, NumberStyles.None, CultureInfo.InvariantCulture, out var parsed) &&
++        return value is null
++            ? fallback
++            : int.TryParse(value, NumberStyles.None, CultureInfo.InvariantCulture, out var parsed) &&
+                parsed >= min && parsed <= max
+             ? parsed
+             : throw new DomainException(error);
+diff --git a/financial-lab-antifraud.Api/Rules/RuleValidator.cs b/financial-lab-antifraud.Api/Rules/RuleValidator.cs
+index cb94ced..8352ef2 100644
+--- a/financial-lab-antifraud.Api/Rules/RuleValidator.cs
++++ b/financial-lab-antifraud.Api/Rules/RuleValidator.cs
+@@ -5,7 +5,7 @@ namespace financial_lab_antifraud.Api.Rules;
+ public static class RuleValidator
+ {
+     public const int MaxIdLength = 64;
+-    public const int MaxDelayMs = 120_000;
++    public const int MaxDelayMs = 12_000;
+     public const int MaxSubmitFailures = 20;
+ 
+     public static Dictionary<string, string[]> Validate(IReadOnlyList<FraudRule> rules)
+@@ -15,12 +15,12 @@ public static class RuleValidator
+             foreach (var (key, messages) in Validate(rules[i], $"rules[{i}]"))
+                 errors[key] = messages;
+ 
+-        var duplicated = rules.GroupBy(r => r.Id, StringComparer.OrdinalIgnoreCase)
++        var repeatedIds = rules.GroupBy(r => r.Id, StringComparer.OrdinalIgnoreCase)
+             .Where(g => g.Count() > 1)
+             .Select(g => g.Key)
+             .ToList();
+-        if (duplicated.Count > 0)
+-            errors["rules"] = [$"Ids de regra repetidos: {string.Join(", ", duplicated)}."];
++        if (repeatedIds.Count > 0)
++            errors["rules"] = [$"Ids de regra repetidos: {string.Join(", ", repeatedIds)}."];
+ 
+         return errors;
+     }

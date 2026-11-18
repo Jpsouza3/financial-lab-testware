@@ -1,0 +1,29 @@
+{
+  "id": "syn-0013",
+  "seq": 13,
+  "seed": 1012,
+  "recipe": "neutral-refactor",
+  "commit_kind": "neutral",
+  "catalog_ids": [
+    "N-03d",
+    "N-04e",
+    "N-07a",
+    "N-02c"
+  ],
+  "changed_files": [
+    "financial-lab-account.Business/Models/Account.cs",
+    "financial-lab-account.Business/Services/Cpf.cs",
+    "financial-lab-account.Business/Services/StatementService.cs",
+    "financial-lab-transfer.Business/Services/TransferService.cs"
+  ],
+  "changed_services": [
+    "account",
+    "transfer"
+  ],
+  "files_changed_count": 4,
+  "lines_added": 16,
+  "lines_removed": 5,
+  "lines_changed": 21,
+  "base_sha": "bf20772106e19f1a64edc272aed89b20ad04d0ec",
+  "generated_at": "2026-11-18T23:15:52.169Z"
+}

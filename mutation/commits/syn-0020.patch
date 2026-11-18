@@ -1,0 +1,113 @@
+diff --git a/financial-lab-account.Business/Services/AccountManagementService.cs b/financial-lab-account.Business/Services/AccountManagementService.cs
+index 4136418..1b50267 100644
+--- a/financial-lab-account.Business/Services/AccountManagementService.cs
++++ b/financial-lab-account.Business/Services/AccountManagementService.cs
+@@ -25,11 +25,7 @@ public partial class AccountManagementService(IAccountRepository repository, Tim
+         branch ??= DefaultBranch;
+         if (branch.Length != 4 || !branch.All(char.IsAsciiDigit))
+             throw new DomainException("A agência deve ter 4 dígitos.");
+-        var deposit = initialDeposit ?? 0m;
+-        if (deposit is < 0 or > MaxInitialDeposit)
+-            throw new DomainException("O depósito inicial deve estar entre 0 e 5000.00.");
+-        if (decimal.Round(deposit, 2) != deposit)
+-            throw new DomainException("O depósito inicial deve ter no máximo 2 casas decimais.");
++        var deposit = ValidateDeposit(initialDeposit);
+         if (!Branches.Contains(branch))
+             throw new BusinessRuleException("Agência inexistente.");
+ 
+@@ -95,6 +91,16 @@ public partial class AccountManagementService(IAccountRepository repository, Tim
+         }
+     }
+ 
++    private static decimal ValidateDeposit(decimal? initialDeposit)
++    {
++        var deposit = initialDeposit ?? 0m;
++        if (deposit is < 0 or > MaxInitialDeposit)
++            throw new DomainException("O depósito inicial deve estar entre 0 e 5000.00.");
++        if (decimal.Round(deposit, 2) != deposit)
++            throw new DomainException("O depósito inicial deve ter no máximo 2 casas decimais.");
++        return deposit;
++    }
++
+     internal static NotFoundException AccountNotFound() => new("Conta não encontrada.");
+ 
+     private static string NormalizeName(string? name)
+diff --git a/financial-lab-account.Business/Services/AccountTransactionService.cs b/financial-lab-account.Business/Services/AccountTransactionService.cs
+index 4b170b6..66b706a 100644
+--- a/financial-lab-account.Business/Services/AccountTransactionService.cs
++++ b/financial-lab-account.Business/Services/AccountTransactionService.cs
+@@ -42,10 +42,10 @@ public class AccountTransactionService(IAccountRepository repository) : IAccount
+             }
+             catch (DuplicateEntryException)
+             {
+-                var winner = await repository.GetProcessedCommandAsync(accountId, endToEndId, ct)
++                var existingCommand = await repository.GetProcessedCommandAsync(accountId, endToEndId, ct)
+                              ?? throw new InvalidOperationException(
+                                  $"Operação {endToEndId} da conta {accountId} não encontrada após violação de unicidade.");
+-                return await ToResultAsync(winner, type, amount, ct);
++                return await ToResultAsync(existingCommand, type, amount, ct);
+             }
+         }
+     }
+diff --git a/financial-lab-account.Business/Services/StatementService.cs b/financial-lab-account.Business/Services/StatementService.cs
+index b680386..88f91e1 100644
+--- a/financial-lab-account.Business/Services/StatementService.cs
++++ b/financial-lab-account.Business/Services/StatementService.cs
+@@ -64,9 +64,9 @@ public class StatementService(IAccountRepository repository, TimeProvider clock)
+ 
+     private static int ParseInt(string? value, int fallback, int min, int max, string error)
+     {
+-        if (value is null)
+-            return fallback;
+-        return int.TryParse(value, NumberStyles.None, CultureInfo.InvariantCulture, out var parsed) &&
++        return value is null
++            ? fallback
++            : int.TryParse(value, NumberStyles.None, CultureInfo.InvariantCulture, out var parsed) &&
+                parsed >= min && parsed <= max
+             ? parsed
+             : throw new DomainException(error);
+diff --git a/financial-lab-antifraud.Api/Rules/RuleValidator.cs b/financial-lab-antifraud.Api/Rules/RuleValidator.cs
+index cb94ced..e514dac 100644
+--- a/financial-lab-antifraud.Api/Rules/RuleValidator.cs
++++ b/financial-lab-antifraud.Api/Rules/RuleValidator.cs
+@@ -15,12 +15,12 @@ public static class RuleValidator
+             foreach (var (key, messages) in Validate(rules[i], $"rules[{i}]"))
+                 errors[key] = messages;
+ 
+-        var duplicated = rules.GroupBy(r => r.Id, StringComparer.OrdinalIgnoreCase)
++        var repeatedIds = rules.GroupBy(r => r.Id, StringComparer.OrdinalIgnoreCase)
+             .Where(g => g.Count() > 1)
+             .Select(g => g.Key)
+             .ToList();
+-        if (duplicated.Count > 0)
+-            errors["rules"] = [$"Ids de regra repetidos: {string.Join(", ", duplicated)}."];
++        if (repeatedIds.Count > 0)
++            errors["rules"] = [$"Ids de regra repetidos: {string.Join(", ", repeatedIds)}."];
+ 
+         return errors;
+     }
+diff --git a/financial-lab-transfer.Api/Workers/ScreeningReconciler.cs b/financial-lab-transfer.Api/Workers/ScreeningReconciler.cs
+index d48607e..8c711e6 100644
+--- a/financial-lab-transfer.Api/Workers/ScreeningReconciler.cs
++++ b/financial-lab-transfer.Api/Workers/ScreeningReconciler.cs
+@@ -25,7 +25,7 @@ public class ScreeningReconciler(
+                     settings.ReconcileBatchSize, stoppingToken);
+ 
+                 if (reconciled > 0)
+-                    logger.LogInformation("Reconciliação do antifraude: {Count} transferência(s) resolvida(s).",
++                    logger.LogInformation("Reconciliação: {Count} transferência(s) resolvida(s) nesta rodada.",
+                         reconciled);
+             }
+             catch (Exception ex) when (ex is not OperationCanceledException)
+diff --git a/financial-lab-transfer.Business/Services/TransferService.cs b/financial-lab-transfer.Business/Services/TransferService.cs
+index 75884c6..a2d6bca 100644
+--- a/financial-lab-transfer.Business/Services/TransferService.cs
++++ b/financial-lab-transfer.Business/Services/TransferService.cs
+@@ -10,6 +10,7 @@ public class TransferService(ITransferRepository repository, IAccountGateway acc
+     public const string RejectedByAntifraudReason = "Recusada pelo antifraude.";
+     public const string ScreeningTimeoutReason = "O antifraude não respondeu a tempo.";
+ 
++    /// <summary>Cria as transferências e pede a análise antifraude de cada uma.</summary>
+     public async Task<IReadOnlyList<Transfer>> CreateAsync(IReadOnlyList<TransferRequest> requests,
+         CancellationToken ct)
+     {

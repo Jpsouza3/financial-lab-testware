@@ -1,0 +1,13 @@
+diff --git a/financial-lab-antifraud.Api/Endpoints/RuleEndpoints.cs b/financial-lab-antifraud.Api/Endpoints/RuleEndpoints.cs
+index 79f6c90..e8827ea 100644
+--- a/financial-lab-antifraud.Api/Endpoints/RuleEndpoints.cs
++++ b/financial-lab-antifraud.Api/Endpoints/RuleEndpoints.cs
+@@ -51,6 +51,8 @@ public static class RuleEndpoints
+         group.MapDelete("/{id}", (string id, RuleStore rules) =>
+             rules.Remove(id) ? Results.NoContent() : Results.NotFound());
+ 
++        group.MapGet("/count", (RuleStore rules) => Results.Ok(new { total = rules.All.Count() }));
++
+         group.MapPost("/reset", (RuleStore rules) => Results.Ok(rules.Reset()));
+     }
+ }

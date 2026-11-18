@@ -1,0 +1,15 @@
+diff --git a/financial-lab-transfer.Api/appsettings.Development.json b/financial-lab-transfer.Api/appsettings.Development.json
+index 8b4e3f2..2e821c2 100644
+--- a/financial-lab-transfer.Api/appsettings.Development.json
++++ b/financial-lab-transfer.Api/appsettings.Development.json
+@@ -21,8 +21,8 @@
+     "CallbackUrl": "http://localhost:5257/webhooks/antifraud",
+     "WebhookSecret": "financial-lab-webhook-secret",
+     "ReconcileIntervalSeconds": 5,
+-    "StaleAfterSeconds": 10,
+-    "TimeoutSeconds": 60
++    "StaleAfterSeconds": 30,
++    "TimeoutSeconds": 180
+   },
+   "Logging": {
+     "LogLevel": {

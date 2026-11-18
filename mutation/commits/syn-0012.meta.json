@@ -1,0 +1,23 @@
+{
+  "id": "syn-0012",
+  "seq": 12,
+  "seed": 1011,
+  "recipe": "config-change",
+  "commit_kind": "config",
+  "catalog_ids": [
+    "K-04b",
+    "K-03"
+  ],
+  "changed_files": [
+    "financial-lab-antifraud.Api/appsettings.json"
+  ],
+  "changed_services": [
+    "antifraud"
+  ],
+  "files_changed_count": 1,
+  "lines_added": 2,
+  "lines_removed": 2,
+  "lines_changed": 4,
+  "base_sha": "bf20772106e19f1a64edc272aed89b20ad04d0ec",
+  "generated_at": "2026-11-18T23:15:52.142Z"
+}

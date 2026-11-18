@@ -1,0 +1,25 @@
+diff --git a/financial-lab-account.Business/Services/Cpf.cs b/financial-lab-account.Business/Services/Cpf.cs
+index 7759005..423cb05 100644
+--- a/financial-lab-account.Business/Services/Cpf.cs
++++ b/financial-lab-account.Business/Services/Cpf.cs
+@@ -2,6 +2,7 @@ namespace financial_lab_account.Business.Services;
+ 
+ public static class Cpf
+ {
++    /// <summary>Valida um CPF sem máscara.</summary>
+     public static bool IsValid(string? value)
+     {
+         if (value is not { Length: 11 } || !value.All(char.IsAsciiDigit) || value.Distinct().Count() == 1)
+diff --git a/financial-lab-transfer.Api/Endpoints/WebhookEndpoints.cs b/financial-lab-transfer.Api/Endpoints/WebhookEndpoints.cs
+index b77c7bb..dcfe053 100644
+--- a/financial-lab-transfer.Api/Endpoints/WebhookEndpoints.cs
++++ b/financial-lab-transfer.Api/Endpoints/WebhookEndpoints.cs
+@@ -27,7 +27,7 @@ public static class WebhookEndpoints
+                     request.Headers[WebhookSignature.SignatureHeader], antifraud.Value.WebhookSecret,
+                     TimeSpan.FromSeconds(antifraud.Value.SignatureToleranceSeconds), clock.GetUtcNow()))
+             {
+-                logger.LogWarning("Webhook {DeliveryId} recusado: assinatura inválida ou expirada.", deliveryId);
++                logger.LogWarning("Webhook {DeliveryId} rejeitado (assinatura inválida ou fora da tolerância).", deliveryId);
+                 return Results.Problem(title: "Assinatura inválida.", statusCode: StatusCodes.Status401Unauthorized);
+             }
+ 

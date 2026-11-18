@@ -1,0 +1,30 @@
+{
+  "id": "syn-0010",
+  "seq": 10,
+  "seed": 1009,
+  "recipe": "cross-service",
+  "commit_kind": "breaking",
+  "catalog_ids": [
+    "B-STM-02",
+    "B-TSV-02",
+    "N-02b",
+    "N-04c"
+  ],
+  "changed_files": [
+    "financial-lab-account.Business/Services/AccountManagementService.cs",
+    "financial-lab-account.Business/Services/StatementService.cs",
+    "financial-lab-antifraud.Api/Models/FraudRule.cs",
+    "financial-lab-transfer.Business/Services/TransferService.cs"
+  ],
+  "changed_services": [
+    "account",
+    "transfer",
+    "antifraud"
+  ],
+  "files_changed_count": 4,
+  "lines_added": 14,
+  "lines_removed": 7,
+  "lines_changed": 21,
+  "base_sha": "bf20772106e19f1a64edc272aed89b20ad04d0ec",
+  "generated_at": "2026-11-18T23:15:52.091Z"
+}

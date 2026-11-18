@@ -1,0 +1,110 @@
+diff --git a/financial-lab-account.Business/Models/Account.cs b/financial-lab-account.Business/Models/Account.cs
+index 1c9dd3f..ca100f3 100644
+--- a/financial-lab-account.Business/Models/Account.cs
++++ b/financial-lab-account.Business/Models/Account.cs
+@@ -19,8 +19,15 @@ public class Account : Entity
+     public decimal AvailableBalance => Balance - BlockedBalance;
+     public uint Version { get; private set; }
+ 
+-    public static Account Open(string name, string document, string branch, string number, DateTime now)
+-        => new() { Name = name, Document = document, Branch = branch, Number = number, OpenedAt = now };
++    public static Account Open(string name, string document, string branch, string number, DateTime now) =>
++        new()
++        {
++            Name = name,
++            Document = document,
++            Branch = branch,
++            Number = number,
++            OpenedAt = now
++        };
+ 
+     public LedgerEntry Credit(decimal amount, string endToEndId, string? description = null)
+     {
+diff --git a/financial-lab-account.Business/Services/AccountManagementService.cs b/financial-lab-account.Business/Services/AccountManagementService.cs
+index 4136418..1b50267 100644
+--- a/financial-lab-account.Business/Services/AccountManagementService.cs
++++ b/financial-lab-account.Business/Services/AccountManagementService.cs
+@@ -25,11 +25,7 @@ public partial class AccountManagementService(IAccountRepository repository, Tim
+         branch ??= DefaultBranch;
+         if (branch.Length != 4 || !branch.All(char.IsAsciiDigit))
+             throw new DomainException("A agência deve ter 4 dígitos.");
+-        var deposit = initialDeposit ?? 0m;
+-        if (deposit is < 0 or > MaxInitialDeposit)
+-            throw new DomainException("O depósito inicial deve estar entre 0 e 5000.00.");
+-        if (decimal.Round(deposit, 2) != deposit)
+-            throw new DomainException("O depósito inicial deve ter no máximo 2 casas decimais.");
++        var deposit = ValidateDeposit(initialDeposit);
+         if (!Branches.Contains(branch))
+             throw new BusinessRuleException("Agência inexistente.");
+ 
+@@ -95,6 +91,16 @@ public partial class AccountManagementService(IAccountRepository repository, Tim
+         }
+     }
+ 
++    private static decimal ValidateDeposit(decimal? initialDeposit)
++    {
++        var deposit = initialDeposit ?? 0m;
++        if (deposit is < 0 or > MaxInitialDeposit)
++            throw new DomainException("O depósito inicial deve estar entre 0 e 5000.00.");
++        if (decimal.Round(deposit, 2) != deposit)
++            throw new DomainException("O depósito inicial deve ter no máximo 2 casas decimais.");
++        return deposit;
++    }
++
+     internal static NotFoundException AccountNotFound() => new("Conta não encontrada.");
+ 
+     private static string NormalizeName(string? name)
+diff --git a/financial-lab-account.Business/Services/BalanceHoldService.cs b/financial-lab-account.Business/Services/BalanceHoldService.cs
+index df78a2e..c5ef497 100644
+--- a/financial-lab-account.Business/Services/BalanceHoldService.cs
++++ b/financial-lab-account.Business/Services/BalanceHoldService.cs
+@@ -7,9 +7,9 @@ namespace financial_lab_account.Business.Services;
+ 
+ public partial class BalanceHoldService(IAccountRepository repository, TimeProvider clock) : IBalanceHoldService
+ {
+-    private const int MaxAttempts = 5;
+     private static readonly TimeSpan MinExpiration = TimeSpan.FromSeconds(10);
+     private static readonly TimeSpan MaxExpiration = TimeSpan.FromDays(90);
++    private const int MaxAttempts = 5;
+     private static readonly Dictionary<string, HoldStatus> Statuses = Enum.GetValues<HoldStatus>()
+         .ToDictionary(s => s.ToString(), StringComparer.Ordinal);
+ 
+diff --git a/financial-lab-account.Business/Services/StatementService.cs b/financial-lab-account.Business/Services/StatementService.cs
+index b680386..3b51a24 100644
+--- a/financial-lab-account.Business/Services/StatementService.cs
++++ b/financial-lab-account.Business/Services/StatementService.cs
+@@ -9,8 +9,8 @@ public class StatementService(IAccountRepository repository, TimeProvider clock)
+ {
+     private const int MaxPeriodDays = 90;
+     private const int DefaultPeriodDays = 30;
+-    private const int DefaultPageSize = 20;
+     private const int MaxPageSize = 100;
++    private const int DefaultPageSize = 20;
+     private static readonly Dictionary<string, EntryType> Types = Enum.GetValues<EntryType>()
+         .ToDictionary(t => t.ToString(), StringComparer.Ordinal);
+ 
+@@ -64,9 +64,9 @@ public class StatementService(IAccountRepository repository, TimeProvider clock)
+ 
+     private static int ParseInt(string? value, int fallback, int min, int max, string error)
+     {
+-        if (value is null)
+-            return fallback;
+-        return int.TryParse(value, NumberStyles.None, CultureInfo.InvariantCulture, out var parsed) &&
++        return value is null
++            ? fallback
++            : int.TryParse(value, NumberStyles.None, CultureInfo.InvariantCulture, out var parsed) &&
+                parsed >= min && parsed <= max
+             ? parsed
+             : throw new DomainException(error);
+diff --git a/financial-lab-transfer.Business/Services/TransferService.cs b/financial-lab-transfer.Business/Services/TransferService.cs
+index 75884c6..a2d6bca 100644
+--- a/financial-lab-transfer.Business/Services/TransferService.cs
++++ b/financial-lab-transfer.Business/Services/TransferService.cs
+@@ -10,6 +10,7 @@ public class TransferService(ITransferRepository repository, IAccountGateway acc
+     public const string RejectedByAntifraudReason = "Recusada pelo antifraude.";
+     public const string ScreeningTimeoutReason = "O antifraude não respondeu a tempo.";
+ 
++    /// <summary>Cria as transferências e pede a análise antifraude de cada uma.</summary>
+     public async Task<IReadOnlyList<Transfer>> CreateAsync(IReadOnlyList<TransferRequest> requests,
+         CancellationToken ct)
+     {

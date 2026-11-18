@@ -1,0 +1,92 @@
+diff --git a/financial-lab-account.Business/Services/AccountManagementService.cs b/financial-lab-account.Business/Services/AccountManagementService.cs
+index 4136418..bc21fb8 100644
+--- a/financial-lab-account.Business/Services/AccountManagementService.cs
++++ b/financial-lab-account.Business/Services/AccountManagementService.cs
+@@ -19,7 +19,7 @@ public partial class AccountManagementService(IAccountRepository repository, Tim
+     public async Task<Account> OpenAsync(string? name, string? document, string? branch, decimal? initialDeposit,
+         CancellationToken ct)
+     {
+-        var normalizedName = NormalizeName(name);
++        var cleanName = NormalizeName(name);
+         if (!Cpf.IsValid(document))
+             throw new DomainException("CPF inválido.");
+         branch ??= DefaultBranch;
+@@ -39,7 +39,7 @@ public partial class AccountManagementService(IAccountRepository repository, Tim
+                 throw new ConflictException("Já existe uma conta não encerrada para este documento.");
+ 
+             var number = (await repository.GetLastNumberAsync(branch, ct) + 1).ToString("D5");
+-            var account = Account.Open(normalizedName, document!, branch, number, clock.GetUtcNow().UtcDateTime);
++            var account = Account.Open(cleanName, document!, branch, number, clock.GetUtcNow().UtcDateTime);
+             repository.AddAccount(account);
+ 
+             if (deposit > 0)
+diff --git a/financial-lab-account.Business/Services/BalanceHoldService.cs b/financial-lab-account.Business/Services/BalanceHoldService.cs
+index df78a2e..74483f4 100644
+--- a/financial-lab-account.Business/Services/BalanceHoldService.cs
++++ b/financial-lab-account.Business/Services/BalanceHoldService.cs
+@@ -1,7 +1,7 @@
+-using System.Text.RegularExpressions;
+ using financial_lab_account.Business.Exceptions;
+ using financial_lab_account.Business.Interfaces;
+ using financial_lab_account.Business.Models;
++using System.Text.RegularExpressions;
+ 
+ namespace financial_lab_account.Business.Services;
+ 
+diff --git a/financial-lab-account.Business/Services/Cpf.cs b/financial-lab-account.Business/Services/Cpf.cs
+index 7759005..423cb05 100644
+--- a/financial-lab-account.Business/Services/Cpf.cs
++++ b/financial-lab-account.Business/Services/Cpf.cs
+@@ -2,6 +2,7 @@ namespace financial_lab_account.Business.Services;
+ 
+ public static class Cpf
+ {
++    /// <summary>Valida um CPF sem máscara.</summary>
+     public static bool IsValid(string? value)
+     {
+         if (value is not { Length: 11 } || !value.All(char.IsAsciiDigit) || value.Distinct().Count() == 1)
+diff --git a/financial-lab-antifraud.Api/Webhooks/WebhookDispatcher.cs b/financial-lab-antifraud.Api/Webhooks/WebhookDispatcher.cs
+index 9136d23..803a651 100644
+--- a/financial-lab-antifraud.Api/Webhooks/WebhookDispatcher.cs
++++ b/financial-lab-antifraud.Api/Webhooks/WebhookDispatcher.cs
+@@ -45,7 +45,7 @@ public class WebhookDispatcher(
+             if (analysis.Delivery == DeliveryMode.Drop)
+             {
+                 analysis.CompleteWebhook(WebhookStatus.Skipped);
+-                logger.LogInformation("Análise {AnalysisId} ({TransactionId}): {Status}, webhook descartado.",
++                logger.LogInformation("Análise {AnalysisId} ({TransactionId}): {Status}, webhook não enviado (Drop).",
+                     analysis.Id, analysis.Request.TransactionId, analysis.Status);
+                 return;
+             }
+diff --git a/financial-lab-transfer.Api/Webhooks/WebhookSignature.cs b/financial-lab-transfer.Api/Webhooks/WebhookSignature.cs
+index 3272e9d..443ad48 100644
+--- a/financial-lab-transfer.Api/Webhooks/WebhookSignature.cs
++++ b/financial-lab-transfer.Api/Webhooks/WebhookSignature.cs
+@@ -17,9 +17,11 @@ public static class WebhookSignature
+         if (Math.Abs(now.ToUnixTimeSeconds() - unix) > tolerance.TotalSeconds)
+             return false;
+ 
+-        var expected = "sha256=" + Convert.ToHexStringLower(HMACSHA256.HashData(
+-            Encoding.UTF8.GetBytes(secret), Encoding.UTF8.GetBytes($"{timestamp}.{body}")));
++        var expected = Sign(secret, Encoding.UTF8.GetBytes($"{timestamp}.{body}"));
+         return CryptographicOperations.FixedTimeEquals(Encoding.UTF8.GetBytes(expected),
+             Encoding.UTF8.GetBytes(signature));
+     }
++
++    private static string Sign(string secret, byte[] message)
++        => "sha256=" + Convert.ToHexStringLower(HMACSHA256.HashData(Encoding.UTF8.GetBytes(secret), message));
+ }
+diff --git a/financial-lab-transfer.Business/Services/TransferService.cs b/financial-lab-transfer.Business/Services/TransferService.cs
+index 75884c6..e28c4c2 100644
+--- a/financial-lab-transfer.Business/Services/TransferService.cs
++++ b/financial-lab-transfer.Business/Services/TransferService.cs
+@@ -124,6 +124,9 @@ public class TransferService(ITransferRepository repository, IAccountGateway acc
+                 transfer.RejectRefund(reason);
+         }, ct);
+ 
++    private static bool IsFinal(Transfer transfer)
++        => transfer.Status is TransferStatus.Completed or TransferStatus.Failed or TransferStatus.Refunded;
++
+     private async Task<Transfer?> HandleAsync(Guid accountId, string endToEndId,
+         Func<Transfer, TransferLeg, Task> apply, CancellationToken ct)
+     {

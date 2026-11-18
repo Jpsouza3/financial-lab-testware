@@ -1,0 +1,65 @@
+diff --git a/financial-lab-account.Business/Models/Account.cs b/financial-lab-account.Business/Models/Account.cs
+index 1c9dd3f..ca100f3 100644
+--- a/financial-lab-account.Business/Models/Account.cs
++++ b/financial-lab-account.Business/Models/Account.cs
+@@ -19,8 +19,15 @@ public class Account : Entity
+     public decimal AvailableBalance => Balance - BlockedBalance;
+     public uint Version { get; private set; }
+ 
+-    public static Account Open(string name, string document, string branch, string number, DateTime now)
+-        => new() { Name = name, Document = document, Branch = branch, Number = number, OpenedAt = now };
++    public static Account Open(string name, string document, string branch, string number, DateTime now) =>
++        new()
++        {
++            Name = name,
++            Document = document,
++            Branch = branch,
++            Number = number,
++            OpenedAt = now
++        };
+ 
+     public LedgerEntry Credit(decimal amount, string endToEndId, string? description = null)
+     {
+diff --git a/financial-lab-account.Business/Services/Cpf.cs b/financial-lab-account.Business/Services/Cpf.cs
+index 7759005..423cb05 100644
+--- a/financial-lab-account.Business/Services/Cpf.cs
++++ b/financial-lab-account.Business/Services/Cpf.cs
+@@ -2,6 +2,7 @@ namespace financial_lab_account.Business.Services;
+ 
+ public static class Cpf
+ {
++    /// <summary>Valida um CPF sem máscara.</summary>
+     public static bool IsValid(string? value)
+     {
+         if (value is not { Length: 11 } || !value.All(char.IsAsciiDigit) || value.Distinct().Count() == 1)
+diff --git a/financial-lab-account.Business/Services/StatementService.cs b/financial-lab-account.Business/Services/StatementService.cs
+index b680386..88f91e1 100644
+--- a/financial-lab-account.Business/Services/StatementService.cs
++++ b/financial-lab-account.Business/Services/StatementService.cs
+@@ -64,9 +64,9 @@ public class StatementService(IAccountRepository repository, TimeProvider clock)
+ 
+     private static int ParseInt(string? value, int fallback, int min, int max, string error)
+     {
+-        if (value is null)
+-            return fallback;
+-        return int.TryParse(value, NumberStyles.None, CultureInfo.InvariantCulture, out var parsed) &&
++        return value is null
++            ? fallback
++            : int.TryParse(value, NumberStyles.None, CultureInfo.InvariantCulture, out var parsed) &&
+                parsed >= min && parsed <= max
+             ? parsed
+             : throw new DomainException(error);
+diff --git a/financial-lab-transfer.Business/Services/TransferService.cs b/financial-lab-transfer.Business/Services/TransferService.cs
+index 75884c6..e28c4c2 100644
+--- a/financial-lab-transfer.Business/Services/TransferService.cs
++++ b/financial-lab-transfer.Business/Services/TransferService.cs
+@@ -124,6 +124,9 @@ public class TransferService(ITransferRepository repository, IAccountGateway acc
+                 transfer.RejectRefund(reason);
+         }, ct);
+ 
++    private static bool IsFinal(Transfer transfer)
++        => transfer.Status is TransferStatus.Completed or TransferStatus.Failed or TransferStatus.Refunded;
++
+     private async Task<Transfer?> HandleAsync(Guid accountId, string endToEndId,
+         Func<Transfer, TransferLeg, Task> apply, CancellationToken ct)
+     {

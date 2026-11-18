@@ -2,13 +2,12 @@ name: api-tests
 
 on:
   push:
-    branches: [main]
   pull_request:
   workflow_dispatch:
     inputs:
       sut_ref:
-        description: Branch, tag ou SHA do SUT (Jpsouza3/financial-lab)
-        default: main
+        description: Branch, tag ou SHA do SUT (vazio = .sut-ref)
+        default: ""
       sut_base:
         description: Base para o diff do SUT (vazio = suíte completa)
         default: ""
@@ -25,10 +24,13 @@ jobs:
       ACCOUNT_API_URL: http://localhost:5157
       TRANSFER_API_URL: http://localhost:5257
       ANTIFRAUD_API_URL: http://localhost:5357
-      SUT_REF: ${{ inputs.sut_ref || 'main' }}
+      SUT_REF_INPUT: ${{ inputs.sut_ref || '' }}
       SUT_BASE: ${{ inputs.sut_base || '' }}
     steps:
       - uses: actions/checkout@v4
+
+      - name: Ref do SUT
+        run: echo "SUT_REF=${SUT_REF_INPUT:-$(cat .sut-ref)}" >> "$GITHUB_ENV"
 
       - uses: actions/checkout@v4
         with:

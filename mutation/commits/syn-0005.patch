@@ -1,0 +1,42 @@
+diff --git a/financial-lab-account.Business/Models/Account.cs b/financial-lab-account.Business/Models/Account.cs
+index 1c9dd3f..e930102 100644
+--- a/financial-lab-account.Business/Models/Account.cs
++++ b/financial-lab-account.Business/Models/Account.cs
+@@ -19,8 +19,15 @@ public class Account : Entity
+     public decimal AvailableBalance => Balance - BlockedBalance;
+     public uint Version { get; private set; }
+ 
+-    public static Account Open(string name, string document, string branch, string number, DateTime now)
+-        => new() { Name = name, Document = document, Branch = branch, Number = number, OpenedAt = now };
++    public static Account Open(string name, string document, string branch, string number, DateTime now) =>
++        new()
++        {
++            Name = name,
++            Document = document,
++            Branch = branch,
++            Number = number,
++            OpenedAt = now
++        };
+ 
+     public LedgerEntry Credit(decimal amount, string endToEndId, string? description = null)
+     {
+@@ -33,6 +40,7 @@ public class Account : Entity
+         return new LedgerEntry(Id, EntryType.Credit, amount, Balance, endToEndId, description);
+     }
+ 
++    /// <summary>Debita a conta respeitando o saldo disponível.</summary>
+     public LedgerEntry Debit(decimal amount, string endToEndId, string? description = null)
+     {
+         ValidateMovement(amount, endToEndId, description);
+diff --git a/financial-lab-account.Business/Services/StatementService.cs b/financial-lab-account.Business/Services/StatementService.cs
+index b680386..0d57e84 100644
+--- a/financial-lab-account.Business/Services/StatementService.cs
++++ b/financial-lab-account.Business/Services/StatementService.cs
+@@ -14,6 +14,7 @@ public class StatementService(IAccountRepository repository, TimeProvider clock)
+     private static readonly Dictionary<string, EntryType> Types = Enum.GetValues<EntryType>()
+         .ToDictionary(t => t.ToString(), StringComparer.Ordinal);
+ 
++    /// <summary>Monta o extrato paginado do período.</summary>
+     public async Task<Statement> GetAsync(Guid accountId, string? from, string? to, string? type, string? page,
+         string? pageSize, CancellationToken ct)
+     {

@@ -1,0 +1,43 @@
+diff --git a/financial-lab-account.Business/Services/BalanceHoldService.cs b/financial-lab-account.Business/Services/BalanceHoldService.cs
+index df78a2e..74483f4 100644
+--- a/financial-lab-account.Business/Services/BalanceHoldService.cs
++++ b/financial-lab-account.Business/Services/BalanceHoldService.cs
+@@ -1,7 +1,7 @@
+-using System.Text.RegularExpressions;
+ using financial_lab_account.Business.Exceptions;
+ using financial_lab_account.Business.Interfaces;
+ using financial_lab_account.Business.Models;
++using System.Text.RegularExpressions;
+ 
+ namespace financial_lab_account.Business.Services;
+ 
+diff --git a/financial-lab-account.Business/Services/Cpf.cs b/financial-lab-account.Business/Services/Cpf.cs
+index 7759005..423cb05 100644
+--- a/financial-lab-account.Business/Services/Cpf.cs
++++ b/financial-lab-account.Business/Services/Cpf.cs
+@@ -2,6 +2,7 @@ namespace financial_lab_account.Business.Services;
+ 
+ public static class Cpf
+ {
++    /// <summary>Valida um CPF sem máscara.</summary>
+     public static bool IsValid(string? value)
+     {
+         if (value is not { Length: 11 } || !value.All(char.IsAsciiDigit) || value.Distinct().Count() == 1)
+diff --git a/financial-lab-transfer.Business/Services/TransferService.cs b/financial-lab-transfer.Business/Services/TransferService.cs
+index 75884c6..a0d27fd 100644
+--- a/financial-lab-transfer.Business/Services/TransferService.cs
++++ b/financial-lab-transfer.Business/Services/TransferService.cs
+@@ -50,11 +50,11 @@ public class TransferService(ITransferRepository repository, IAccountGateway acc
+         CancellationToken ct)
+     {
+         var now = UtcClock.Now;
+-        var stale = await repository.ListByStatusCreatedBeforeAsync(TransferStatus.Screening, now - staleAfter, take,
++        var staleTransfers = await repository.ListByStatusCreatedBeforeAsync(TransferStatus.Screening, now - staleAfter, take,
+             ct);
+         var reconciled = 0;
+ 
+-        foreach (var transfer in stale)
++        foreach (var transfer in staleTransfers)
+         {
+             var decision = await antifraud.FindDecisionAsync(transfer.EndToEndId, ct);
+             try

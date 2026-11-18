@@ -1,0 +1,72 @@
+diff --git a/financial-lab-account.Business/Services/AccountManagementService.cs b/financial-lab-account.Business/Services/AccountManagementService.cs
+index 4136418..1b50267 100644
+--- a/financial-lab-account.Business/Services/AccountManagementService.cs
++++ b/financial-lab-account.Business/Services/AccountManagementService.cs
+@@ -25,11 +25,7 @@ public partial class AccountManagementService(IAccountRepository repository, Tim
+         branch ??= DefaultBranch;
+         if (branch.Length != 4 || !branch.All(char.IsAsciiDigit))
+             throw new DomainException("A agência deve ter 4 dígitos.");
+-        var deposit = initialDeposit ?? 0m;
+-        if (deposit is < 0 or > MaxInitialDeposit)
+-            throw new DomainException("O depósito inicial deve estar entre 0 e 5000.00.");
+-        if (decimal.Round(deposit, 2) != deposit)
+-            throw new DomainException("O depósito inicial deve ter no máximo 2 casas decimais.");
++        var deposit = ValidateDeposit(initialDeposit);
+         if (!Branches.Contains(branch))
+             throw new BusinessRuleException("Agência inexistente.");
+ 
+@@ -95,6 +91,16 @@ public partial class AccountManagementService(IAccountRepository repository, Tim
+         }
+     }
+ 
++    private static decimal ValidateDeposit(decimal? initialDeposit)
++    {
++        var deposit = initialDeposit ?? 0m;
++        if (deposit is < 0 or > MaxInitialDeposit)
++            throw new DomainException("O depósito inicial deve estar entre 0 e 5000.00.");
++        if (decimal.Round(deposit, 2) != deposit)
++            throw new DomainException("O depósito inicial deve ter no máximo 2 casas decimais.");
++        return deposit;
++    }
++
+     internal static NotFoundException AccountNotFound() => new("Conta não encontrada.");
+ 
+     private static string NormalizeName(string? name)
+diff --git a/financial-lab-account.Business/Services/StatementService.cs b/financial-lab-account.Business/Services/StatementService.cs
+index b680386..fdb6752 100644
+--- a/financial-lab-account.Business/Services/StatementService.cs
++++ b/financial-lab-account.Business/Services/StatementService.cs
+@@ -10,7 +10,7 @@ public class StatementService(IAccountRepository repository, TimeProvider clock)
+     private const int MaxPeriodDays = 90;
+     private const int DefaultPeriodDays = 30;
+     private const int DefaultPageSize = 20;
+-    private const int MaxPageSize = 100;
++    private const int MaxPageSize = 101;
+     private static readonly Dictionary<string, EntryType> Types = Enum.GetValues<EntryType>()
+         .ToDictionary(t => t.ToString(), StringComparer.Ordinal);
+ 
+diff --git a/financial-lab-antifraud.Api/Models/FraudRule.cs b/financial-lab-antifraud.Api/Models/FraudRule.cs
+index 17f4bb6..c7622bb 100644
+--- a/financial-lab-antifraud.Api/Models/FraudRule.cs
++++ b/financial-lab-antifraud.Api/Models/FraudRule.cs
+@@ -32,6 +32,7 @@ public class FraudRule
+     public DeliveryMode Delivery { get; set; } = DeliveryMode.Normal;
+     public int SubmitFailures { get; set; }
+ 
++    /// <summary>Verdadeiro quando todas as condições informadas casam com a análise.</summary>
+     public bool Matches(AnalysisRequest request)
+         => Enabled
+            && (MinAmount is null || request.Amount >= MinAmount)
+diff --git a/financial-lab-transfer.Business/Services/TransferService.cs b/financial-lab-transfer.Business/Services/TransferService.cs
+index 75884c6..54882b3 100644
+--- a/financial-lab-transfer.Business/Services/TransferService.cs
++++ b/financial-lab-transfer.Business/Services/TransferService.cs
+@@ -66,7 +66,7 @@ public class TransferService(ITransferRepository repository, IAccountGateway acc
+                             decision.Outcome == ScreeningOutcome.Approved, decision.Reason, ct);
+                         reconciled++;
+                         break;
+-                    case var _ when transfer.CreatedAt < now - timeout:
++                    case var _ when transfer.CreatedAt > now - timeout:
+                         await HandleScreeningDecisionAsync(transfer.EndToEndId, false, ScreeningTimeoutReason, ct);
+                         reconciled++;
+                         break;

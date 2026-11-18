@@ -1,0 +1,24 @@
+{
+  "id": "syn-0006",
+  "seq": 6,
+  "seed": 1005,
+  "recipe": "single-break",
+  "commit_kind": "breaking",
+  "catalog_ids": [
+    "B-STS-01",
+    "N-04e"
+  ],
+  "changed_files": [
+    "financial-lab-account.Business/Services/AccountManagementService.cs",
+    "financial-lab-account.Business/Services/Cpf.cs"
+  ],
+  "changed_services": [
+    "account"
+  ],
+  "files_changed_count": 2,
+  "lines_added": 2,
+  "lines_removed": 1,
+  "lines_changed": 3,
+  "base_sha": "bf20772106e19f1a64edc272aed89b20ad04d0ec",
+  "generated_at": "2026-11-18T23:15:51.950Z"
+}

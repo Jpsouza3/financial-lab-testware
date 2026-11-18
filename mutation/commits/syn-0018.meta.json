@@ -1,0 +1,23 @@
+{
+  "id": "syn-0018",
+  "seq": 18,
+  "seed": 1017,
+  "recipe": "neutral-refactor",
+  "commit_kind": "neutral",
+  "catalog_ids": [
+    "N-01b",
+    "N-08a"
+  ],
+  "changed_files": [
+    "financial-lab-account.Business/Services/BalanceHoldService.cs"
+  ],
+  "changed_services": [
+    "account"
+  ],
+  "files_changed_count": 1,
+  "lines_added": 4,
+  "lines_removed": 4,
+  "lines_changed": 8,
+  "base_sha": "bf20772106e19f1a64edc272aed89b20ad04d0ec",
+  "generated_at": "2026-11-18T23:15:52.309Z"
+}

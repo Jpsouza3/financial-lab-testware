@@ -1,0 +1,39 @@
+diff --git a/financial-lab-account.Api/Models/AccountBalanceResponse.cs b/financial-lab-account.Api/Models/AccountBalanceResponse.cs
+index 5fe7e66..25909ec 100644
+--- a/financial-lab-account.Api/Models/AccountBalanceResponse.cs
++++ b/financial-lab-account.Api/Models/AccountBalanceResponse.cs
+@@ -3,7 +3,7 @@ using financial_lab_account.Business.Models;
+ namespace financial_lab_account.Api.Models;
+ 
+ public record AccountBalanceResponse(Guid AccountId, AccountStatus Status, decimal Balance, decimal BlockedBalance,
+-    decimal AvailableBalance, uint Version)
++    decimal AvailableBalance, uint Version, string Currency = "BRL")
+ {
+     public static AccountBalanceResponse From(Account a)
+         => new(a.Id, a.Status, a.Balance, a.BlockedBalance, a.AvailableBalance, a.Version);
+diff --git a/financial-lab-antifraud.Api/Endpoints/RuleEndpoints.cs b/financial-lab-antifraud.Api/Endpoints/RuleEndpoints.cs
+index 79f6c90..e8827ea 100644
+--- a/financial-lab-antifraud.Api/Endpoints/RuleEndpoints.cs
++++ b/financial-lab-antifraud.Api/Endpoints/RuleEndpoints.cs
+@@ -51,6 +51,8 @@ public static class RuleEndpoints
+         group.MapDelete("/{id}", (string id, RuleStore rules) =>
+             rules.Remove(id) ? Results.NoContent() : Results.NotFound());
+ 
++        group.MapGet("/count", (RuleStore rules) => Results.Ok(new { total = rules.All.Count() }));
++
+         group.MapPost("/reset", (RuleStore rules) => Results.Ok(rules.Reset()));
+     }
+ }
+diff --git a/financial-lab-transfer.Business/Models/Transfer.cs b/financial-lab-transfer.Business/Models/Transfer.cs
+index 7698349..9fec0bc 100644
+--- a/financial-lab-transfer.Business/Models/Transfer.cs
++++ b/financial-lab-transfer.Business/Models/Transfer.cs
+@@ -76,7 +76,7 @@ public class Transfer : Entity
+ 
+     public bool ConfirmDebit(Guid entryId, DateTime occurredAt)
+     {
+-        if (!Move(TransferStatus.Debiting, TransferStatus.Crediting))
++        if (!Move(TransferStatus.Debiting, TransferStatus.Completed))
+             return false;
+ 
+         (DebitEntryId, DebitedAt) = (entryId, occurredAt);

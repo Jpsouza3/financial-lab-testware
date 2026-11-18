@@ -1,0 +1,34 @@
+{
+  "id": "syn-0020",
+  "seq": 20,
+  "seed": 1019,
+  "recipe": "neutral-refactor",
+  "commit_kind": "neutral",
+  "catalog_ids": [
+    "N-05b",
+    "N-02b",
+    "N-01c",
+    "N-07a",
+    "N-01f",
+    "N-04b"
+  ],
+  "changed_files": [
+    "financial-lab-account.Business/Services/AccountManagementService.cs",
+    "financial-lab-account.Business/Services/AccountTransactionService.cs",
+    "financial-lab-account.Business/Services/StatementService.cs",
+    "financial-lab-antifraud.Api/Rules/RuleValidator.cs",
+    "financial-lab-transfer.Api/Workers/ScreeningReconciler.cs",
+    "financial-lab-transfer.Business/Services/TransferService.cs"
+  ],
+  "changed_services": [
+    "account",
+    "transfer",
+    "antifraud"
+  ],
+  "files_changed_count": 6,
+  "lines_added": 21,
+  "lines_removed": 14,
+  "lines_changed": 35,
+  "base_sha": "bf20772106e19f1a64edc272aed89b20ad04d0ec",
+  "generated_at": "2026-11-18T23:15:52.372Z"
+}

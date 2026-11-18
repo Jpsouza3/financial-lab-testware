@@ -1,0 +1,22 @@
+{
+  "id": "syn-0008",
+  "seq": 8,
+  "seed": 1007,
+  "recipe": "feature",
+  "commit_kind": "additive",
+  "catalog_ids": [
+    "D-02b"
+  ],
+  "changed_files": [
+    "financial-lab-antifraud.Api/Endpoints/RuleEndpoints.cs"
+  ],
+  "changed_services": [
+    "antifraud"
+  ],
+  "files_changed_count": 1,
+  "lines_added": 2,
+  "lines_removed": 0,
+  "lines_changed": 2,
+  "base_sha": "bf20772106e19f1a64edc272aed89b20ad04d0ec",
+  "generated_at": "2026-11-18T23:15:52.037Z"
+}

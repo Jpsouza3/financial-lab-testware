@@ -1,0 +1,25 @@
+{
+  "id": "syn-0014",
+  "seq": 14,
+  "seed": 1013,
+  "recipe": "neutral-refactor",
+  "commit_kind": "neutral",
+  "catalog_ids": [
+    "N-04e",
+    "N-05c"
+  ],
+  "changed_files": [
+    "financial-lab-account.Business/Services/Cpf.cs",
+    "financial-lab-transfer.Api/Endpoints/WebhookEndpoints.cs"
+  ],
+  "changed_services": [
+    "account",
+    "transfer"
+  ],
+  "files_changed_count": 2,
+  "lines_added": 2,
+  "lines_removed": 1,
+  "lines_changed": 3,
+  "base_sha": "bf20772106e19f1a64edc272aed89b20ad04d0ec",
+  "generated_at": "2026-11-18T23:15:52.195Z"
+}

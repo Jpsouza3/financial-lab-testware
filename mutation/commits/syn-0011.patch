@@ -1,0 +1,35 @@
+diff --git a/financial-lab-account.Business/Services/AccountManagementService.cs b/financial-lab-account.Business/Services/AccountManagementService.cs
+index 4136418..bc21fb8 100644
+--- a/financial-lab-account.Business/Services/AccountManagementService.cs
++++ b/financial-lab-account.Business/Services/AccountManagementService.cs
+@@ -19,7 +19,7 @@ public partial class AccountManagementService(IAccountRepository repository, Tim
+     public async Task<Account> OpenAsync(string? name, string? document, string? branch, decimal? initialDeposit,
+         CancellationToken ct)
+     {
+-        var normalizedName = NormalizeName(name);
++        var cleanName = NormalizeName(name);
+         if (!Cpf.IsValid(document))
+             throw new DomainException("CPF inválido.");
+         branch ??= DefaultBranch;
+@@ -39,7 +39,7 @@ public partial class AccountManagementService(IAccountRepository repository, Tim
+                 throw new ConflictException("Já existe uma conta não encerrada para este documento.");
+ 
+             var number = (await repository.GetLastNumberAsync(branch, ct) + 1).ToString("D5");
+-            var account = Account.Open(normalizedName, document!, branch, number, clock.GetUtcNow().UtcDateTime);
++            var account = Account.Open(cleanName, document!, branch, number, clock.GetUtcNow().UtcDateTime);
+             repository.AddAccount(account);
+ 
+             if (deposit > 0)
+diff --git a/financial-lab-antifraud.Api/Models/FraudRule.cs b/financial-lab-antifraud.Api/Models/FraudRule.cs
+index 17f4bb6..d826be5 100644
+--- a/financial-lab-antifraud.Api/Models/FraudRule.cs
++++ b/financial-lab-antifraud.Api/Models/FraudRule.cs
+@@ -35,7 +35,7 @@ public class FraudRule
+     public bool Matches(AnalysisRequest request)
+         => Enabled
+            && (MinAmount is null || request.Amount >= MinAmount)
+-           && (MaxAmount is null || request.Amount <= MaxAmount)
++           && (MaxAmount is null || request.Amount < MaxAmount)
+            && (SourceAccountIds is not { Count: > 0 } || SourceAccountIds.Contains(request.SourceAccountId))
+            && (DestinationAccountIds is not { Count: > 0 } || DestinationAccountIds.Contains(request.DestinationAccountId))
+            && (string.IsNullOrEmpty(DescriptionContains)

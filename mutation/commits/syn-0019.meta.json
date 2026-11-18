@@ -1,0 +1,30 @@
+{
+  "id": "syn-0019",
+  "seq": 19,
+  "seed": 1018,
+  "recipe": "cross-service",
+  "commit_kind": "breaking",
+  "catalog_ids": [
+    "B-HLD-06",
+    "B-SIM-01",
+    "N-03d",
+    "N-03b",
+    "N-04b"
+  ],
+  "changed_files": [
+    "financial-lab-account.Business/Models/Account.cs",
+    "financial-lab-account.Business/Services/BalanceHoldService.cs",
+    "financial-lab-transfer.Business/Services/SimulationService.cs",
+    "financial-lab-transfer.Business/Services/TransferService.cs"
+  ],
+  "changed_services": [
+    "account",
+    "transfer"
+  ],
+  "files_changed_count": 4,
+  "lines_added": 14,
+  "lines_removed": 6,
+  "lines_changed": 20,
+  "base_sha": "bf20772106e19f1a64edc272aed89b20ad04d0ec",
+  "generated_at": "2026-11-18T23:15:52.339Z"
+}

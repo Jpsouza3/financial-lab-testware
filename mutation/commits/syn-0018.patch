@@ -1,0 +1,41 @@
+diff --git a/financial-lab-account.Business/Services/BalanceHoldService.cs b/financial-lab-account.Business/Services/BalanceHoldService.cs
+index df78a2e..d48fbc9 100644
+--- a/financial-lab-account.Business/Services/BalanceHoldService.cs
++++ b/financial-lab-account.Business/Services/BalanceHoldService.cs
+@@ -7,9 +7,9 @@ namespace financial_lab_account.Business.Services;
+ 
+ public partial class BalanceHoldService(IAccountRepository repository, TimeProvider clock) : IBalanceHoldService
+ {
+-    private const int MaxAttempts = 5;
+     private static readonly TimeSpan MinExpiration = TimeSpan.FromSeconds(10);
+     private static readonly TimeSpan MaxExpiration = TimeSpan.FromDays(90);
++    private const int MaxAttempts = 5;
+     private static readonly Dictionary<string, HoldStatus> Statuses = Enum.GetValues<HoldStatus>()
+         .ToDictionary(s => s.ToString(), StringComparer.Ordinal);
+ 
+@@ -106,7 +106,7 @@ public partial class BalanceHoldService(IAccountRepository repository, TimeProvi
+     public async Task<int> ExpireDueAsync(int batchSize, CancellationToken ct)
+     {
+         var now = clock.GetUtcNow().UtcDateTime;
+-        var expired = 0;
++        var expiredCount = 0;
+ 
+         foreach (var holdId in await repository.ListExpiredHoldIdsAsync(now, batchSize, ct))
+         {
+@@ -119,14 +119,14 @@ public partial class BalanceHoldService(IAccountRepository repository, TimeProvi
+             try
+             {
+                 await repository.SaveChangesAsync(ct);
+-                expired++;
++                expiredCount++;
+             }
+             catch (ConcurrencyConflictException)
+             {
+             }
+         }
+ 
+-        return expired;
++        return expiredCount;
+     }
+ 
+     private static NotFoundException HoldNotFound() => new("Bloqueio não encontrado.");

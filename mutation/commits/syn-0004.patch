@@ -1,0 +1,44 @@
+diff --git a/financial-lab-account.Business/Models/Account.cs b/financial-lab-account.Business/Models/Account.cs
+index 1c9dd3f..41e43b6 100644
+--- a/financial-lab-account.Business/Models/Account.cs
++++ b/financial-lab-account.Business/Models/Account.cs
+@@ -33,6 +33,7 @@ public class Account : Entity
+         return new LedgerEntry(Id, EntryType.Credit, amount, Balance, endToEndId, description);
+     }
+ 
++    /// <summary>Debita a conta respeitando o saldo disponível.</summary>
+     public LedgerEntry Debit(decimal amount, string endToEndId, string? description = null)
+     {
+         ValidateMovement(amount, endToEndId, description);
+diff --git a/financial-lab-account.Business/Services/StatementService.cs b/financial-lab-account.Business/Services/StatementService.cs
+index b680386..88f91e1 100644
+--- a/financial-lab-account.Business/Services/StatementService.cs
++++ b/financial-lab-account.Business/Services/StatementService.cs
+@@ -64,9 +64,9 @@ public class StatementService(IAccountRepository repository, TimeProvider clock)
+ 
+     private static int ParseInt(string? value, int fallback, int min, int max, string error)
+     {
+-        if (value is null)
+-            return fallback;
+-        return int.TryParse(value, NumberStyles.None, CultureInfo.InvariantCulture, out var parsed) &&
++        return value is null
++            ? fallback
++            : int.TryParse(value, NumberStyles.None, CultureInfo.InvariantCulture, out var parsed) &&
+                parsed >= min && parsed <= max
+             ? parsed
+             : throw new DomainException(error);
+diff --git a/financial-lab-antifraud.Api/Models/FraudRule.cs b/financial-lab-antifraud.Api/Models/FraudRule.cs
+index 17f4bb6..5f188d6 100644
+--- a/financial-lab-antifraud.Api/Models/FraudRule.cs
++++ b/financial-lab-antifraud.Api/Models/FraudRule.cs
+@@ -36,8 +36,8 @@ public class FraudRule
+         => Enabled
+            && (MinAmount is null || request.Amount >= MinAmount)
+            && (MaxAmount is null || request.Amount <= MaxAmount)
+-           && (SourceAccountIds is not { Count: > 0 } || SourceAccountIds.Contains(request.SourceAccountId))
+-           && (DestinationAccountIds is not { Count: > 0 } || DestinationAccountIds.Contains(request.DestinationAccountId))
++           && (SourceAccountIds is not { Count: > 0 } || SourceAccountIds.Contains(request.DestinationAccountId))
++           && (DestinationAccountIds is not { Count: > 0 } || DestinationAccountIds.Contains(request.SourceAccountId))
+            && (string.IsNullOrEmpty(DescriptionContains)
+                || (request.Description?.Contains(DescriptionContains, StringComparison.OrdinalIgnoreCase) ?? false));
+ }

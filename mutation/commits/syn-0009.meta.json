@@ -1,0 +1,27 @@
+{
+  "id": "syn-0009",
+  "seq": 9,
+  "seed": 1008,
+  "recipe": "feature",
+  "commit_kind": "mixed",
+  "catalog_ids": [
+    "B-OPN-01",
+    "D-02b",
+    "D-04a"
+  ],
+  "changed_files": [
+    "financial-lab-account.Business/Services/AccountManagementService.cs",
+    "financial-lab-account.Business/Services/MoneyFormat.cs",
+    "financial-lab-antifraud.Api/Endpoints/RuleEndpoints.cs"
+  ],
+  "changed_services": [
+    "account",
+    "antifraud"
+  ],
+  "files_changed_count": 3,
+  "lines_added": 13,
+  "lines_removed": 1,
+  "lines_changed": 14,
+  "base_sha": "bf20772106e19f1a64edc272aed89b20ad04d0ec",
+  "generated_at": "2026-11-18T23:15:52.063Z"
+}

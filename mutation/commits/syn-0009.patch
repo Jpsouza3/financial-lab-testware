@@ -1,0 +1,42 @@
+diff --git a/financial-lab-account.Business/Services/AccountManagementService.cs b/financial-lab-account.Business/Services/AccountManagementService.cs
+index 4136418..cdd51c9 100644
+--- a/financial-lab-account.Business/Services/AccountManagementService.cs
++++ b/financial-lab-account.Business/Services/AccountManagementService.cs
+@@ -26,7 +26,7 @@ public partial class AccountManagementService(IAccountRepository repository, Tim
+         if (branch.Length != 4 || !branch.All(char.IsAsciiDigit))
+             throw new DomainException("A agência deve ter 4 dígitos.");
+         var deposit = initialDeposit ?? 0m;
+-        if (deposit is < 0 or > MaxInitialDeposit)
++        if (deposit is < 0 or >= MaxInitialDeposit)
+             throw new DomainException("O depósito inicial deve estar entre 0 e 5000.00.");
+         if (decimal.Round(deposit, 2) != deposit)
+             throw new DomainException("O depósito inicial deve ter no máximo 2 casas decimais.");
+diff --git a/financial-lab-account.Business/Services/MoneyFormat.cs b/financial-lab-account.Business/Services/MoneyFormat.cs
+new file mode 100644
+index 0000000..b3e3cfc
+--- /dev/null
++++ b/financial-lab-account.Business/Services/MoneyFormat.cs
+@@ -0,0 +1,10 @@
++using System.Globalization;
++
++namespace financial_lab_account.Business.Services;
++
++public static class MoneyFormat
++{
++    private static readonly CultureInfo PtBr = CultureInfo.GetCultureInfo("pt-BR");
++
++    public static string Brl(decimal amount) => amount.ToString("C", PtBr);
++}
+diff --git a/financial-lab-antifraud.Api/Endpoints/RuleEndpoints.cs b/financial-lab-antifraud.Api/Endpoints/RuleEndpoints.cs
+index 79f6c90..e8827ea 100644
+--- a/financial-lab-antifraud.Api/Endpoints/RuleEndpoints.cs
++++ b/financial-lab-antifraud.Api/Endpoints/RuleEndpoints.cs
+@@ -51,6 +51,8 @@ public static class RuleEndpoints
+         group.MapDelete("/{id}", (string id, RuleStore rules) =>
+             rules.Remove(id) ? Results.NoContent() : Results.NotFound());
+ 
++        group.MapGet("/count", (RuleStore rules) => Results.Ok(new { total = rules.All.Count() }));
++
+         group.MapPost("/reset", (RuleStore rules) => Results.Ok(rules.Reset()));
+     }
+ }
