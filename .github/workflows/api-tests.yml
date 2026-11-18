@@ -1,0 +1,113 @@
+name: api-tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      sut_ref:
+        description: Branch, tag ou SHA do SUT (Jpsouza3/financial-lab)
+        default: main
+      sut_base:
+        description: Base para o diff do SUT (vazio = suíte completa)
+        default: ""
+
+concurrency:
+  group: api-tests-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  api-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      ACCOUNT_API_URL: http://localhost:5157
+      TRANSFER_API_URL: http://localhost:5257
+      ANTIFRAUD_API_URL: http://localhost:5357
+      SUT_REF: ${{ inputs.sut_ref || 'main' }}
+      SUT_BASE: ${{ inputs.sut_base || '' }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/checkout@v4
+        with:
+          repository: Jpsouza3/financial-lab
+          ref: ${{ env.SUT_REF }}
+          path: sut
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - run: npm run check
+
+      - name: Histórico de falhas recentes
+        uses: actions/cache/restore@v4
+        with:
+          path: ci-history
+          key: ci-history-${{ github.run_id }}
+          restore-keys: ci-history-
+
+      - name: Seleção de testes (fallback para a suíte completa)
+        id: select
+        run: |
+          grep="."
+          if [ -n "$SUT_BASE" ] && [ "$GITHUB_REF" != "refs/heads/main" ]; then
+            git -C sut diff --name-only "$SUT_BASE"..."$(git -C sut rev-parse HEAD)" > changed-files.txt || true
+            if [ -s changed-files.txt ]; then
+              grep=$(npx tsx scripts/select-tests.ts --format grep --history ci-history < changed-files.txt) || grep="."
+            fi
+          fi
+          touch changed-files.txt
+          [ -n "$grep" ] || grep="."
+          printf '%s' "$grep" > grep.txt
+          if [ "$grep" = '^$' ]; then echo "mode=none" >> "$GITHUB_OUTPUT"; else echo "mode=run" >> "$GITHUB_OUTPUT"; fi
+          echo "Seleção: $grep"
+
+      - name: Sobe o SUT
+        working-directory: sut
+        run: docker compose up -d --build --wait --wait-timeout 300
+
+      - name: Suíte de API
+        id: suite
+        if: steps.select.outputs.mode == 'run'
+        run: >
+          npx tsx scripts/ci-run.ts
+          --id "ci-${{ github.run_id }}-${{ github.run_attempt }}"
+          --out ci-history
+          --grep "$(cat grep.txt)"
+          --changed-files changed-files.txt
+          --sut-sha "$(git -C sut rev-parse HEAD)"
+
+      - name: Resumo
+        if: always()
+        run: |
+          f=$(ls -t ci-history/*.json 2>/dev/null | head -1)
+          [ -n "$f" ] && node -e 'const r=require(process.argv[1]);const s=r.summary;console.log(`| total | ok | falhas | flaky | puladas |\n|---|---|---|---|---|\n| ${s.total} | ${s.passed} | ${s.failed} | ${s.flaky} | ${s.skipped} |`);for(const t of r.tests.filter(t=>t.result==="failed"))console.log(`- ❌ ${t.test_id}`)' "$PWD/$f" >> "$GITHUB_STEP_SUMMARY" || true
+
+      - name: Logs do SUT
+        if: failure()
+        working-directory: sut
+        run: docker compose logs --no-color > ../sut-logs.txt || true
+
+      - name: Persiste o histórico
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: ci-history
+          key: ci-history-${{ github.run_id }}
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: api-test-results-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            ci-history/ci-${{ github.run_id }}-*.json
+            changed-files.txt
+            sut-logs.txt
+          retention-days: 90

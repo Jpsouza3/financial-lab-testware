@@ -1,0 +1,49 @@
+name: mutation-dataset
+
+on:
+  workflow_dispatch:
+    inputs:
+      count:
+        description: Commits sintéticos a gerar neste lote
+        default: "5"
+      seed:
+        description: Semente do lote
+        default: "1"
+
+jobs:
+  batch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/checkout@v4
+        with:
+          repository: Jpsouza3/financial-lab
+          path: sut
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Gera e executa o lote
+        env:
+          SUT_PATH: ${{ github.workspace }}/sut
+        run: |
+          npx tsx mutation/generate.ts --count "${{ inputs.count }}" --seed "${{ inputs.seed }}"
+          npx tsx mutation/run.ts --slots 1 --workers 2
+
+      - run: npm run dataset && (npm run dataset:report || true)
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: mutation-batch-${{ github.run_id }}
+          path: |
+            mutation/commits
+            mutation/results
+            data
+          retention-days: 90
