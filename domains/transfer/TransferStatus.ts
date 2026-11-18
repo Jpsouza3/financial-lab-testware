@@ -1,4 +1,6 @@
 export const TRANSFER_STATUSES = [
+    "Screening",
+    "FraudRejected",
     "Debiting",
     "Crediting",
     "Completed",

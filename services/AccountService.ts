@@ -1,9 +1,12 @@
 import { HttpResponse } from "../core/http/HttpResponse";
 import { HttpClient } from "../core/http/HttpClient";
+import { DeleteHoldResponse } from "../domains/account/DeleteHoldResponse";
 import { GetAccountResponse } from "../domains/account/GetAccountResponse";
 import { GetBalanceResponse } from "../domains/account/GetBalanceResponse";
 import { GetHoldResponse } from "../domains/account/GetHoldResponse";
 import { GetHoldsResponse } from "../domains/account/GetHoldsResponse";
+import { GetStatementQuery } from "../domains/account/GetStatementQuery";
+import { GetStatementResponse } from "../domains/account/GetStatementResponse";
 import { HoldStatus } from "../domains/account/HoldStatus";
 import { PatchAccountStatusBody } from "../domains/account/PatchAccountStatusBody";
 import { PatchAccountStatusResponse } from "../domains/account/PatchAccountStatusResponse";
@@ -46,6 +49,19 @@ export class AccountService implements AccountInterface {
         return this.httpClient.get<GetHoldsResponse>(
             `/accounts/${encodeURIComponent(accountId)}/holds`,
             { params: { status } }
+        );
+    }
+
+    DeleteHold(accountId: string, holdId: string): Promise<HttpResponse<DeleteHoldResponse>> {
+        return this.httpClient.delete<DeleteHoldResponse>(
+            `/accounts/${encodeURIComponent(accountId)}/holds/${encodeURIComponent(holdId)}`
+        );
+    }
+
+    GetStatement(accountId: string, query: GetStatementQuery = {}): Promise<HttpResponse<GetStatementResponse>> {
+        return this.httpClient.get<GetStatementResponse>(
+            `/accounts/${encodeURIComponent(accountId)}/statement`,
+            { params: { ...query } }
         );
     }
 }

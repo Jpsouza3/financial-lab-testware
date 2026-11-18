@@ -9,6 +9,7 @@ export interface AntifraudInterface {
     GetRules(): Promise<HttpResponse<FraudRule[]>>
     GetRule(id: string): Promise<HttpResponse<FraudRule>>
     PostRule(body: RuleBody): Promise<HttpResponse<FraudRule>>
+    PostRuleRaw(rawBody: string): Promise<HttpResponse<FraudRule>>
     PutRule(id: string, body: RuleBody): Promise<HttpResponse<FraudRule>>
     PutRules(body: RuleBody[]): Promise<HttpResponse<FraudRule[]>>
     DeleteRule(id: string): Promise<HttpResponse<void>>

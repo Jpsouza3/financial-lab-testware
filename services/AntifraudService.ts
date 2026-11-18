@@ -22,6 +22,10 @@ export class AntifraudService implements AntifraudInterface {
         return this.httpClient.post<FraudRule>("/rules", { json: body });
     }
 
+    PostRuleRaw(rawBody: string): Promise<HttpResponse<FraudRule>> {
+        return this.httpClient.post<FraudRule>("/rules", { text: rawBody, contentType: "application/json" });
+    }
+
     PutRule(id: string, body: RuleBody): Promise<HttpResponse<FraudRule>> {
         return this.httpClient.put<FraudRule>(`/rules/${encodeURIComponent(id)}`, { json: body });
     }
