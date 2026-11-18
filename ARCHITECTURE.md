@@ -2,7 +2,7 @@
 
 Fonte única de convenções do financial-lab-testware. A fase 2 da skill `spec-to-test` planeja a partir deste arquivo, e quem implementa o plano segue este arquivo. Divergência entre código e documento: siga o documento e registre a divergência.
 
-Testes de API com Playwright + TypeScript. Duas APIs: **account** (saldo e bloqueios) e **transfer** (transferências). Idioma de testes, helpers e docs: português (pt-BR); identificadores de código em inglês.
+Testes de API com Playwright + TypeScript. Três APIs: **account** (contas, saldo, extrato e bloqueios), **transfer** (transferências, simulações, webhook do antifraude) e **antifraud** (regras e análises do antifraude simulado). Idioma de testes, helpers e docs: português (pt-BR); identificadores de código em inglês.
 
 ## Camadas
 
@@ -26,7 +26,7 @@ Dependências só no sentido da tabela (de baixo para cima). `npm run lint:arch`
 
 ## Base URL e rotas
 
-- Uma variável de base URL por API (`ACCOUNT_API_URL`, `TRANSFER_API_URL`), aplicada como `baseURL` pelo fixture. Sem barra final (o config remove).
+- Uma variável de base URL por API (`ACCOUNT_API_URL`, `TRANSFER_API_URL`, `ANTIFRAUD_API_URL`), aplicada como `baseURL` pelo fixture. Sem barra final (o config remove).
 - O service usa rota relativa começando com `/` (`/accounts/${encodeURIComponent(accountId)}/holds`). A base URL deve ser só a origem: com `/`, um caminho na base URL seria descartado.
 - `encodeURIComponent` em todo parâmetro de rota. Query em `options.params` (valores `undefined` são omitidos, então `{ params: { status } }` com `status` opcional basta).
 - API nova: chave `<x>ApiUrl` no config + `.env.example`, `interfaces/<X>Interface.ts`, `services/<X>Service.ts`, fixture `<x>Service` em `fixtures/ApiFixtures.ts`.
@@ -55,7 +55,8 @@ As APIs atuais não exigem autenticação. Quando exigirem:
 
 ## Specs de teste
 
-- Título: `<PREFIXO>-NN: <descrição>` (o ID liga o teste ao caso da spec; nunca renumerar IDs existentes).
+- Título: `<PREFIXO>-NN: <descrição>` (o ID liga o teste ao caso da spec; nunca renumerar IDs existentes). Título único no arquivo: `arquivo › describe › título` é o `test_id` estável do dataset de seleção de testes.
+- Tags no `test.describe` de topo: serviço (`@account`, `@transfer`, `@antifraud` ou `@e2e`) e spec (`@spec:<slug do arquivo em specs/ do SUT>`, ex.: `@spec:criar-bloqueio-saldo`). Exemplo: `test.describe("POST /accounts/{accountId}/holds", { tag: ["@account", "@spec:criar-bloqueio-saldo"] }, () => {...})`.
 - Cabeçalho de comentário com a feature, a versão da spec `(vX.Y.Z)`, a operação e o resumo da regra; casos fora do escopo listados no cabeçalho.
 - `test.describe` pela rota (`"POST /accounts/{accountId}/holds"`) e sub-`describe` por grupo de regra (criação, validação do corpo, idempotência, regras de negócio).
 - `test.step` para cada fase relevante do caso; variações de entrada em tabela + `for` com `test.step` por variação.
@@ -68,7 +69,9 @@ As APIs atuais não exigem autenticação. Quando exigirem:
 - Teste com espera longa: `test.setTimeout(90_000)` no próprio teste.
 - `fullyParallel: true`. Spec com estado compartilhado entre testes usa `test.describe.configure({ mode: "serial" })`.
 - Efeitos são observados só pela API (sem banco, fila ou mocks).
-- Dados de teste: contas **pré-existentes** por chave de config (o testware não cria contas). Cada teste que muta saldo usa um slot próprio de `ACTIVE_ACCOUNT_IDS` (`SLOT` no topo da spec); sem a conta, `test.skip` com o motivo (`activeAccount(slot)`). Bloqueios criados não são liberados: cada execução precisa de contas limpas.
+- Dados de teste: cada teste abre as **próprias contas** pela API (`openAccount`/`openAccountId` em `tests/helpers/account/accounts.ts`, CPF válido aleatório, `initialDeposit` padrão 100,00; `status: "Blocked"`/`"Closed"` leva ao status pedido). Nenhum teste depende de seed, de contas configuradas ou de ordem de execução: a suíte roda contra um banco recém-criado.
+- Estado global do antifraude (lista de regras e análises em memória): testes paralelos **não** alteram a lista inteira, não removem nem alteram as regras de configuração e não chamam `POST /rules/reset` nem `DELETE /analyses`. Para influenciar a decisão de uma transferência, criam uma regra própria com `id` único, escopada pelas contas recém-abertas (`sourceAccountIds`), com `amount` abaixo de `1000.00` (a regra padrão `valor-alto` vem antes na lista), e a removem no fim (`DELETE /rules/{id}`).
+- Testes que precisam mexer no estado global (reset, `PUT /rules`, regras padrão, `DELETE /analyses`, `GET /analyses?take`) levam a tag `@global`: rodam no projeto `global` (1 worker, depois do projeto `api`, via `npm test`) e terminam com `POST /rules/reset`.
 - Dado único por execução: `uniqueReference()`; valores monetários com `cents()` e `toBeCloseTo(x, 2)`.
 
 ## Ambientes e configuração
@@ -82,7 +85,8 @@ As APIs atuais não exigem autenticação. Quando exigirem:
 
 - `npm run check` (= `npm run typecheck` + `npm run lint:arch`)
 - Listar testes: `npx playwright test <spec> --list`
-- Rodar: `ENV=<env> npx playwright test <spec>` (pergunte antes: muta saldo das contas de teste)
+- Rodar: `ENV=<env> npx playwright test <spec>` (os testes criam os próprios dados; contra o docker-compose local do SUT, rodar é seguro)
+- Suíte completa: `npm test` (projeto `api` em paralelo e depois o projeto `global`)
 
 ## Proibições
 

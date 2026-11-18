@@ -6,8 +6,7 @@
  * com outro amount, 409. Demais regras, avaliadas na ordem: corpo inválido (400), conta inexistente (404),
  * reference já usada (R7), conta Closed (422), limite de 5 bloqueios Active (422), saldo disponível insuficiente (422).
  *
- * Contas: cada teste que muta saldo usa um slot próprio de ACTIVE_ACCOUNT_IDS (ver tests/helpers/account/holds.ts).
- * Os bloqueios criados não são liberados: cada execução precisa de contas limpas.
+ * Contas: cada teste abre as próprias contas pela API (tests/helpers/account/accounts.ts).
  * Fora do escopo (v1.0.0): repetição de bloqueio Released (HLD-15a), Released no limite (HLD-19),
  * não-efeito no extrato (HLD-01/02) e HLD-22 com conta Closed + reference já usada.
  */
@@ -16,11 +15,8 @@ import { ContractValidator } from "../../core/schema/ContractValidator";
 import { HoldResponseSchema } from "../../domains/account/HoldResponseSchema";
 import { expect, test } from "../../fixtures/ApiFixtures";
 import {
-    activeAccount,
-    blockedAccount,
     buildHoldBody,
     cents,
-    closedAccount,
     createHold,
     expectBalanceAfterHold,
     expectBalanceUnchanged,
@@ -29,20 +25,12 @@ import {
     getBalance,
     invalidHoldBody,
     isoIn,
-    requireAvailable,
     uniqueReference,
     waitForHoldStatus,
     waitForTransferFinal,
 } from "../helpers/account/holds";
+import { openAccountId } from "../helpers/account/accounts";
 import { expectProblem } from "../helpers/common/problem";
-
-/** Slot de ACTIVE_ACCOUNT_IDS usado por cada teste (uma conta por teste que muta saldo). */
-const SLOT = {
-    HLD01: 0, HLD02: 1, HLD03: 2, HLD05: 3, HLD06_A: 4, HLD06_B: 5,
-    HLD07: 6, HLD08: 7, HLD09: 8, HLD10: 9, HLD11: 10,
-    HLD13: 11, HLD14: 12, HLD15: 13, HLD16: 14, HLD18: 15, HLD19: 16, HLD20: 17,
-    HLD21_SRC: 18, HLD21_DST: 19, HLD22: 20,
-} as const;
 
 const DETAIL = {
     reference: "A referência deve ter de 1 a 32 caracteres alfanuméricos, hífen ou sublinhado.",
@@ -60,12 +48,11 @@ const DETAIL = {
 
 const DAY = 24 * 60 * 60 * 1000;
 
-test.describe("POST /accounts/{accountId}/holds", () => {
+test.describe("POST /accounts/{accountId}/holds", { tag: ["@account", "@spec:criar-bloqueio-saldo"] }, () => {
     test.describe("criação", () => {
         test("HLD-01: Criar bloqueio sem expiração em conta Active com saldo", async ({ accountService }) => {
-            const accountId = activeAccount(SLOT.HLD01);
+            const accountId = await openAccountId(accountService);
             const before = await getBalance(accountService, accountId);
-            requireAvailable(before, 1);
             const body = buildHoldBody({ amount: 1.0 });
 
             const hold = await test.step("cria o bloqueio", async () => {
@@ -90,8 +77,7 @@ test.describe("POST /accounts/{accountId}/holds", () => {
         });
 
         test("HLD-02: Criar bloqueio com expiresAt válido", async ({ accountService }) => {
-            const accountId = activeAccount(SLOT.HLD02);
-            requireAvailable(await getBalance(accountService, accountId), 0.04);
+            const accountId = await openAccountId(accountService);
 
             const variations = [
                 { label: "+1 h em UTC", expiresAt: isoIn(60 * 60 * 1000) },
@@ -110,9 +96,8 @@ test.describe("POST /accounts/{accountId}/holds", () => {
         });
 
         test("HLD-03: Bloqueio com amount igual ao availableBalance zera o disponível", async ({ accountService }) => {
-            const accountId = activeAccount(SLOT.HLD03);
+            const accountId = await openAccountId(accountService);
             const before = await getBalance(accountService, accountId);
-            requireAvailable(before, 0.01);
             const body = buildHoldBody({ amount: before.availableBalance });
 
             expectHoldCreated(await accountService.PostHold(accountId, body), body, accountId);
@@ -123,10 +108,9 @@ test.describe("POST /accounts/{accountId}/holds", () => {
         });
 
         test("HLD-04: Conta Blocked aceita bloqueio de saldo", async ({ accountService }) => {
-            const accountId = blockedAccount();
+            const accountId = await openAccountId(accountService, { status: "Blocked" });
             const before = await getBalance(accountService, accountId);
             expect(before.status).toBe("Blocked");
-            requireAvailable(before, 0.01);
             const body = buildHoldBody({ amount: 0.01 });
 
             expectHoldCreated(await accountService.PostHold(accountId, body), body, accountId);
@@ -137,8 +121,7 @@ test.describe("POST /accounts/{accountId}/holds", () => {
         });
 
         test("HLD-05: reason com espaços nas pontas é gravado sem eles", async ({ accountService }) => {
-            const accountId = activeAccount(SLOT.HLD05);
-            requireAvailable(await getBalance(accountService, accountId), 0.01);
+            const accountId = await openAccountId(accountService);
             const body = buildHoldBody({ amount: 0.01, reason: "   Ordem judicial 123   " });
 
             const hold = expectHoldCreated(await accountService.PostHold(accountId, body), body, accountId);
@@ -147,10 +130,8 @@ test.describe("POST /accounts/{accountId}/holds", () => {
         });
 
         test("HLD-06: Mesma reference em outra conta cria outro bloqueio", async ({ accountService }) => {
-            const accountA = activeAccount(SLOT.HLD06_A);
-            const accountB = activeAccount(SLOT.HLD06_B);
-            requireAvailable(await getBalance(accountService, accountA), 0.02);
-            requireAvailable(await getBalance(accountService, accountB), 0.03);
+            const accountA = await openAccountId(accountService);
+            const accountB = await openAccountId(accountService);
 
             const sameAmount = await createHold(accountService, accountA, { amount: 0.01 });
             const otherAmount = await createHold(accountService, accountA, { amount: 0.01 });
@@ -180,9 +161,8 @@ test.describe("POST /accounts/{accountId}/holds", () => {
 
     test.describe("validação do corpo", () => {
         test("HLD-07: reference inválida", async ({ accountService }) => {
-            const accountId = activeAccount(SLOT.HLD07);
+            const accountId = await openAccountId(accountService);
             const before = await getBalance(accountService, accountId);
-            requireAvailable(before, 0.02);
 
             const invalid: { label: string; reference?: string }[] = [
                 { label: "ausente" },
@@ -212,9 +192,8 @@ test.describe("POST /accounts/{accountId}/holds", () => {
         });
 
         test("HLD-08: amount ausente, zero ou negativo", async ({ accountService }) => {
-            const accountId = activeAccount(SLOT.HLD08);
+            const accountId = await openAccountId(accountService);
             const before = await getBalance(accountService, accountId);
-            requireAvailable(before, 0.01);
 
             const invalid: { label: string; amount?: number }[] = [
                 { label: "ausente" },
@@ -238,9 +217,8 @@ test.describe("POST /accounts/{accountId}/holds", () => {
         });
 
         test("HLD-09: amount com mais de 2 casas decimais", async ({ accountService }) => {
-            const accountId = activeAccount(SLOT.HLD09);
+            const accountId = await openAccountId(accountService);
             const before = await getBalance(accountService, accountId);
-            requireAvailable(before, 20.11);
 
             for (const amount of [10.001, 0.001]) {
                 await test.step(`400: ${amount}`, async () => {
@@ -258,9 +236,8 @@ test.describe("POST /accounts/{accountId}/holds", () => {
         });
 
         test("HLD-10: reason ausente ou fora de 5 a 200 caracteres", async ({ accountService }) => {
-            const accountId = activeAccount(SLOT.HLD10);
+            const accountId = await openAccountId(accountService);
             const before = await getBalance(accountService, accountId);
-            requireAvailable(before, 0.02);
 
             const invalid: { label: string; reason?: string }[] = [
                 { label: "ausente" },
@@ -289,7 +266,7 @@ test.describe("POST /accounts/{accountId}/holds", () => {
         test.fixme("HLD-10: reason \"   abc   \" (3 caracteres após o trim)", async () => {});
 
         test("HLD-11: expiresAt fora da janela de 10 s a 90 dias", async ({ accountService }) => {
-            const accountId = activeAccount(SLOT.HLD11);
+            const accountId = await openAccountId(accountService);
             const before = await getBalance(accountService, accountId);
 
             const invalid = [
@@ -315,8 +292,7 @@ test.describe("POST /accounts/{accountId}/holds", () => {
 
     test.describe("idempotência", () => {
         test("HLD-13: Repetição com mesma reference e mesmo amount devolve o bloqueio original", async ({ accountService }) => {
-            const accountId = activeAccount(SLOT.HLD13);
-            requireAvailable(await getBalance(accountService, accountId), 0.01);
+            const accountId = await openAccountId(accountService);
             const original = await createHold(accountService, accountId, {
                 amount: 0.01,
                 reason: "Motivo original",
@@ -340,8 +316,7 @@ test.describe("POST /accounts/{accountId}/holds", () => {
         });
 
         test("HLD-14: Repetição devolve 200 mesmo sem saldo disponível agora", async ({ accountService }) => {
-            const accountId = activeAccount(SLOT.HLD14);
-            requireAvailable(await getBalance(accountService, accountId), 0.02);
+            const accountId = await openAccountId(accountService);
             const original = await createHold(accountService, accountId, { amount: 0.01 });
             const remaining = (await getBalance(accountService, accountId)).availableBalance;
             await createHold(accountService, accountId, { amount: remaining });
@@ -357,8 +332,7 @@ test.describe("POST /accounts/{accountId}/holds", () => {
 
         test("HLD-15: Repetição devolve o bloqueio no estado atual (Expired)", async ({ accountService }) => {
             test.setTimeout(90_000);
-            const accountId = activeAccount(SLOT.HLD15);
-            requireAvailable(await getBalance(accountService, accountId), 0.01);
+            const accountId = await openAccountId(accountService);
             const original = await createHold(accountService, accountId, { amount: 0.01, expiresAt: isoIn(15_000) });
 
             await test.step("aguarda a expiração", async () => {
@@ -376,8 +350,7 @@ test.describe("POST /accounts/{accountId}/holds", () => {
         });
 
         test("HLD-16: reference já usada com outro amount", async ({ accountService }) => {
-            const accountId = activeAccount(SLOT.HLD16);
-            requireAvailable(await getBalance(accountService, accountId), 0.03);
+            const accountId = await openAccountId(accountService);
             const original = await createHold(accountService, accountId, { amount: 0.01 });
             const before = await getBalance(accountService, accountId);
 
@@ -391,7 +364,7 @@ test.describe("POST /accounts/{accountId}/holds", () => {
 
     test.describe("regras de negócio", () => {
         test("HLD-17: Conta Closed não aceita bloqueio", async ({ accountService }) => {
-            const accountId = closedAccount();
+            const accountId = await openAccountId(accountService, { initialDeposit: 0, status: "Closed" });
             const before = await getBalance(accountService, accountId);
             expect(before.status).toBe("Closed");
 
@@ -400,8 +373,7 @@ test.describe("POST /accounts/{accountId}/holds", () => {
         });
 
         test("HLD-18: Limite de 5 bloqueios Active", async ({ accountService }) => {
-            const accountId = activeAccount(SLOT.HLD18);
-            requireAvailable(await getBalance(accountService, accountId), 0.06);
+            const accountId = await openAccountId(accountService);
             await fillActiveHolds(accountService, accountId, 4);
 
             await test.step("5º bloqueio é aceito", async () => {
@@ -418,8 +390,7 @@ test.describe("POST /accounts/{accountId}/holds", () => {
 
         test("HLD-19: Bloqueios Expired não contam para o limite", async ({ accountService }) => {
             test.setTimeout(90_000);
-            const accountId = activeAccount(SLOT.HLD19);
-            requireAvailable(await getBalance(accountService, accountId), 0.06);
+            const accountId = await openAccountId(accountService);
             await fillActiveHolds(accountService, accountId, 4);
             const expiring = await createHold(accountService, accountId, { amount: 0.01, expiresAt: isoIn(15_000) });
 
@@ -434,8 +405,7 @@ test.describe("POST /accounts/{accountId}/holds", () => {
         });
 
         test("HLD-20: amount maior que o availableBalance", async ({ accountService }) => {
-            const accountId = activeAccount(SLOT.HLD20);
-            requireAvailable(await getBalance(accountService, accountId), 0.02);
+            const accountId = await openAccountId(accountService);
 
             await test.step("amount = availableBalance + 0,01", async () => {
                 const before = await getBalance(accountService, accountId);
@@ -465,9 +435,8 @@ test.describe("POST /accounts/{accountId}/holds", () => {
 
         test("HLD-21: Débito maior que o availableBalance é recusado com bloqueio ativo", async ({ accountService, transferService }) => {
             test.setTimeout(90_000);
-            const source = activeAccount(SLOT.HLD21_SRC);
-            const destination = activeAccount(SLOT.HLD21_DST);
-            requireAvailable(await getBalance(accountService, source), 1.02);
+            const source = await openAccountId(accountService);
+            const destination = await openAccountId(accountService);
             const hold = await createHold(accountService, source, { amount: 1.0 });
 
             await test.step("débito > availableBalance termina Failed", async () => {
@@ -505,8 +474,7 @@ test.describe("POST /accounts/{accountId}/holds", () => {
                 expectProblem(await accountService.PostHold(randomUUID(), buildHoldBody({ amount: 0 })), 400, DETAIL.amount);
             });
 
-            const accountId = activeAccount(SLOT.HLD22);
-            requireAvailable(await getBalance(accountService, accountId), 0.05);
+            const accountId = await openAccountId(accountService);
             const holds = await fillActiveHolds(accountService, accountId, 5);
             const before = await getBalance(accountService, accountId);
 
@@ -531,7 +499,7 @@ test.describe("POST /accounts/{accountId}/holds", () => {
         });
 
         test("HLD-22: Ordem de avaliação das regras (conta Closed + amount > availableBalance)", async ({ accountService }) => {
-            const accountId = closedAccount();
+            const accountId = await openAccountId(accountService, { initialDeposit: 0, status: "Closed" });
             const before = await getBalance(accountService, accountId);
             const body = buildHoldBody({ amount: cents(before.availableBalance + 0.01) });
 

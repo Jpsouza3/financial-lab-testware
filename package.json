@@ -2,10 +2,12 @@
   "name": "financial-lab-testware",
   "version": "1.0.0",
   "scripts": {
-    "test": "playwright test",
+    "test": "playwright test --project=api && playwright test --project=global",
     "typecheck": "tsc --noEmit",
     "lint:arch": "tsx scripts/check-architecture.ts",
-    "check": "npm run typecheck && npm run lint:arch"
+    "check": "npm run typecheck && npm run lint:arch",
+    "test:api": "playwright test --project=api",
+    "test:global": "playwright test --project=global"
   },
   "keywords": [],
   "author": "",

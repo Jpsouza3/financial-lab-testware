@@ -31,11 +31,7 @@ export const config = Object.freeze({
     // APIs
     accountApiUrl: env.url("ACCOUNT_API_URL"),
     transferApiUrl: env.url("TRANSFER_API_URL"),
-
-    // Contas de teste pré-existentes (o testware não cria contas). Opcionais: o teste que depende faz `test.skip`.
-    activeAccountIds: Object.freeze(env.list("ACTIVE_ACCOUNT_IDS")),
-    blockedAccountId: env.optional("BLOCKED_ACCOUNT_ID"),
-    closedAccountId: env.optional("CLOSED_ACCOUNT_ID"),
+    antifraudApiUrl: env.url("ANTIFRAUD_API_URL"),
 });
 
 env.assertValid();

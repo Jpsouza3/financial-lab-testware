@@ -1,4 +1,3 @@
-import { config } from "../../../core/config/EnvironmentConfig";
 import { HttpResponse } from "../../../core/http/HttpResponse";
 import { ContractValidator } from "../../../core/schema/ContractValidator";
 import { GetBalanceResponse } from "../../../domains/account/GetBalanceResponse";
@@ -8,33 +7,9 @@ import { HoldResponseSchema } from "../../../domains/account/HoldResponseSchema"
 import { HoldStatus } from "../../../domains/account/HoldStatus";
 import { PostHoldBody } from "../../../domains/account/PostHoldBody";
 import { TransferResponse } from "../../../domains/transfer/TransferResponse";
-import { expect, test } from "../../../fixtures/ApiFixtures";
+import { expect } from "../../../fixtures/ApiFixtures";
 import { AccountInterface } from "../../../interfaces/AccountInterface";
 import { TransferInterface } from "../../../interfaces/TransferInterface";
-
-/**
- * Contas de teste.
- *
- * O testware não cria contas e não existe operação de liberação no testware, então cada bloqueio Active
- * criado aqui fica na conta (consome saldo e um dos 5 slots). Por isso:
- * - cada teste que muta saldo usa uma conta própria do pool `ACTIVE_ACCOUNT_IDS` (índice fixo na spec);
- * - uma nova execução da suíte precisa de contas limpas (Active, com saldo, sem bloqueios Active).
- */
-export function activeAccount(slot: number): string {
-    const id = config.activeAccountIds[slot];
-    test.skip(!id, `ACTIVE_ACCOUNT_IDS precisa de pelo menos ${slot + 1} contas (slot ${slot})`);
-    return id!;
-}
-
-export function blockedAccount(): string {
-    test.skip(!config.blockedAccountId, "BLOCKED_ACCOUNT_ID não configurada");
-    return config.blockedAccountId!;
-}
-
-export function closedAccount(): string {
-    test.skip(!config.closedAccountId, "CLOSED_ACCOUNT_ID não configurada");
-    return config.closedAccountId!;
-}
 
 /** Arredonda para centavos (evita erro de ponto flutuante nas contas de saldo). */
 export const cents = (n: number): number => Math.round(n * 100) / 100;
@@ -74,11 +49,6 @@ export async function getBalance(accountService: AccountInterface, accountId: st
     expect(res.status, `GET balance ${accountId}`).toBe(200);
     ContractValidator.validate(GetBalanceResponseSchema, res.body);
     return res.body;
-}
-
-/** Garante saldo disponível mínimo para o teste; sem ele, o teste é pulado (conta de teste mal preparada). */
-export function requireAvailable(balance: GetBalanceResponse, min: number): void {
-    test.skip(balance.availableBalance < min, `conta ${balance.accountId} precisa de availableBalance >= ${min}`);
 }
 
 /** Cria um bloqueio e afirma 201. */

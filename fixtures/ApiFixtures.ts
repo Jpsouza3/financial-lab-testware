@@ -3,8 +3,10 @@ import { config } from "../core/config/EnvironmentConfig";
 import { HttpClient } from "../core/http/HttpClient";
 import { PlaywrightHttpClient } from "../core/http/PlaywrightHttpClient";
 import { AccountInterface } from "../interfaces/AccountInterface";
+import { AntifraudInterface } from "../interfaces/AntifraudInterface";
 import { TransferInterface } from "../interfaces/TransferInterface";
 import { AccountService } from "../services/AccountService";
+import { AntifraudService } from "../services/AntifraudService";
 import { TransferService } from "../services/TransferService";
 
 /**
@@ -14,6 +16,7 @@ import { TransferService } from "../services/TransferService";
 type ApiFixtures = {
     accountService: AccountInterface;
     transferService: TransferInterface;
+    antifraudService: AntifraudInterface;
 };
 
 /** Fixture de um service: abre um `APIRequestContext` com o baseURL da API e descarta ao fim do teste. */
@@ -31,6 +34,7 @@ function serviceFixture<S>(baseURL: string, create: (http: HttpClient) => S) {
 export const test = base.extend<ApiFixtures>({
     accountService: serviceFixture(config.accountApiUrl, (http) => new AccountService(http)),
     transferService: serviceFixture(config.transferApiUrl, (http) => new TransferService(http)),
+    antifraudService: serviceFixture(config.antifraudApiUrl, (http) => new AntifraudService(http)),
 });
 
 export { expect } from "@playwright/test";
