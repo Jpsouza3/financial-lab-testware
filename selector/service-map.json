@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "services": {
+    "account": ["@account", "@e2e"],
+    "transfer": ["@transfer", "@e2e"],
+    "antifraud": ["@antifraud", "@e2e"]
+  },
+  "ignoredFiles": ["\\.md$", "\\.http$", "^specs/", "^\\.gitignore$", "^\\.dockerignore$"],
+  "runAllFiles": ["^Dockerfile$", "^docker-compose\\.yml$", "^global\\.json$", "\\.sln$", "Contracts/", "Migrations/"],
+  "recentFailuresWindow": 5
+}
