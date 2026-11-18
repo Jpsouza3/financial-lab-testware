@@ -40,7 +40,7 @@ const ALLOWED_PACKAGES: Partial<Record<Layer, string[]>> = {
 };
 
 /** Únicos arquivos que podem ler `process.env`. */
-const PROCESS_ENV_ALLOWED = [/^core\/config\//, /^playwright\.config\.ts$/, /^scripts\//];
+const PROCESS_ENV_ALLOWED = [/^core\/config\//, /^playwright\.config\.ts$/, /^scripts\//, /^mutation\//];
 
 /** Único arquivo de `core/http` acoplado ao Playwright (o adapter). */
 const PLAYWRIGHT_ADAPTER = "core/http/PlaywrightHttpClient.ts";

@@ -1,0 +1,24 @@
+{
+  "version": 1,
+  "recipes": [
+    { "id": "neutral-refactor", "weight": 30, "neutral": [2, 6] },
+    { "id": "single-break", "weight": 25, "breaking": [1, 1], "neutral": [0, 2] },
+    { "id": "multi-break", "weight": 10, "breaking": [2, 3], "sameService": true },
+    { "id": "cross-service", "weight": 10, "breaking": [1, 2], "neutral": [0, 3], "minServices": 2 },
+    { "id": "feature", "weight": 15, "additive": [1, 2], "breaking": [0, 1] },
+    { "id": "config-change", "weight": 10, "config": [1, 2] }
+  ],
+  "fileWeights": [
+    { "pattern": "Services/TransferService\\.cs$", "weight": 3 },
+    { "pattern": "Models/Account\\.cs$", "weight": 3 },
+    { "pattern": "Models/Transfer\\.cs$", "weight": 3 },
+    { "pattern": "Services/Cpf\\.cs$", "weight": 2 },
+    { "pattern": "Services/StatementService\\.cs$", "weight": 2 },
+    { "pattern": "Validator\\.cs$", "weight": 2 },
+    { "pattern": "Services/(AccountManagement|BalanceHold|AccountTransaction)Service\\.cs$", "weight": 2 },
+    { "pattern": "/Models/.*Models?\\.cs$|Response\\.cs$", "weight": 1 },
+    { "pattern": "\\.http$|README\\.md$", "weight": 1 }
+  ],
+  "defaultFileWeight": 1.5,
+  "serviceWeights": { "account": 1, "transfer": 1, "antifraud": 1, "docs": 1 }
+}

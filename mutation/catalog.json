@@ -1,0 +1,1588 @@
+{
+  "version": 1,
+  "items": [
+    {
+      "id": "B-ACC-01",
+      "kind": "breaking",
+      "file": "financial-lab-account.Business/Models/Account.cs",
+      "description": "Debit: > vira >=",
+      "expected": "Débito igual ao saldo disponível é recusado",
+      "edits": [
+        {
+          "find": "if (amount > AvailableBalance)\n            throw new DomainException(\"Saldo insuficiente.\");",
+          "replace": "if (amount >= AvailableBalance)\n            throw new DomainException(\"Saldo insuficiente.\");"
+        }
+      ],
+      "service": "account"
+    },
+    {
+      "id": "B-ACC-02",
+      "kind": "breaking",
+      "file": "financial-lab-account.Business/Models/Account.cs",
+      "description": "Debit valida contra Balance",
+      "expected": "Débito ignora saldo bloqueado",
+      "edits": [
+        {
+          "find": "if (amount > AvailableBalance)\n            throw new DomainException(\"Saldo insuficiente.\");",
+          "replace": "if (amount > Balance)\n            throw new DomainException(\"Saldo insuficiente.\");"
+        }
+      ],
+      "service": "account"
+    },
+    {
+      "id": "B-ACC-03",
+      "kind": "breaking",
+      "file": "financial-lab-account.Business/Models/Account.cs",
+      "description": "Debit sem checagem de Blocked",
+      "expected": "Conta bloqueada debita",
+      "edits": [
+        {
+          "find": "        if (Status == AccountStatus.Blocked)\n            throw new DomainException(\"Conta Blocked: débito não permitido.\");\n",
+          "replace": ""
+        }
+      ],
+      "service": "account"
+    },
+    {
+      "id": "B-ACC-04",
+      "kind": "breaking",
+      "file": "financial-lab-account.Business/Models/Account.cs",
+      "description": "Credit sem checagem de Closed",
+      "expected": "Conta encerrada recebe crédito",
+      "edits": [
+        {
+          "find": "        ValidateMovement(amount, endToEndId, description);\n        if (Status == AccountStatus.Closed)\n            throw new DomainException(\"Conta Closed: movimentação não permitida.\");\n\n        Balance += amount;",
+          "replace": "        ValidateMovement(amount, endToEndId, description);\n\n        Balance += amount;"
+        }
+      ],
+      "service": "account"
+    },
+    {
+      "id": "B-ACC-05",
+      "kind": "breaking",
+      "file": "financial-lab-account.Business/Models/Account.cs",
+      "description": "Encerrar sem checar saldo",
+      "expected": "Encerra conta com saldo",
+      "edits": [
+        {
+          "find": "            if (Balance != 0)\n                throw new BusinessRuleException(\"A conta precisa estar com saldo zerado para ser encerrada.\");\n",
+          "replace": ""
+        }
+      ],
+      "service": "account"
+    },
+    {
+      "id": "B-ACC-06",
+      "kind": "breaking",
+      "file": "financial-lab-account.Business/Models/Account.cs",
+      "description": "Encerrar sem checar bloqueios",
+      "expected": "Encerra conta com bloqueios ativos",
+      "edits": [
+        {
+          "find": "            if (hasActiveHolds)\n                throw new BusinessRuleException(\"A conta possui bloqueios de saldo ativos.\");\n",
+          "replace": ""
+        }
+      ],
+      "service": "account"
+    },
+    {
+      "id": "B-ACC-07",
+      "kind": "breaking",
+      "file": "financial-lab-account.Business/Models/Account.cs",
+      "description": "MaxActiveHolds 5 -> 6",
+      "expected": "Limite de bloqueios muda",
+      "edits": [
+        {
+          "find": "public const int MaxActiveHolds = 5;",
+          "replace": "public const int MaxActiveHolds = 6;"
+        }
+      ],
+      "service": "account"
+    },
+    {
+      "id": "B-ACC-08",
+      "kind": "breaking",
+      "file": "financial-lab-account.Business/Models/Account.cs",
+      "description": "PlaceHold: >= vira >",
+      "expected": "Limite estoura por 1",
+      "edits": [
+        {
+          "find": "if (activeHolds >= MaxActiveHolds)",
+          "replace": "if (activeHolds > MaxActiveHolds)"
+        }
+      ],
+      "service": "account"
+    },
+    {
+      "id": "B-ACC-09",
+      "kind": "breaking",
+      "file": "financial-lab-account.Business/Models/Account.cs",
+      "description": "PlaceHold sem checar saldo",
+      "expected": "Bloqueio acima do saldo",
+      "edits": [
+        {
+          "find": "        if (amount > AvailableBalance)\n            throw new BusinessRuleException(\"Saldo disponível insuficiente para o bloqueio.\");\n",
+          "replace": ""
+        }
+      ],
+      "service": "account"
+    },
+    {
+      "id": "B-ACC-10",
+      "kind": "breaking",
+      "file": "financial-lab-account.Business/Models/Account.cs",
+      "description": "ReleaseHold soma em vez de subtrair",
+      "expected": "Saldo bloqueado incorreto após liberação",
+      "edits": [
+        {
+          "find": "BlockedBalance -= hold.Amount;",
+          "replace": "BlockedBalance += hold.Amount;"
+        }
+      ],
+      "service": "account"
+    },
+    {
+      "id": "B-ACC-11",
+      "kind": "breaking",
+      "file": "financial-lab-account.Business/Models/Account.cs",
+      "description": "ValidateMovement aceita zero",
+      "expected": "Valor zero aceito",
+      "edits": [
+        {
+          "find": "if (amount <= 0)\n            throw new DomainException(\"O valor deve ser maior que zero.\");",
+          "replace": "if (amount < 0)\n            throw new DomainException(\"O valor deve ser maior que zero.\");"
+        }
+      ],
+      "service": "account"
+    },
+    {
+      "id": "B-ACC-12",
+      "kind": "breaking",
+      "file": "financial-lab-account.Business/Models/Account.cs",
+      "description": "ValidateMovement sem 2 casas",
+      "expected": "Valores com 3+ casas aceitos",
+      "edits": [
+        {
+          "find": "        if (decimal.Round(amount, 2) != amount)\n            throw new DomainException(\"O valor deve ter no máximo 2 casas decimais.\");\n",
+          "replace": ""
+        }
+      ],
+      "service": "account"
+    },
+    {
+      "id": "B-ACC-13",
+      "kind": "breaking",
+      "file": "financial-lab-account.Business/Models/Account.cs",
+      "description": "Credit sem Version++",
+      "expected": "Version não muda no crédito",
+      "edits": [
+        {
+          "find": "        Balance += amount;\n        Version++;",
+          "replace": "        Balance += amount;"
+        }
+      ],
+      "service": "account"
+    },
+    {
+      "id": "B-TXN-01",
+      "kind": "breaking",
+      "file": "financial-lab-account.Business/Services/AccountTransactionService.cs",
+      "description": "MaxAttempts 3 -> 1",
+      "expected": "Conflito de concorrência não é retentado",
+      "edits": [
+        {
+          "find": "private const int MaxAttempts = 3;",
+          "replace": "private const int MaxAttempts = 1;"
+        }
+      ],
+      "service": "account"
+    },
+    {
+      "id": "B-TXN-02",
+      "kind": "breaking",
+      "file": "financial-lab-account.Business/Services/AccountTransactionService.cs",
+      "description": "Sem consulta de comando processado",
+      "expected": "Reprocessa a mesma operação",
+      "edits": [
+        {
+          "find": "            var existing = await repository.GetProcessedCommandAsync(accountId, endToEndId, ct);\n            if (existing is not null)\n                return await ToResultAsync(existing, type, amount, ct);\n\n",
+          "replace": ""
+        }
+      ],
+      "service": "account"
+    },
+    {
+      "id": "B-TXN-03",
+      "kind": "breaking",
+      "file": "financial-lab-account.Business/Services/AccountTransactionService.cs",
+      "description": "Sem IdempotencyConflict",
+      "expected": "Não sinaliza conflito de idempotência",
+      "edits": [
+        {
+          "find": "        if (existing.Type != type || existing.Amount != amount)\n            throw new IdempotencyConflictException(existing.EndToEndId, $\"{existing.Type} de {existing.Amount}\");\n\n",
+          "replace": ""
+        }
+      ],
+      "service": "account"
+    },
+    {
+      "id": "B-TXN-04",
+      "kind": "breaking",
+      "file": "financial-lab-account.Business/Services/AccountTransactionService.cs",
+      "description": "Engole DuplicateEntry",
+      "expected": "Corrida de duplicidade devolve o perdedor",
+      "edits": [
+        {
+          "find": "                var winner = await repository.GetProcessedCommandAsync(accountId, endToEndId, ct)\n                             ?? throw new InvalidOperationException(\n                                 $\"Operação {endToEndId} da conta {accountId} não encontrada após violação de unicidade.\");\n                return await ToResultAsync(winner, type, amount, ct);",
+          "replace": "                return result;"
+        }
+      ],
+      "service": "account"
+    },
+    {
+      "id": "B-HLD-01",
+      "kind": "breaking",
+      "file": "financial-lab-account.Business/Services/BalanceHoldService.cs",
+      "description": "MinExpiration 10s -> 0",
+      "expected": "Expiração curta aceita",
+      "edits": [
+        {
+          "find": "MinExpiration = TimeSpan.FromSeconds(10);",
+          "replace": "MinExpiration = TimeSpan.Zero;"
+        }
+      ],
+      "service": "account"
+    },
+    {
+      "id": "B-HLD-02",
+      "kind": "breaking",
+      "file": "financial-lab-account.Business/Services/BalanceHoldService.cs",
+      "description": "Regex de referência afrouxada",
+      "expected": "Referências inválidas aceitas",
+      "edits": [
+        {
+          "find": "[GeneratedRegex(\"^[A-Za-z0-9_-]{1,32}$\")]",
+          "replace": "[GeneratedRegex(\"^[A-Za-z0-9_.-]{1,40}$\")]"
+        }
+      ],
+      "service": "account"
+    },
+    {
+      "id": "B-HLD-03",
+      "kind": "breaking",
+      "file": "financial-lab-account.Business/Services/BalanceHoldService.cs",
+      "description": "Referência repetida com outro valor devolve existente",
+      "expected": "409 deixa de ser sinalizado",
+      "edits": [
+        {
+          "find": ": throw new ConflictException(\"Referência já utilizada com outro valor.\");",
+          "replace": ": new HoldResult(existing, false);"
+        }
+      ],
+      "service": "account"
+    },
+    {
+      "id": "B-HLD-04",
+      "kind": "breaking",
+      "file": "financial-lab-account.Business/Services/BalanceHoldService.cs",
+      "description": "ReleaseAsync aceita Expired",
+      "expected": "Libera bloqueio expirado",
+      "edits": [
+        {
+          "find": "                case HoldStatus.Expired:\n                    throw new ConflictException(\"Bloqueio expirado não pode ser liberado.\");\n",
+          "replace": ""
+        }
+      ],
+      "service": "account"
+    },
+    {
+      "id": "B-HLD-05",
+      "kind": "breaking",
+      "file": "financial-lab-account.Business/Services/BalanceHoldService.cs",
+      "description": "ExpireDue sem filtro Active",
+      "expected": "Reprocessa bloqueios fechados",
+      "edits": [
+        {
+          "find": "if (hold is not { Status: HoldStatus.Active } ||",
+          "replace": "if (hold is null ||"
+        }
+      ],
+      "service": "account"
+    },
+    {
+      "id": "B-HLD-06",
+      "kind": "breaking",
+      "file": "financial-lab-account.Business/Services/BalanceHoldService.cs",
+      "description": "Motivo mínimo 5 -> 1",
+      "expected": "Motivos curtos aceitos",
+      "edits": [
+        {
+          "find": "reason is not { Length: >= 5 and <= BalanceHold.ReasonMaxLength }",
+          "replace": "reason is not { Length: >= 1 and <= BalanceHold.ReasonMaxLength }"
+        }
+      ],
+      "service": "account"
+    },
+    {
+      "id": "B-HLD-07",
+      "kind": "breaking",
+      "file": "financial-lab-account.Business/Services/BalanceHoldService.cs",
+      "description": "MaxExpiration 90d -> 365d",
+      "expected": "Expiração longa aceita",
+      "edits": [
+        {
+          "find": "MaxExpiration = TimeSpan.FromDays(90);",
+          "replace": "MaxExpiration = TimeSpan.FromDays(365);"
+        }
+      ],
+      "service": "account"
+    },
+    {
+      "id": "B-STM-01",
+      "kind": "breaking",
+      "file": "financial-lab-account.Business/Services/StatementService.cs",
+      "description": "MaxPeriodDays 90 -> 91",
+      "expected": "Limite do extrato muda",
+      "edits": [
+        {
+          "find": "private const int MaxPeriodDays = 90;",
+          "replace": "private const int MaxPeriodDays = 91;"
+        }
+      ],
+      "service": "account"
+    },
+    {
+      "id": "B-STM-02",
+      "kind": "breaking",
+      "file": "financial-lab-account.Business/Services/StatementService.cs",
+      "description": "MaxPageSize 100 -> 101",
+      "expected": "Limite de página muda",
+      "edits": [
+        {
+          "find": "private const int MaxPageSize = 100;",
+          "replace": "private const int MaxPageSize = 101;"
+        }
+      ],
+      "service": "account"
+    },
+    {
+      "id": "B-STM-03",
+      "kind": "breaking",
+      "file": "financial-lab-account.Business/Services/StatementService.cs",
+      "description": "Total de páginas sem arredondar para cima",
+      "expected": "Perde a última página",
+      "edits": [
+        {
+          "find": "(totals.Count + size - 1) / size",
+          "replace": "totals.Count / size"
+        }
+      ],
+      "service": "account"
+    },
+    {
+      "id": "B-STM-04",
+      "kind": "breaking",
+      "file": "financial-lab-account.Business/Services/StatementService.cs",
+      "description": "Sem checagem de data futura",
+      "expected": "Aceita datas futuras",
+      "edits": [
+        {
+          "find": "        if (end > today)\n            throw new DomainException(\"A data final não pode estar no futuro.\");\n",
+          "replace": ""
+        }
+      ],
+      "service": "account"
+    },
+    {
+      "id": "B-STM-05",
+      "kind": "breaking",
+      "file": "financial-lab-account.Business/Services/StatementService.cs",
+      "description": "Troca saldo de abertura e fechamento",
+      "expected": "Totais do extrato incorretos",
+      "edits": [
+        {
+          "find": "opening, closing, totals.Credits",
+          "replace": "closing, opening, totals.Credits"
+        }
+      ],
+      "service": "account"
+    },
+    {
+      "id": "B-CPF-01",
+      "kind": "breaking",
+      "file": "financial-lab-account.Business/Services/Cpf.cs",
+      "description": "Sem checagem de dígitos iguais",
+      "expected": "CPF 11111111111 aceito",
+      "edits": [
+        {
+          "find": " || value.Distinct().Count() == 1",
+          "replace": ""
+        }
+      ],
+      "service": "account"
+    },
+    {
+      "id": "B-CPF-02",
+      "kind": "breaking",
+      "file": "financial-lab-account.Business/Services/Cpf.cs",
+      "description": "Peso do dígito errado",
+      "expected": "Validação de dígito errada",
+      "edits": [
+        {
+          "find": "sum += digits[i] * (length + 1 - i);",
+          "replace": "sum += digits[i] * (length - i);"
+        }
+      ],
+      "service": "account"
+    },
+    {
+      "id": "B-CPF-03",
+      "kind": "breaking",
+      "file": "financial-lab-account.Business/Services/Cpf.cs",
+      "description": "rest 10 não vira 0",
+      "expected": "Dígito 10 mal tratado",
+      "edits": [
+        {
+          "find": "return rest == 10 ? 0 : rest;",
+          "replace": "return rest;"
+        }
+      ],
+      "service": "account"
+    },
+    {
+      "id": "B-OPN-01",
+      "kind": "breaking",
+      "file": "financial-lab-account.Business/Services/AccountManagementService.cs",
+      "description": "Depósito máximo exclusivo",
+      "expected": "Depósito de 5000.00 recusado",
+      "edits": [
+        {
+          "find": "if (deposit is < 0 or > MaxInitialDeposit)",
+          "replace": "if (deposit is < 0 or >= MaxInitialDeposit)"
+        }
+      ],
+      "service": "account"
+    },
+    {
+      "id": "B-OPN-02",
+      "kind": "breaking",
+      "file": "financial-lab-account.Business/Services/AccountManagementService.cs",
+      "description": "Agência 0003 aceita",
+      "expected": "Agência inexistente aceita",
+      "edits": [
+        {
+          "find": "Branches = [\"0001\", \"0002\"];",
+          "replace": "Branches = [\"0001\", \"0002\", \"0003\"];"
+        }
+      ],
+      "service": "account"
+    },
+    {
+      "id": "B-OPN-03",
+      "kind": "breaking",
+      "file": "financial-lab-account.Business/Services/AccountManagementService.cs",
+      "description": "Nome mínimo 3 -> 2",
+      "expected": "Nome curto aceito",
+      "edits": [
+        {
+          "find": "if (normalized.Length is < 3 or > 150)",
+          "replace": "if (normalized.Length is < 2 or > 150)"
+        }
+      ],
+      "service": "account"
+    },
+    {
+      "id": "B-STS-01",
+      "kind": "breaking",
+      "file": "financial-lab-account.Business/Services/AccountManagementService.cs",
+      "description": "Motivo de status mínimo 5 -> 3",
+      "expected": "Motivo curto aceito",
+      "edits": [
+        {
+          "find": "if (reason is { Length: < 5 or > 200 })",
+          "replace": "if (reason is { Length: < 3 or > 200 })"
+        }
+      ],
+      "service": "account"
+    },
+    {
+      "id": "B-STS-02",
+      "kind": "breaking",
+      "file": "financial-lab-account.Business/Models/Account.cs",
+      "description": "Mudança para o mesmo status é efetiva",
+      "expected": "Version e data mudam sem mudança de status",
+      "edits": [
+        {
+          "find": "        if (target == Status)\n            return false;\n",
+          "replace": ""
+        }
+      ],
+      "service": "account"
+    },
+    {
+      "id": "B-AWK-01",
+      "kind": "breaking",
+      "file": "financial-lab-account.Api/Workers/HoldExpirationWorker.cs",
+      "description": "Intervalo do worker 5s -> 60s",
+      "expected": "Expiração demora (sensível a tempo)",
+      "edits": [
+        {
+          "find": "Interval = TimeSpan.FromSeconds(5);",
+          "replace": "Interval = TimeSpan.FromSeconds(60);"
+        }
+      ],
+      "service": "account"
+    },
+    {
+      "id": "B-AWK-02",
+      "kind": "breaking",
+      "file": "financial-lab-account.Api/Workers/HoldExpirationWorker.cs",
+      "description": "BatchSize 100 -> 1",
+      "expected": "Expiração lenta com muitos bloqueios",
+      "edits": [
+        {
+          "find": "private const int BatchSize = 100;",
+          "replace": "private const int BatchSize = 1;"
+        }
+      ],
+      "service": "account"
+    },
+    {
+      "id": "B-TRF-01",
+      "kind": "breaking",
+      "file": "financial-lab-transfer.Business/Models/Transfer.cs",
+      "description": "Sem checagem origem != destino",
+      "expected": "Transferência para si mesmo aceita",
+      "edits": [
+        {
+          "find": "        if (request.SourceAccountId == request.DestinationAccountId)\n            throw new DomainException(\"A conta de origem e a de destino devem ser diferentes.\");\n",
+          "replace": ""
+        }
+      ],
+      "service": "transfer"
+    },
+    {
+      "id": "B-TRF-02",
+      "kind": "breaking",
+      "file": "financial-lab-transfer.Business/Models/Transfer.cs",
+      "description": "Sem checagem de valor positivo",
+      "expected": "Valor inválido aceito",
+      "edits": [
+        {
+          "find": "        if (request.Amount <= 0)\n            throw new DomainException(\"O valor deve ser maior que zero.\");\n",
+          "replace": ""
+        }
+      ],
+      "service": "transfer"
+    },
+    {
+      "id": "B-TRF-03",
+      "kind": "breaking",
+      "file": "financial-lab-transfer.Business/Models/Transfer.cs",
+      "description": "LegOf troca Debit e Credit",
+      "expected": "Pernas associadas à conta errada",
+      "edits": [
+        {
+          "find": "return accountId == SourceAccountId ? TransferLeg.Debit\n                : accountId == DestinationAccountId ? TransferLeg.Credit",
+          "replace": "return accountId == SourceAccountId ? TransferLeg.Credit\n                : accountId == DestinationAccountId ? TransferLeg.Debit"
+        }
+      ],
+      "service": "transfer"
+    },
+    {
+      "id": "B-TRF-04",
+      "kind": "breaking",
+      "file": "financial-lab-transfer.Business/Models/Transfer.cs",
+      "description": "RejectCredit sem RefundEndToEndId",
+      "expected": "Estorno sem identificador",
+      "edits": [
+        {
+          "find": "        RefundEndToEndId = EndToEndIds.NewRefund();\n",
+          "replace": ""
+        }
+      ],
+      "service": "transfer"
+    },
+    {
+      "id": "B-TRF-05",
+      "kind": "breaking",
+      "file": "financial-lab-transfer.Business/Models/Transfer.cs",
+      "description": "Move sem checagem de origem",
+      "expected": "Máquina de estados aceita qualquer transição",
+      "edits": [
+        {
+          "find": "        if (Status != from)\n            return false;\n\n",
+          "replace": ""
+        }
+      ],
+      "service": "transfer"
+    },
+    {
+      "id": "B-TRF-06",
+      "kind": "breaking",
+      "file": "financial-lab-transfer.Business/Models/Transfer.cs",
+      "description": "ConfirmDebit vai a Completed",
+      "expected": "Pula a etapa de crédito",
+      "edits": [
+        {
+          "find": "if (!Move(TransferStatus.Debiting, TransferStatus.Crediting))",
+          "replace": "if (!Move(TransferStatus.Debiting, TransferStatus.Completed))"
+        }
+      ],
+      "service": "transfer"
+    },
+    {
+      "id": "B-TRF-07",
+      "kind": "breaking",
+      "file": "financial-lab-transfer.Business/Models/Transfer.cs",
+      "description": "FailureReasonMaxLength 400 -> 40",
+      "expected": "Motivos truncados",
+      "edits": [
+        {
+          "find": "public const int FailureReasonMaxLength = 400;",
+          "replace": "public const int FailureReasonMaxLength = 40;"
+        }
+      ],
+      "service": "transfer"
+    },
+    {
+      "id": "B-TSV-01",
+      "kind": "breaking",
+      "file": "financial-lab-transfer.Business/Services/TransferService.cs",
+      "description": "Débito mesmo sem aprovar a triagem",
+      "expected": "Débito repetido em webhook repetido",
+      "edits": [
+        {
+          "find": "            if (transfer.ApproveScreening())\n                await accounts.RequestDebitAsync(",
+          "replace": "            transfer.ApproveScreening();\n            await accounts.RequestDebitAsync("
+        }
+      ],
+      "service": "transfer"
+    },
+    {
+      "id": "B-TSV-02",
+      "kind": "breaking",
+      "file": "financial-lab-transfer.Business/Services/TransferService.cs",
+      "description": "Comparação do timeout invertida",
+      "expected": "Timeout resolve cedo/tarde demais",
+      "edits": [
+        {
+          "find": "case var _ when transfer.CreatedAt < now - timeout:",
+          "replace": "case var _ when transfer.CreatedAt > now - timeout:"
+        }
+      ],
+      "service": "transfer"
+    },
+    {
+      "id": "B-TSV-03",
+      "kind": "breaking",
+      "file": "financial-lab-transfer.Business/Services/TransferService.cs",
+      "description": "Texto do timeout muda",
+      "expected": "Asserts de mensagem quebram",
+      "edits": [
+        {
+          "find": "ScreeningTimeoutReason = \"O antifraude não respondeu a tempo.\";",
+          "replace": "ScreeningTimeoutReason = \"Tempo de análise esgotado.\";"
+        }
+      ],
+      "service": "transfer"
+    },
+    {
+      "id": "B-TSV-04",
+      "kind": "breaking",
+      "file": "financial-lab-transfer.Business/Services/TransferService.cs",
+      "description": "NotFound não reenvia a análise",
+      "expected": "Transferência presa em Screening",
+      "edits": [
+        {
+          "find": "case ScreeningOutcome.NotFound:\n                        await antifraud.RequestAnalysisAsync(transfer, ct);\n                        await repository.SaveChangesAsync(ct);\n",
+          "replace": "case ScreeningOutcome.NotFound:\n"
+        }
+      ],
+      "service": "transfer"
+    },
+    {
+      "id": "B-TSV-05",
+      "kind": "breaking",
+      "file": "financial-lab-transfer.Business/Services/TransferService.cs",
+      "description": "Crédito recusado não pede estorno",
+      "expected": "Transferência presa em Refunding",
+      "edits": [
+        {
+          "find": "if (leg == TransferLeg.Credit && transfer.RejectCredit(reason))\n                await accounts.RequestCreditAsync(transfer.SourceAccountId, transfer.Amount,\n                    transfer.RefundEndToEndId!, $\"Devolução da transferência {transfer.Id}\", ct);",
+          "replace": "if (leg == TransferLeg.Credit)\n                transfer.RejectCredit(reason);"
+        }
+      ],
+      "service": "transfer"
+    },
+    {
+      "id": "B-SIM-01",
+      "kind": "breaking",
+      "file": "financial-lab-transfer.Business/Services/SimulationService.cs",
+      "description": "MaxTransfers 1000 -> 100",
+      "expected": "Limite de simulação muda",
+      "edits": [
+        {
+          "find": "public const int MaxTransfers = 1000;",
+          "replace": "public const int MaxTransfers = 100;"
+        }
+      ],
+      "service": "transfer"
+    },
+    {
+      "id": "B-SIM-02",
+      "kind": "breaking",
+      "file": "financial-lab-transfer.Business/Services/SimulationService.cs",
+      "description": "Simulação com uma conta",
+      "expected": "Aceita simulação com uma conta",
+      "edits": [
+        {
+          "find": "if (accountIds.Count < 2)",
+          "replace": "if (accountIds.Count < 1)"
+        }
+      ],
+      "service": "transfer"
+    },
+    {
+      "id": "B-WHS-01",
+      "kind": "breaking",
+      "file": "financial-lab-transfer.Api/Webhooks/WebhookSignature.cs",
+      "description": "Sem tolerância de tempo",
+      "expected": "Aceita timestamp antigo",
+      "edits": [
+        {
+          "find": "        if (Math.Abs(now.ToUnixTimeSeconds() - unix) > tolerance.TotalSeconds)\n            return false;\n",
+          "replace": ""
+        }
+      ],
+      "service": "transfer"
+    },
+    {
+      "id": "B-WHS-02",
+      "kind": "breaking",
+      "file": "financial-lab-transfer.Api/Webhooks/WebhookSignature.cs",
+      "description": "HMAC sem timestamp",
+      "expected": "Assinaturas legítimas falham",
+      "edits": [
+        {
+          "find": "Encoding.UTF8.GetBytes($\"{timestamp}.{body}\")",
+          "replace": "Encoding.UTF8.GetBytes(body)"
+        }
+      ],
+      "service": "transfer"
+    },
+    {
+      "id": "B-WHS-03",
+      "kind": "breaking",
+      "file": "financial-lab-transfer.Api/Webhooks/WebhookSignature.cs",
+      "description": "Aceita assinatura vazia",
+      "expected": "Webhook sem assinatura aceito",
+      "edits": [
+        {
+          "find": "if (string.IsNullOrEmpty(timestamp) || string.IsNullOrEmpty(signature) || !long.TryParse(timestamp, out var unix))\n            return false;",
+          "replace": "if (string.IsNullOrEmpty(signature))\n            return true;\n        if (string.IsNullOrEmpty(timestamp) || !long.TryParse(timestamp, out var unix))\n            return false;"
+        }
+      ],
+      "service": "transfer"
+    },
+    {
+      "id": "B-FRL-01",
+      "kind": "breaking",
+      "file": "financial-lab-antifraud.Api/Models/FraudRule.cs",
+      "description": "MinAmount exclusivo",
+      "expected": "Borda inferior da regra",
+      "edits": [
+        {
+          "find": "request.Amount >= MinAmount",
+          "replace": "request.Amount > MinAmount"
+        }
+      ],
+      "service": "antifraud"
+    },
+    {
+      "id": "B-FRL-02",
+      "kind": "breaking",
+      "file": "financial-lab-antifraud.Api/Models/FraudRule.cs",
+      "description": "MaxAmount exclusivo",
+      "expected": "Borda superior da regra",
+      "edits": [
+        {
+          "find": "request.Amount <= MaxAmount",
+          "replace": "request.Amount < MaxAmount"
+        }
+      ],
+      "service": "antifraud"
+    },
+    {
+      "id": "B-FRL-03",
+      "kind": "breaking",
+      "file": "financial-lab-antifraud.Api/Models/FraudRule.cs",
+      "description": "Descrição diferencia maiúsculas",
+      "expected": "Regra de descrição case-sensitive",
+      "edits": [
+        {
+          "find": "StringComparison.OrdinalIgnoreCase",
+          "replace": "StringComparison.Ordinal"
+        }
+      ],
+      "service": "antifraud"
+    },
+    {
+      "id": "B-FRL-04",
+      "kind": "breaking",
+      "file": "financial-lab-antifraud.Api/Models/FraudRule.cs",
+      "description": "Ignora Enabled",
+      "expected": "Regra desabilitada casa",
+      "edits": [
+        {
+          "find": "=> Enabled\n           && (MinAmount",
+          "replace": "=> (MinAmount"
+        }
+      ],
+      "service": "antifraud"
+    },
+    {
+      "id": "B-FRL-05",
+      "kind": "breaking",
+      "file": "financial-lab-antifraud.Api/Models/FraudRule.cs",
+      "description": "Troca origem e destino nas listas",
+      "expected": "Regras por conta casam errado",
+      "edits": [
+        {
+          "find": "SourceAccountIds.Contains(request.SourceAccountId)",
+          "replace": "SourceAccountIds.Contains(request.DestinationAccountId)"
+        },
+        {
+          "find": "DestinationAccountIds.Contains(request.DestinationAccountId)",
+          "replace": "DestinationAccountIds.Contains(request.SourceAccountId)"
+        }
+      ],
+      "service": "antifraud"
+    },
+    {
+      "id": "B-RVL-01",
+      "kind": "breaking",
+      "file": "financial-lab-antifraud.Api/Rules/RuleValidator.cs",
+      "description": "MaxDelayMs 120000 -> 12000",
+      "expected": "Validação de atraso muda",
+      "edits": [
+        {
+          "find": "public const int MaxDelayMs = 120_000;",
+          "replace": "public const int MaxDelayMs = 12_000;"
+        }
+      ],
+      "service": "antifraud"
+    },
+    {
+      "id": "B-RVL-02",
+      "kind": "breaking",
+      "file": "financial-lab-antifraud.Api/Rules/RuleValidator.cs",
+      "description": "Sem checagem de ids repetidos",
+      "expected": "Aceita regras repetidas",
+      "edits": [
+        {
+          "find": "        if (duplicated.Count > 0)\n            errors[\"rules\"] = [$\"Ids de regra repetidos: {string.Join(\", \", duplicated)}.\"];\n",
+          "replace": ""
+        }
+      ],
+      "service": "antifraud"
+    },
+    {
+      "id": "B-RVL-03",
+      "kind": "breaking",
+      "file": "financial-lab-antifraud.Api/Rules/RuleValidator.cs",
+      "description": "Faixa de um valor rejeitada",
+      "expected": "minAmount == maxAmount recusado",
+      "edits": [
+        {
+          "find": "if (rule.MinAmount > rule.MaxAmount)",
+          "replace": "if (rule.MinAmount >= rule.MaxAmount)"
+        }
+      ],
+      "service": "antifraud"
+    },
+    {
+      "id": "B-WHD-01",
+      "kind": "breaking",
+      "file": "financial-lab-antifraud.Api/Webhooks/WebhookDispatcher.cs",
+      "description": "Duplicate com outro deliveryId",
+      "expected": "Idempotência por entrega quebra",
+      "edits": [
+        {
+          "find": "                await DeliverAsync(analysis, payload, deliveryId, false, ct);",
+          "replace": "                await DeliverAsync(analysis, payload, Guid.NewGuid(), false, ct);"
+        }
+      ],
+      "service": "antifraud"
+    },
+    {
+      "id": "B-WHD-02",
+      "kind": "breaking",
+      "file": "financial-lab-antifraud.Api/Webhooks/WebhookDispatcher.cs",
+      "description": "Flip envia a mesma decisão",
+      "expected": "Reversão deixa de existir",
+      "edits": [
+        {
+          "find": "analysis.ToPayload(flipped, \"Decisão revista.\")",
+          "replace": "analysis.ToPayload(analysis.Status, \"Decisão revista.\")"
+        }
+      ],
+      "service": "antifraud"
+    },
+    {
+      "id": "B-WHD-03",
+      "kind": "breaking",
+      "file": "financial-lab-antifraud.Api/Webhooks/WebhookDispatcher.cs",
+      "description": "Drop ainda entrega",
+      "expected": "Reconciliação não é exercitada",
+      "edits": [
+        {
+          "find": "if (analysis.Delivery == DeliveryMode.Drop)",
+          "replace": "if (analysis.Delivery == DeliveryMode.Drop && analysis.DelayMs < 0)"
+        }
+      ],
+      "service": "antifraud"
+    },
+    {
+      "id": "B-WHD-04",
+      "kind": "breaking",
+      "file": "financial-lab-antifraud.Api/Webhooks/WebhookDispatcher.cs",
+      "description": "Retry sem backoff exponencial",
+      "expected": "Intervalo constante entre tentativas",
+      "edits": [
+        {
+          "find": "delivery.BaseBackoffMs * Math.Pow(2, attempt - 1)",
+          "replace": "delivery.BaseBackoffMs"
+        }
+      ],
+      "service": "antifraud"
+    },
+    {
+      "id": "N-01a",
+      "kind": "neutral",
+      "file": "financial-lab-account.Business/Services/StatementService.cs",
+      "description": "Renomeia variável local parsedFrom",
+      "edits": [
+        {
+          "find": "\\bparsedFrom\\b",
+          "replace": "fromDate",
+          "regex": true,
+          "all": true
+        }
+      ],
+      "service": "account"
+    },
+    {
+      "id": "N-01b",
+      "kind": "neutral",
+      "file": "financial-lab-account.Business/Services/BalanceHoldService.cs",
+      "description": "Renomeia variável local expired",
+      "edits": [
+        {
+          "find": "\\bexpired\\b",
+          "replace": "expiredCount",
+          "regex": true,
+          "all": true
+        }
+      ],
+      "service": "account"
+    },
+    {
+      "id": "N-01c",
+      "kind": "neutral",
+      "file": "financial-lab-account.Business/Services/AccountTransactionService.cs",
+      "description": "Renomeia variável local winner",
+      "edits": [
+        {
+          "find": "\\bwinner\\b",
+          "replace": "existingCommand",
+          "regex": true,
+          "all": true
+        }
+      ],
+      "service": "account"
+    },
+    {
+      "id": "N-01d",
+      "kind": "neutral",
+      "file": "financial-lab-transfer.Business/Services/TransferService.cs",
+      "description": "Renomeia variável local stale",
+      "edits": [
+        {
+          "find": "\\bstale\\b",
+          "replace": "staleTransfers",
+          "regex": true,
+          "all": true
+        }
+      ],
+      "service": "transfer"
+    },
+    {
+      "id": "N-01e",
+      "kind": "neutral",
+      "file": "financial-lab-antifraud.Api/Webhooks/WebhookDispatcher.cs",
+      "description": "Renomeia variável local flipped",
+      "edits": [
+        {
+          "find": "\\bflipped\\b",
+          "replace": "reversed",
+          "regex": true,
+          "all": true
+        }
+      ],
+      "service": "antifraud"
+    },
+    {
+      "id": "N-01f",
+      "kind": "neutral",
+      "file": "financial-lab-antifraud.Api/Rules/RuleValidator.cs",
+      "description": "Renomeia variável local duplicated",
+      "edits": [
+        {
+          "find": "\\bduplicated\\b",
+          "replace": "repeatedIds",
+          "regex": true,
+          "all": true
+        }
+      ],
+      "service": "antifraud"
+    },
+    {
+      "id": "N-01g",
+      "kind": "neutral",
+      "file": "financial-lab-account.Business/Services/AccountManagementService.cs",
+      "description": "Renomeia variável local normalizedName",
+      "edits": [
+        {
+          "find": "\\bnormalizedName\\b",
+          "replace": "cleanName",
+          "regex": true,
+          "all": true
+        }
+      ],
+      "service": "account"
+    },
+    {
+      "id": "N-02a",
+      "kind": "neutral",
+      "file": "financial-lab-transfer.Api/Webhooks/WebhookSignature.cs",
+      "description": "Extrai cálculo da assinatura para método privado",
+      "edits": [
+        {
+          "find": "var expected = \"sha256=\" + Convert.ToHexStringLower(HMACSHA256.HashData(\n            Encoding.UTF8.GetBytes(secret), Encoding.UTF8.GetBytes($\"{timestamp}.{body}\")));",
+          "replace": "var expected = Sign(secret, Encoding.UTF8.GetBytes($\"{timestamp}.{body}\"));"
+        },
+        {
+          "find": "            Encoding.UTF8.GetBytes(signature));\n    }\n}",
+          "replace": "            Encoding.UTF8.GetBytes(signature));\n    }\n\n    private static string Sign(string secret, byte[] message)\n        => \"sha256=\" + Convert.ToHexStringLower(HMACSHA256.HashData(Encoding.UTF8.GetBytes(secret), message));\n}"
+        }
+      ],
+      "service": "transfer"
+    },
+    {
+      "id": "N-02b",
+      "kind": "neutral",
+      "file": "financial-lab-account.Business/Services/AccountManagementService.cs",
+      "description": "Extrai validação do depósito para método privado",
+      "edits": [
+        {
+          "find": "        var deposit = initialDeposit ?? 0m;\n        if (deposit is < 0 or > MaxInitialDeposit)\n            throw new DomainException(\"O depósito inicial deve estar entre 0 e 5000.00.\");\n        if (decimal.Round(deposit, 2) != deposit)\n            throw new DomainException(\"O depósito inicial deve ter no máximo 2 casas decimais.\");\n",
+          "replace": "        var deposit = ValidateDeposit(initialDeposit);\n"
+        },
+        {
+          "find": "    internal static NotFoundException AccountNotFound()",
+          "replace": "    private static decimal ValidateDeposit(decimal? initialDeposit)\n    {\n        var deposit = initialDeposit ?? 0m;\n        if (deposit is < 0 or > MaxInitialDeposit)\n            throw new DomainException(\"O depósito inicial deve estar entre 0 e 5000.00.\");\n        if (decimal.Round(deposit, 2) != deposit)\n            throw new DomainException(\"O depósito inicial deve ter no máximo 2 casas decimais.\");\n        return deposit;\n    }\n\n    internal static NotFoundException AccountNotFound()"
+        }
+      ],
+      "service": "account"
+    },
+    {
+      "id": "N-02c",
+      "kind": "neutral",
+      "file": "financial-lab-transfer.Business/Services/TransferService.cs",
+      "description": "Adiciona método privado auxiliar não usado",
+      "edits": [
+        {
+          "find": "    private async Task<Transfer?> HandleAsync(",
+          "replace": "    private static bool IsFinal(Transfer transfer)\n        => transfer.Status is TransferStatus.Completed or TransferStatus.Failed or TransferStatus.Refunded;\n\n    private async Task<Transfer?> HandleAsync("
+        }
+      ],
+      "service": "transfer"
+    },
+    {
+      "id": "N-03a",
+      "kind": "neutral",
+      "file": "financial-lab-account.Business/Services/BalanceHoldService.cs",
+      "description": "Reordena usings",
+      "edits": [
+        {
+          "find": "using System.Text.RegularExpressions;\nusing financial_lab_account.Business.Exceptions;\nusing financial_lab_account.Business.Interfaces;\nusing financial_lab_account.Business.Models;",
+          "replace": "using financial_lab_account.Business.Exceptions;\nusing financial_lab_account.Business.Interfaces;\nusing financial_lab_account.Business.Models;\nusing System.Text.RegularExpressions;"
+        }
+      ],
+      "service": "account"
+    },
+    {
+      "id": "N-03b",
+      "kind": "neutral",
+      "file": "financial-lab-transfer.Business/Services/TransferService.cs",
+      "description": "Reordena usings",
+      "edits": [
+        {
+          "find": "using financial_lab_transfer.Business.Exceptions;\nusing financial_lab_transfer.Business.Interfaces;\nusing financial_lab_transfer.Business.Models;",
+          "replace": "using financial_lab_transfer.Business.Models;\nusing financial_lab_transfer.Business.Interfaces;\nusing financial_lab_transfer.Business.Exceptions;"
+        }
+      ],
+      "service": "transfer"
+    },
+    {
+      "id": "N-03c",
+      "kind": "neutral",
+      "file": "financial-lab-antifraud.Api/Webhooks/WebhookDispatcher.cs",
+      "description": "Reordena usings",
+      "edits": [
+        {
+          "find": "using System.Net;\nusing System.Text;\nusing System.Text.Json;",
+          "replace": "using System.Text;\nusing System.Net;\nusing System.Text.Json;"
+        }
+      ],
+      "service": "antifraud"
+    },
+    {
+      "id": "N-03d",
+      "kind": "neutral",
+      "file": "financial-lab-account.Business/Models/Account.cs",
+      "description": "Reformata inicializador",
+      "edits": [
+        {
+          "find": "    public static Account Open(string name, string document, string branch, string number, DateTime now)\n        => new() { Name = name, Document = document, Branch = branch, Number = number, OpenedAt = now };",
+          "replace": "    public static Account Open(string name, string document, string branch, string number, DateTime now) =>\n        new()\n        {\n            Name = name,\n            Document = document,\n            Branch = branch,\n            Number = number,\n            OpenedAt = now\n        };"
+        }
+      ],
+      "service": "account"
+    },
+    {
+      "id": "N-04a",
+      "kind": "neutral",
+      "file": "financial-lab-account.Business/Models/Account.cs",
+      "description": "Documentação XML",
+      "edits": [
+        {
+          "find": "    public LedgerEntry Debit(decimal amount, string endToEndId, string? description = null)",
+          "replace": "    /// <summary>Debita a conta respeitando o saldo disponível.</summary>\n    public LedgerEntry Debit(decimal amount, string endToEndId, string? description = null)"
+        }
+      ],
+      "service": "account"
+    },
+    {
+      "id": "N-04b",
+      "kind": "neutral",
+      "file": "financial-lab-transfer.Business/Services/TransferService.cs",
+      "description": "Documentação XML",
+      "edits": [
+        {
+          "find": "    public async Task<IReadOnlyList<Transfer>> CreateAsync(",
+          "replace": "    /// <summary>Cria as transferências e pede a análise antifraude de cada uma.</summary>\n    public async Task<IReadOnlyList<Transfer>> CreateAsync("
+        }
+      ],
+      "service": "transfer"
+    },
+    {
+      "id": "N-04c",
+      "kind": "neutral",
+      "file": "financial-lab-antifraud.Api/Models/FraudRule.cs",
+      "description": "Documentação XML",
+      "edits": [
+        {
+          "find": "    public bool Matches(AnalysisRequest request)",
+          "replace": "    /// <summary>Verdadeiro quando todas as condições informadas casam com a análise.</summary>\n    public bool Matches(AnalysisRequest request)"
+        }
+      ],
+      "service": "antifraud"
+    },
+    {
+      "id": "N-04d",
+      "kind": "neutral",
+      "file": "financial-lab-account.Business/Services/StatementService.cs",
+      "description": "Documentação XML",
+      "edits": [
+        {
+          "find": "    public async Task<Statement> GetAsync(",
+          "replace": "    /// <summary>Monta o extrato paginado do período.</summary>\n    public async Task<Statement> GetAsync("
+        }
+      ],
+      "service": "account"
+    },
+    {
+      "id": "N-04e",
+      "kind": "neutral",
+      "file": "financial-lab-account.Business/Services/Cpf.cs",
+      "description": "Documentação XML",
+      "edits": [
+        {
+          "find": "    public static bool IsValid(string? value)",
+          "replace": "    /// <summary>Valida um CPF sem máscara.</summary>\n    public static bool IsValid(string? value)"
+        }
+      ],
+      "service": "account"
+    },
+    {
+      "id": "N-05a",
+      "kind": "neutral",
+      "file": "financial-lab-account.Api/Workers/HoldExpirationWorker.cs",
+      "description": "Texto de log",
+      "edits": [
+        {
+          "find": "\"Expiração de bloqueios: {Count} bloqueio(s) expirado(s).\"",
+          "replace": "\"Bloqueios expirados nesta execução: {Count}.\""
+        }
+      ],
+      "service": "account"
+    },
+    {
+      "id": "N-05b",
+      "kind": "neutral",
+      "file": "financial-lab-transfer.Api/Workers/ScreeningReconciler.cs",
+      "description": "Texto de log",
+      "edits": [
+        {
+          "find": "\"Reconciliação do antifraude: {Count} transferência(s) resolvida(s).\"",
+          "replace": "\"Reconciliação: {Count} transferência(s) resolvida(s) nesta rodada.\""
+        }
+      ],
+      "service": "transfer"
+    },
+    {
+      "id": "N-05c",
+      "kind": "neutral",
+      "file": "financial-lab-transfer.Api/Endpoints/WebhookEndpoints.cs",
+      "description": "Texto de log",
+      "edits": [
+        {
+          "find": "\"Webhook {DeliveryId} recusado: assinatura inválida ou expirada.\"",
+          "replace": "\"Webhook {DeliveryId} rejeitado (assinatura inválida ou fora da tolerância).\""
+        }
+      ],
+      "service": "transfer"
+    },
+    {
+      "id": "N-05d",
+      "kind": "neutral",
+      "file": "financial-lab-antifraud.Api/Webhooks/WebhookDispatcher.cs",
+      "description": "Texto de log",
+      "edits": [
+        {
+          "find": "{Status}, webhook descartado.\"",
+          "replace": "{Status}, webhook não enviado (Drop).\""
+        }
+      ],
+      "service": "antifraud"
+    },
+    {
+      "id": "N-06a",
+      "kind": "neutral",
+      "file": "financial-lab-account.Api/financial-lab-account.Api.http",
+      "description": "Exemplo novo no .http",
+      "edits": [
+        {
+          "find": "GET {{financial_lab_account.Api_HostAddress}}/accounts/11111111-1111-1111-1111-111111111111/balance\nAccept: application/json",
+          "replace": "GET {{financial_lab_account.Api_HostAddress}}/accounts/11111111-1111-1111-1111-111111111111/balance\nAccept: application/json\n\n### Extrato de uma conta de teste\nGET {{financial_lab_account.Api_HostAddress}}/accounts/11111111-1111-1111-1111-111111111111/statement\nAccept: application/json"
+        }
+      ],
+      "service": "account"
+    },
+    {
+      "id": "N-06b",
+      "kind": "neutral",
+      "file": "financial-lab-antifraud.Api/financial-lab-antifraud.Api.http",
+      "description": "Exemplo novo no .http",
+      "edits": [
+        {
+          "find": "### Limpar as análises em memória\nDELETE {{host}}/analyses",
+          "replace": "### Limpar as análises em memória\nDELETE {{host}}/analyses\n\n### Últimas 10 análises\nGET {{host}}/analyses?take=10"
+        }
+      ],
+      "service": "antifraud"
+    },
+    {
+      "id": "N-06c",
+      "kind": "neutral",
+      "file": "README.md",
+      "description": "Ajuste no README",
+      "edits": [
+        {
+          "find": "O serviço `migrations` aparece como `Exited (0)` em `docker compose ps -a`, e isso é esperado.",
+          "replace": "O serviço `migrations` aparece como `Exited (0)` em `docker compose ps -a`, e isso é esperado: ele só aplica as migrações e termina."
+        }
+      ],
+      "service": "docs"
+    },
+    {
+      "id": "N-07a",
+      "kind": "neutral",
+      "file": "financial-lab-account.Business/Services/StatementService.cs",
+      "description": "if/return vira ternário",
+      "edits": [
+        {
+          "find": "        if (value is null)\n            return fallback;\n        return int.TryParse(",
+          "replace": "        return value is null\n            ? fallback\n            : int.TryParse("
+        }
+      ],
+      "service": "account"
+    },
+    {
+      "id": "N-08a",
+      "kind": "neutral",
+      "file": "financial-lab-account.Business/Services/BalanceHoldService.cs",
+      "description": "Reordena constantes",
+      "edits": [
+        {
+          "find": "    private const int MaxAttempts = 5;\n    private static readonly TimeSpan MinExpiration = TimeSpan.FromSeconds(10);\n    private static readonly TimeSpan MaxExpiration = TimeSpan.FromDays(90);",
+          "replace": "    private static readonly TimeSpan MinExpiration = TimeSpan.FromSeconds(10);\n    private static readonly TimeSpan MaxExpiration = TimeSpan.FromDays(90);\n    private const int MaxAttempts = 5;"
+        }
+      ],
+      "service": "account"
+    },
+    {
+      "id": "N-08b",
+      "kind": "neutral",
+      "file": "financial-lab-account.Business/Services/StatementService.cs",
+      "description": "Reordena constantes",
+      "edits": [
+        {
+          "find": "    private const int DefaultPageSize = 20;\n    private const int MaxPageSize = 100;",
+          "replace": "    private const int MaxPageSize = 100;\n    private const int DefaultPageSize = 20;"
+        }
+      ],
+      "service": "account"
+    },
+    {
+      "id": "N-08c",
+      "kind": "neutral",
+      "file": "financial-lab-antifraud.Api/Rules/RuleValidator.cs",
+      "description": "Reordena constantes",
+      "edits": [
+        {
+          "find": "    public const int MaxIdLength = 64;\n    public const int MaxDelayMs = 120_000;",
+          "replace": "    public const int MaxDelayMs = 120_000;\n    public const int MaxIdLength = 64;"
+        }
+      ],
+      "service": "antifraud"
+    },
+    {
+      "id": "D-01a",
+      "kind": "additive",
+      "file": "financial-lab-account.Api/Models/AccountBalanceResponse.cs",
+      "description": "Campo novo opcional na resposta de saldo",
+      "edits": [
+        {
+          "find": "    decimal AvailableBalance, uint Version)\n{",
+          "replace": "    decimal AvailableBalance, uint Version, string Currency = \"BRL\")\n{"
+        }
+      ],
+      "service": "account"
+    },
+    {
+      "id": "D-01b",
+      "kind": "additive",
+      "file": "financial-lab-transfer.Api/Models/TransferModels.cs",
+      "description": "Campo novo opcional na resposta de transferência",
+      "edits": [
+        {
+          "find": "    TransferLegResponse? Credit, TransferLegResponse? Refund)\n{",
+          "replace": "    TransferLegResponse? Credit, TransferLegResponse? Refund, string Currency = \"BRL\")\n{"
+        }
+      ],
+      "service": "transfer"
+    },
+    {
+      "id": "D-01c",
+      "kind": "additive",
+      "file": "financial-lab-antifraud.Api/Models/AnalysisModels.cs",
+      "description": "Campo novo opcional na resposta de análise",
+      "edits": [
+        {
+          "find": "    DateTime? DecidedAt, WebhookResponse Webhook);",
+          "replace": "    DateTime? DecidedAt, WebhookResponse Webhook, string Engine = \"rules-v1\");"
+        }
+      ],
+      "service": "antifraud"
+    },
+    {
+      "id": "D-02a",
+      "kind": "additive",
+      "file": "financial-lab-account.Api/Endpoints/HoldEndpoints.cs",
+      "description": "Endpoint novo: contagem de bloqueios ativos",
+      "edits": [
+        {
+          "find": "        group.MapGet(\"/{holdId:guid}\",",
+          "replace": "        group.MapGet(\"/active/count\", async (Guid accountId, IBalanceHoldService service, CancellationToken ct) =>\n            Results.Ok(new { accountId, active = (await service.ListAsync(accountId, \"Active\", ct)).Count }));\n\n        group.MapGet(\"/{holdId:guid}\","
+        }
+      ],
+      "service": "account"
+    },
+    {
+      "id": "D-02b",
+      "kind": "additive",
+      "file": "financial-lab-antifraud.Api/Endpoints/RuleEndpoints.cs",
+      "description": "Endpoint novo: contagem de regras",
+      "edits": [
+        {
+          "find": "        group.MapPost(\"/reset\",",
+          "replace": "        group.MapGet(\"/count\", (RuleStore rules) => Results.Ok(new { total = rules.All.Count() }));\n\n        group.MapPost(\"/reset\","
+        }
+      ],
+      "service": "antifraud"
+    },
+    {
+      "id": "D-03",
+      "kind": "additive",
+      "file": "financial-lab-antifraud.Api/Models/FraudRule.cs",
+      "description": "Campo opcional novo em FraudRule",
+      "edits": [
+        {
+          "find": "    public int SubmitFailures { get; set; }",
+          "replace": "    public int SubmitFailures { get; set; }\n    public string? Owner { get; set; }"
+        }
+      ],
+      "service": "antifraud"
+    },
+    {
+      "id": "D-04a",
+      "kind": "additive",
+      "file": "financial-lab-account.Business/Services/MoneyFormat.cs",
+      "description": "Utilitário novo não usado",
+      "edits": [
+        {
+          "create": true,
+          "content": "using System.Globalization;\n\nnamespace financial_lab_account.Business.Services;\n\npublic static class MoneyFormat\n{\n    private static readonly CultureInfo PtBr = CultureInfo.GetCultureInfo(\"pt-BR\");\n\n    public static string Brl(decimal amount) => amount.ToString(\"C\", PtBr);\n}\n"
+        }
+      ],
+      "service": "account"
+    },
+    {
+      "id": "D-04b",
+      "kind": "additive",
+      "file": "financial-lab-transfer.Business/Models/TransferStatusExtensions.cs",
+      "description": "Utilitário novo não usado",
+      "edits": [
+        {
+          "create": true,
+          "content": "namespace financial_lab_transfer.Business.Models;\n\npublic static class TransferStatusExtensions\n{\n    public static bool IsTerminal(this TransferStatus status)\n        => status is TransferStatus.Completed or TransferStatus.Failed or TransferStatus.Refunded\n            or TransferStatus.RefundFailed or TransferStatus.FraudRejected;\n}\n"
+        }
+      ],
+      "service": "transfer"
+    },
+    {
+      "id": "D-04c",
+      "kind": "additive",
+      "file": "financial-lab-antifraud.Api/Rules/RuleIds.cs",
+      "description": "Utilitário novo não usado",
+      "edits": [
+        {
+          "create": true,
+          "content": "namespace financial_lab_antifraud.Api.Rules;\n\npublic static class RuleIds\n{\n    public static string Normalize(string id) => id.Trim().ToLowerInvariant();\n}\n"
+        }
+      ],
+      "service": "antifraud"
+    },
+    {
+      "id": "K-01a",
+      "kind": "config",
+      "file": "financial-lab-transfer.Api/appsettings.Development.json",
+      "description": "Antifraud:TimeoutSeconds 60 -> 20",
+      "expected": "Timeout de triagem mais cedo",
+      "edits": [
+        {
+          "find": "\"TimeoutSeconds\": 60",
+          "replace": "\"TimeoutSeconds\": 20"
+        }
+      ],
+      "service": "transfer"
+    },
+    {
+      "id": "K-01b",
+      "kind": "config",
+      "file": "financial-lab-transfer.Api/appsettings.Development.json",
+      "description": "Antifraud:TimeoutSeconds 60 -> 180",
+      "expected": "Timeout de triagem estoura os testes",
+      "edits": [
+        {
+          "find": "\"TimeoutSeconds\": 60",
+          "replace": "\"TimeoutSeconds\": 180"
+        }
+      ],
+      "service": "transfer"
+    },
+    {
+      "id": "K-02a",
+      "kind": "config",
+      "file": "financial-lab-transfer.Api/appsettings.Development.json",
+      "description": "Antifraud:StaleAfterSeconds 10 -> 30",
+      "expected": "Reconciliação mais lenta",
+      "edits": [
+        {
+          "find": "\"StaleAfterSeconds\": 10",
+          "replace": "\"StaleAfterSeconds\": 30"
+        }
+      ],
+      "service": "transfer"
+    },
+    {
+      "id": "K-02b",
+      "kind": "config",
+      "file": "financial-lab-transfer.Api/appsettings.Development.json",
+      "description": "Antifraud:ReconcileIntervalSeconds 5 -> 15",
+      "expected": "Reconciliação mais lenta",
+      "edits": [
+        {
+          "find": "\"ReconcileIntervalSeconds\": 5",
+          "replace": "\"ReconcileIntervalSeconds\": 15"
+        }
+      ],
+      "service": "transfer"
+    },
+    {
+      "id": "K-03",
+      "kind": "config",
+      "file": "financial-lab-antifraud.Api/appsettings.json",
+      "description": "DefaultDelayMs 300 -> 1500",
+      "expected": "Janela de assincronia maior",
+      "edits": [
+        {
+          "find": "\"DefaultDelayMs\": 300",
+          "replace": "\"DefaultDelayMs\": 1500"
+        }
+      ],
+      "service": "antifraud"
+    },
+    {
+      "id": "K-04a",
+      "kind": "config",
+      "file": "financial-lab-antifraud.Api/appsettings.json",
+      "description": "Delivery:MaxAttempts 5 -> 2",
+      "expected": "Menos tentativas de webhook",
+      "edits": [
+        {
+          "find": "\"MaxAttempts\": 5",
+          "replace": "\"MaxAttempts\": 2"
+        }
+      ],
+      "service": "antifraud"
+    },
+    {
+      "id": "K-04b",
+      "kind": "config",
+      "file": "financial-lab-antifraud.Api/appsettings.json",
+      "description": "Delivery:BaseBackoffMs 200 -> 1000",
+      "expected": "Backoff mais lento",
+      "edits": [
+        {
+          "find": "\"BaseBackoffMs\": 200",
+          "replace": "\"BaseBackoffMs\": 1000"
+        }
+      ],
+      "service": "antifraud"
+    }
+  ]
+}

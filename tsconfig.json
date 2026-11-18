@@ -16,6 +16,7 @@
     "services",
     "fixtures",
     "scripts",
+    "mutation",
     "tests",
     "playwright.config.ts"
   ]
