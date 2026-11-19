@@ -125,9 +125,16 @@ async function runJob(job: Job, slot: number): Promise<RunResult> {
         }
         result.build_ms = Date.now() - buildStart;
 
+        let composeDir = dir;
+        if (job.kind === "real") {
+            composeDir = path.join(workDir, "compose");
+            fs.mkdirSync(composeDir, { recursive: true });
+            fs.writeFileSync(path.join(composeDir, "docker-compose.yml"),
+                await mustExec("git", ["-C", SUT_PATH, "show", `${base.base_sha}:docker-compose.yml`]));
+        }
         const override = job.delayMs !== undefined ? writeDelayOverride(path.join(workDir, "delay.override.yml"), job.delayMs) : undefined;
         try {
-            const upError = await stackUp(dir, slot, images, override);
+            const upError = await stackUp(composeDir, slot, images, override);
             if (upError) { result.stack_healthy = false; result.reason = `stack sem health: ${upError}`; }
             const suiteStart = Date.now();
             const suite = await runSuite(slotUrls(slot), workDir, workers, timeoutMs);
@@ -138,7 +145,7 @@ async function runJob(job: Job, slot: number): Promise<RunResult> {
                 result.reason = [result.reason, ...suite.errors].filter(Boolean).join("\n");
             }
         } finally {
-            await stackDown(dir, slot, images, override);
+            await stackDown(composeDir, slot, images, override);
             await removeImages(result.rebuilt_images);
         }
     });
