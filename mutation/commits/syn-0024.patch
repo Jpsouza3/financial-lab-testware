@@ -1,0 +1,43 @@
+diff --git a/financial-lab-account.Business/Models/Account.cs b/financial-lab-account.Business/Models/Account.cs
+index 1c9dd3f..f16e00e 100644
+--- a/financial-lab-account.Business/Models/Account.cs
++++ b/financial-lab-account.Business/Models/Account.cs
+@@ -38,8 +38,6 @@ public class Account : Entity
+         ValidateMovement(amount, endToEndId, description);
+         if (Status == AccountStatus.Closed)
+             throw new DomainException("Conta Closed: movimentação não permitida.");
+-        if (Status == AccountStatus.Blocked)
+-            throw new DomainException("Conta Blocked: débito não permitido.");
+         if (amount > AvailableBalance)
+             throw new DomainException("Saldo insuficiente.");
+ 
+diff --git a/financial-lab-account.Business/Services/BalanceHoldService.cs b/financial-lab-account.Business/Services/BalanceHoldService.cs
+index df78a2e..464478b 100644
+--- a/financial-lab-account.Business/Services/BalanceHoldService.cs
++++ b/financial-lab-account.Business/Services/BalanceHoldService.cs
+@@ -106,7 +106,7 @@ public partial class BalanceHoldService(IAccountRepository repository, TimeProvi
+     public async Task<int> ExpireDueAsync(int batchSize, CancellationToken ct)
+     {
+         var now = clock.GetUtcNow().UtcDateTime;
+-        var expired = 0;
++        var expiredCount = 0;
+ 
+         foreach (var holdId in await repository.ListExpiredHoldIdsAsync(now, batchSize, ct))
+         {
+@@ -119,14 +119,14 @@ public partial class BalanceHoldService(IAccountRepository repository, TimeProvi
+             try
+             {
+                 await repository.SaveChangesAsync(ct);
+-                expired++;
++                expiredCount++;
+             }
+             catch (ConcurrencyConflictException)
+             {
+             }
+         }
+ 
+-        return expired;
++        return expiredCount;
+     }
+ 
+     private static NotFoundException HoldNotFound() => new("Bloqueio não encontrado.");

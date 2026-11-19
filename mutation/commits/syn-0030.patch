@@ -1,0 +1,30 @@
+diff --git a/financial-lab-account.Business/Services/StatementService.cs b/financial-lab-account.Business/Services/StatementService.cs
+index b680386..88f91e1 100644
+--- a/financial-lab-account.Business/Services/StatementService.cs
++++ b/financial-lab-account.Business/Services/StatementService.cs
+@@ -64,9 +64,9 @@ public class StatementService(IAccountRepository repository, TimeProvider clock)
+ 
+     private static int ParseInt(string? value, int fallback, int min, int max, string error)
+     {
+-        if (value is null)
+-            return fallback;
+-        return int.TryParse(value, NumberStyles.None, CultureInfo.InvariantCulture, out var parsed) &&
++        return value is null
++            ? fallback
++            : int.TryParse(value, NumberStyles.None, CultureInfo.InvariantCulture, out var parsed) &&
+                parsed >= min && parsed <= max
+             ? parsed
+             : throw new DomainException(error);
+diff --git a/financial-lab-transfer.Api/Endpoints/WebhookEndpoints.cs b/financial-lab-transfer.Api/Endpoints/WebhookEndpoints.cs
+index b77c7bb..dcfe053 100644
+--- a/financial-lab-transfer.Api/Endpoints/WebhookEndpoints.cs
++++ b/financial-lab-transfer.Api/Endpoints/WebhookEndpoints.cs
+@@ -27,7 +27,7 @@ public static class WebhookEndpoints
+                     request.Headers[WebhookSignature.SignatureHeader], antifraud.Value.WebhookSecret,
+                     TimeSpan.FromSeconds(antifraud.Value.SignatureToleranceSeconds), clock.GetUtcNow()))
+             {
+-                logger.LogWarning("Webhook {DeliveryId} recusado: assinatura inválida ou expirada.", deliveryId);
++                logger.LogWarning("Webhook {DeliveryId} rejeitado (assinatura inválida ou fora da tolerância).", deliveryId);
+                 return Results.Problem(title: "Assinatura inválida.", statusCode: StatusCodes.Status401Unauthorized);
+             }
+ 

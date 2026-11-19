@@ -1,0 +1,13 @@
+diff --git a/financial-lab-antifraud.Api/appsettings.json b/financial-lab-antifraud.Api/appsettings.json
+index 3b6d4f0..7dfaf96 100644
+--- a/financial-lab-antifraud.Api/appsettings.json
++++ b/financial-lab-antifraud.Api/appsettings.json
+@@ -1,7 +1,7 @@
+ {
+   "Antifraud": {
+     "WebhookSecret": "",
+-    "DefaultDelayMs": 300,
++    "DefaultDelayMs": 1500,
+     "AllowedCallbackHosts": [],
+     "Delivery": {
+       "MaxAttempts": 5,

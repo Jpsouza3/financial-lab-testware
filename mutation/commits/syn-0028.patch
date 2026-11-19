@@ -1,0 +1,75 @@
+diff --git a/financial-lab-account.Business/Models/Account.cs b/financial-lab-account.Business/Models/Account.cs
+index 1c9dd3f..ca100f3 100644
+--- a/financial-lab-account.Business/Models/Account.cs
++++ b/financial-lab-account.Business/Models/Account.cs
+@@ -19,8 +19,15 @@ public class Account : Entity
+     public decimal AvailableBalance => Balance - BlockedBalance;
+     public uint Version { get; private set; }
+ 
+-    public static Account Open(string name, string document, string branch, string number, DateTime now)
+-        => new() { Name = name, Document = document, Branch = branch, Number = number, OpenedAt = now };
++    public static Account Open(string name, string document, string branch, string number, DateTime now) =>
++        new()
++        {
++            Name = name,
++            Document = document,
++            Branch = branch,
++            Number = number,
++            OpenedAt = now
++        };
+ 
+     public LedgerEntry Credit(decimal amount, string endToEndId, string? description = null)
+     {
+diff --git a/financial-lab-account.Business/Services/AccountManagementService.cs b/financial-lab-account.Business/Services/AccountManagementService.cs
+index 4136418..bc21fb8 100644
+--- a/financial-lab-account.Business/Services/AccountManagementService.cs
++++ b/financial-lab-account.Business/Services/AccountManagementService.cs
+@@ -19,7 +19,7 @@ public partial class AccountManagementService(IAccountRepository repository, Tim
+     public async Task<Account> OpenAsync(string? name, string? document, string? branch, decimal? initialDeposit,
+         CancellationToken ct)
+     {
+-        var normalizedName = NormalizeName(name);
++        var cleanName = NormalizeName(name);
+         if (!Cpf.IsValid(document))
+             throw new DomainException("CPF inválido.");
+         branch ??= DefaultBranch;
+@@ -39,7 +39,7 @@ public partial class AccountManagementService(IAccountRepository repository, Tim
+                 throw new ConflictException("Já existe uma conta não encerrada para este documento.");
+ 
+             var number = (await repository.GetLastNumberAsync(branch, ct) + 1).ToString("D5");
+-            var account = Account.Open(normalizedName, document!, branch, number, clock.GetUtcNow().UtcDateTime);
++            var account = Account.Open(cleanName, document!, branch, number, clock.GetUtcNow().UtcDateTime);
+             repository.AddAccount(account);
+ 
+             if (deposit > 0)
+diff --git a/financial-lab-account.Business/Services/AccountTransactionService.cs b/financial-lab-account.Business/Services/AccountTransactionService.cs
+index 4b170b6..66b706a 100644
+--- a/financial-lab-account.Business/Services/AccountTransactionService.cs
++++ b/financial-lab-account.Business/Services/AccountTransactionService.cs
+@@ -42,10 +42,10 @@ public class AccountTransactionService(IAccountRepository repository) : IAccount
+             }
+             catch (DuplicateEntryException)
+             {
+-                var winner = await repository.GetProcessedCommandAsync(accountId, endToEndId, ct)
++                var existingCommand = await repository.GetProcessedCommandAsync(accountId, endToEndId, ct)
+                              ?? throw new InvalidOperationException(
+                                  $"Operação {endToEndId} da conta {accountId} não encontrada após violação de unicidade.");
+-                return await ToResultAsync(winner, type, amount, ct);
++                return await ToResultAsync(existingCommand, type, amount, ct);
+             }
+         }
+     }
+diff --git a/financial-lab-transfer.Business/Services/TransferService.cs b/financial-lab-transfer.Business/Services/TransferService.cs
+index 75884c6..e28c4c2 100644
+--- a/financial-lab-transfer.Business/Services/TransferService.cs
++++ b/financial-lab-transfer.Business/Services/TransferService.cs
+@@ -124,6 +124,9 @@ public class TransferService(ITransferRepository repository, IAccountGateway acc
+                 transfer.RejectRefund(reason);
+         }, ct);
+ 
++    private static bool IsFinal(Transfer transfer)
++        => transfer.Status is TransferStatus.Completed or TransferStatus.Failed or TransferStatus.Refunded;
++
+     private async Task<Transfer?> HandleAsync(Guid accountId, string endToEndId,
+         Func<Transfer, TransferLeg, Task> apply, CancellationToken ct)
+     {

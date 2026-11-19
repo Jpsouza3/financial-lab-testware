@@ -1,0 +1,64 @@
+diff --git a/financial-lab-account.Business/Services/AccountManagementService.cs b/financial-lab-account.Business/Services/AccountManagementService.cs
+index 4136418..1b50267 100644
+--- a/financial-lab-account.Business/Services/AccountManagementService.cs
++++ b/financial-lab-account.Business/Services/AccountManagementService.cs
+@@ -25,11 +25,7 @@ public partial class AccountManagementService(IAccountRepository repository, Tim
+         branch ??= DefaultBranch;
+         if (branch.Length != 4 || !branch.All(char.IsAsciiDigit))
+             throw new DomainException("A agência deve ter 4 dígitos.");
+-        var deposit = initialDeposit ?? 0m;
+-        if (deposit is < 0 or > MaxInitialDeposit)
+-            throw new DomainException("O depósito inicial deve estar entre 0 e 5000.00.");
+-        if (decimal.Round(deposit, 2) != deposit)
+-            throw new DomainException("O depósito inicial deve ter no máximo 2 casas decimais.");
++        var deposit = ValidateDeposit(initialDeposit);
+         if (!Branches.Contains(branch))
+             throw new BusinessRuleException("Agência inexistente.");
+ 
+@@ -95,6 +91,16 @@ public partial class AccountManagementService(IAccountRepository repository, Tim
+         }
+     }
+ 
++    private static decimal ValidateDeposit(decimal? initialDeposit)
++    {
++        var deposit = initialDeposit ?? 0m;
++        if (deposit is < 0 or > MaxInitialDeposit)
++            throw new DomainException("O depósito inicial deve estar entre 0 e 5000.00.");
++        if (decimal.Round(deposit, 2) != deposit)
++            throw new DomainException("O depósito inicial deve ter no máximo 2 casas decimais.");
++        return deposit;
++    }
++
+     internal static NotFoundException AccountNotFound() => new("Conta não encontrada.");
+ 
+     private static string NormalizeName(string? name)
+diff --git a/financial-lab-account.Business/Services/BalanceHoldService.cs b/financial-lab-account.Business/Services/BalanceHoldService.cs
+index df78a2e..464478b 100644
+--- a/financial-lab-account.Business/Services/BalanceHoldService.cs
++++ b/financial-lab-account.Business/Services/BalanceHoldService.cs
+@@ -106,7 +106,7 @@ public partial class BalanceHoldService(IAccountRepository repository, TimeProvi
+     public async Task<int> ExpireDueAsync(int batchSize, CancellationToken ct)
+     {
+         var now = clock.GetUtcNow().UtcDateTime;
+-        var expired = 0;
++        var expiredCount = 0;
+ 
+         foreach (var holdId in await repository.ListExpiredHoldIdsAsync(now, batchSize, ct))
+         {
+@@ -119,14 +119,14 @@ public partial class BalanceHoldService(IAccountRepository repository, TimeProvi
+             try
+             {
+                 await repository.SaveChangesAsync(ct);
+-                expired++;
++                expiredCount++;
+             }
+             catch (ConcurrencyConflictException)
+             {
+             }
+         }
+ 
+-        return expired;
++        return expiredCount;
+     }
+ 
+     private static NotFoundException HoldNotFound() => new("Bloqueio não encontrado.");

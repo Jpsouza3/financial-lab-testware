@@ -1,0 +1,48 @@
+diff --git a/README.md b/README.md
+index f2d71ed..3e1b361 100644
+--- a/README.md
++++ b/README.md
+@@ -97,7 +97,7 @@ docker compose ps
+ docker compose logs -f account-api transfer-api antifraud-api
+ ```
+ 
+-O serviço `migrations` aparece como `Exited (0)` em `docker compose ps -a`, e isso é esperado.
++O serviço `migrations` aparece como `Exited (0)` em `docker compose ps -a`, e isso é esperado: ele só aplica as migrações e termina.
+ 
+ ### Várias instâncias na mesma máquina
+ 
+diff --git a/financial-lab-account.Business/Models/Account.cs b/financial-lab-account.Business/Models/Account.cs
+index 1c9dd3f..ca100f3 100644
+--- a/financial-lab-account.Business/Models/Account.cs
++++ b/financial-lab-account.Business/Models/Account.cs
+@@ -19,8 +19,15 @@ public class Account : Entity
+     public decimal AvailableBalance => Balance - BlockedBalance;
+     public uint Version { get; private set; }
+ 
+-    public static Account Open(string name, string document, string branch, string number, DateTime now)
+-        => new() { Name = name, Document = document, Branch = branch, Number = number, OpenedAt = now };
++    public static Account Open(string name, string document, string branch, string number, DateTime now) =>
++        new()
++        {
++            Name = name,
++            Document = document,
++            Branch = branch,
++            Number = number,
++            OpenedAt = now
++        };
+ 
+     public LedgerEntry Credit(decimal amount, string endToEndId, string? description = null)
+     {
+diff --git a/financial-lab-account.Business/Services/BalanceHoldService.cs b/financial-lab-account.Business/Services/BalanceHoldService.cs
+index df78a2e..74483f4 100644
+--- a/financial-lab-account.Business/Services/BalanceHoldService.cs
++++ b/financial-lab-account.Business/Services/BalanceHoldService.cs
+@@ -1,7 +1,7 @@
+-using System.Text.RegularExpressions;
+ using financial_lab_account.Business.Exceptions;
+ using financial_lab_account.Business.Interfaces;
+ using financial_lab_account.Business.Models;
++using System.Text.RegularExpressions;
+ 
+ namespace financial_lab_account.Business.Services;
+ 

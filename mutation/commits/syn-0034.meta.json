@@ -1,0 +1,22 @@
+{
+  "id": "syn-0034",
+  "seq": 34,
+  "seed": 2013,
+  "recipe": "single-break",
+  "commit_kind": "breaking",
+  "catalog_ids": [
+    "B-ACC-03"
+  ],
+  "changed_files": [
+    "financial-lab-account.Business/Models/Account.cs"
+  ],
+  "changed_services": [
+    "account"
+  ],
+  "files_changed_count": 1,
+  "lines_added": 0,
+  "lines_removed": 2,
+  "lines_changed": 2,
+  "base_sha": "bf20772106e19f1a64edc272aed89b20ad04d0ec",
+  "generated_at": "2026-11-19T00:05:51.077Z"
+}

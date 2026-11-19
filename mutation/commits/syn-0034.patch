@@ -1,0 +1,13 @@
+diff --git a/financial-lab-account.Business/Models/Account.cs b/financial-lab-account.Business/Models/Account.cs
+index 1c9dd3f..f16e00e 100644
+--- a/financial-lab-account.Business/Models/Account.cs
++++ b/financial-lab-account.Business/Models/Account.cs
+@@ -38,8 +38,6 @@ public class Account : Entity
+         ValidateMovement(amount, endToEndId, description);
+         if (Status == AccountStatus.Closed)
+             throw new DomainException("Conta Closed: movimentação não permitida.");
+-        if (Status == AccountStatus.Blocked)
+-            throw new DomainException("Conta Blocked: débito não permitido.");
+         if (amount > AvailableBalance)
+             throw new DomainException("Saldo insuficiente.");
+ 

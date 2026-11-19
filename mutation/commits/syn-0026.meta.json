@@ -1,0 +1,22 @@
+{
+  "id": "syn-0026",
+  "seq": 26,
+  "seed": 2005,
+  "recipe": "single-break",
+  "commit_kind": "breaking",
+  "catalog_ids": [
+    "B-WHD-03"
+  ],
+  "changed_files": [
+    "financial-lab-antifraud.Api/Webhooks/WebhookDispatcher.cs"
+  ],
+  "changed_services": [
+    "antifraud"
+  ],
+  "files_changed_count": 1,
+  "lines_added": 1,
+  "lines_removed": 1,
+  "lines_changed": 2,
+  "base_sha": "bf20772106e19f1a64edc272aed89b20ad04d0ec",
+  "generated_at": "2026-11-19T00:05:50.661Z"
+}

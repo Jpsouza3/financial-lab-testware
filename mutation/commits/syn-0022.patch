@@ -1,0 +1,65 @@
+diff --git a/financial-lab-account.Business/Models/Account.cs b/financial-lab-account.Business/Models/Account.cs
+index 1c9dd3f..ca100f3 100644
+--- a/financial-lab-account.Business/Models/Account.cs
++++ b/financial-lab-account.Business/Models/Account.cs
+@@ -19,8 +19,15 @@ public class Account : Entity
+     public decimal AvailableBalance => Balance - BlockedBalance;
+     public uint Version { get; private set; }
+ 
+-    public static Account Open(string name, string document, string branch, string number, DateTime now)
+-        => new() { Name = name, Document = document, Branch = branch, Number = number, OpenedAt = now };
++    public static Account Open(string name, string document, string branch, string number, DateTime now) =>
++        new()
++        {
++            Name = name,
++            Document = document,
++            Branch = branch,
++            Number = number,
++            OpenedAt = now
++        };
+ 
+     public LedgerEntry Credit(decimal amount, string endToEndId, string? description = null)
+     {
+diff --git a/financial-lab-account.Business/Services/AccountTransactionService.cs b/financial-lab-account.Business/Services/AccountTransactionService.cs
+index 4b170b6..66b706a 100644
+--- a/financial-lab-account.Business/Services/AccountTransactionService.cs
++++ b/financial-lab-account.Business/Services/AccountTransactionService.cs
+@@ -42,10 +42,10 @@ public class AccountTransactionService(IAccountRepository repository) : IAccount
+             }
+             catch (DuplicateEntryException)
+             {
+-                var winner = await repository.GetProcessedCommandAsync(accountId, endToEndId, ct)
++                var existingCommand = await repository.GetProcessedCommandAsync(accountId, endToEndId, ct)
+                              ?? throw new InvalidOperationException(
+                                  $"Operação {endToEndId} da conta {accountId} não encontrada após violação de unicidade.");
+-                return await ToResultAsync(winner, type, amount, ct);
++                return await ToResultAsync(existingCommand, type, amount, ct);
+             }
+         }
+     }
+diff --git a/financial-lab-antifraud.Api/Models/FraudRule.cs b/financial-lab-antifraud.Api/Models/FraudRule.cs
+index 17f4bb6..c7622bb 100644
+--- a/financial-lab-antifraud.Api/Models/FraudRule.cs
++++ b/financial-lab-antifraud.Api/Models/FraudRule.cs
+@@ -32,6 +32,7 @@ public class FraudRule
+     public DeliveryMode Delivery { get; set; } = DeliveryMode.Normal;
+     public int SubmitFailures { get; set; }
+ 
++    /// <summary>Verdadeiro quando todas as condições informadas casam com a análise.</summary>
+     public bool Matches(AnalysisRequest request)
+         => Enabled
+            && (MinAmount is null || request.Amount >= MinAmount)
+diff --git a/financial-lab-transfer.Business/Services/TransferService.cs b/financial-lab-transfer.Business/Services/TransferService.cs
+index 75884c6..e28c4c2 100644
+--- a/financial-lab-transfer.Business/Services/TransferService.cs
++++ b/financial-lab-transfer.Business/Services/TransferService.cs
+@@ -124,6 +124,9 @@ public class TransferService(ITransferRepository repository, IAccountGateway acc
+                 transfer.RejectRefund(reason);
+         }, ct);
+ 
++    private static bool IsFinal(Transfer transfer)
++        => transfer.Status is TransferStatus.Completed or TransferStatus.Failed or TransferStatus.Refunded;
++
+     private async Task<Transfer?> HandleAsync(Guid accountId, string endToEndId,
+         Func<Transfer, TransferLeg, Task> apply, CancellationToken ct)
+     {

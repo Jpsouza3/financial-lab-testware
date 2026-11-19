@@ -1,0 +1,26 @@
+diff --git a/financial-lab-antifraud.Api/Endpoints/RuleEndpoints.cs b/financial-lab-antifraud.Api/Endpoints/RuleEndpoints.cs
+index 79f6c90..e8827ea 100644
+--- a/financial-lab-antifraud.Api/Endpoints/RuleEndpoints.cs
++++ b/financial-lab-antifraud.Api/Endpoints/RuleEndpoints.cs
+@@ -51,6 +51,8 @@ public static class RuleEndpoints
+         group.MapDelete("/{id}", (string id, RuleStore rules) =>
+             rules.Remove(id) ? Results.NoContent() : Results.NotFound());
+ 
++        group.MapGet("/count", (RuleStore rules) => Results.Ok(new { total = rules.All.Count() }));
++
+         group.MapPost("/reset", (RuleStore rules) => Results.Ok(rules.Reset()));
+     }
+ }
+diff --git a/financial-lab-antifraud.Api/Models/AnalysisModels.cs b/financial-lab-antifraud.Api/Models/AnalysisModels.cs
+index f36335e..8be6460 100644
+--- a/financial-lab-antifraud.Api/Models/AnalysisModels.cs
++++ b/financial-lab-antifraud.Api/Models/AnalysisModels.cs
+@@ -25,7 +25,7 @@ public record WebhookResponse(DeliveryMode Mode, WebhookStatus Status, IReadOnly
+ 
+ public record AnalysisResponse(Guid Id, string TransactionId, AnalysisStatus Status, string? Reason, string? RuleId,
+     decimal Amount, Guid SourceAccountId, Guid DestinationAccountId, string? Description, DateTime CreatedAt,
+-    DateTime? DecidedAt, WebhookResponse Webhook);
++    DateTime? DecidedAt, WebhookResponse Webhook, string Engine = "rules-v1");
+ 
+ public record WebhookPayload(Guid AnalysisId, string TransactionId, AnalysisStatus Decision, string? Reason,
+     string? RuleId, DateTime DecidedAt);

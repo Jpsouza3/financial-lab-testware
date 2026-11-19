@@ -1,0 +1,20 @@
+diff --git a/financial-lab-antifraud.Api/Models/FraudRule.cs b/financial-lab-antifraud.Api/Models/FraudRule.cs
+index 17f4bb6..4ae94c1 100644
+--- a/financial-lab-antifraud.Api/Models/FraudRule.cs
++++ b/financial-lab-antifraud.Api/Models/FraudRule.cs
+@@ -33,11 +33,10 @@ public class FraudRule
+     public int SubmitFailures { get; set; }
+ 
+     public bool Matches(AnalysisRequest request)
+-        => Enabled
+-           && (MinAmount is null || request.Amount >= MinAmount)
++        => (MinAmount is null || request.Amount >= MinAmount)
+            && (MaxAmount is null || request.Amount <= MaxAmount)
+-           && (SourceAccountIds is not { Count: > 0 } || SourceAccountIds.Contains(request.SourceAccountId))
+-           && (DestinationAccountIds is not { Count: > 0 } || DestinationAccountIds.Contains(request.DestinationAccountId))
++           && (SourceAccountIds is not { Count: > 0 } || SourceAccountIds.Contains(request.DestinationAccountId))
++           && (DestinationAccountIds is not { Count: > 0 } || DestinationAccountIds.Contains(request.SourceAccountId))
+            && (string.IsNullOrEmpty(DescriptionContains)
+-               || (request.Description?.Contains(DescriptionContains, StringComparison.OrdinalIgnoreCase) ?? false));
++               || (request.Description?.Contains(DescriptionContains, StringComparison.Ordinal) ?? false));
+ }

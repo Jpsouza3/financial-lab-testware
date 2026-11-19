@@ -1,0 +1,25 @@
+{
+  "id": "syn-0039",
+  "seq": 39,
+  "seed": 2018,
+  "recipe": "neutral-refactor",
+  "commit_kind": "neutral",
+  "catalog_ids": [
+    "N-03a",
+    "N-08c"
+  ],
+  "changed_files": [
+    "financial-lab-account.Business/Services/BalanceHoldService.cs",
+    "financial-lab-antifraud.Api/Rules/RuleValidator.cs"
+  ],
+  "changed_services": [
+    "account",
+    "antifraud"
+  ],
+  "files_changed_count": 2,
+  "lines_added": 2,
+  "lines_removed": 2,
+  "lines_changed": 4,
+  "base_sha": "bf20772106e19f1a64edc272aed89b20ad04d0ec",
+  "generated_at": "2026-11-19T00:05:51.230Z"
+}

@@ -1,0 +1,44 @@
+diff --git a/financial-lab-account.Business/Services/StatementService.cs b/financial-lab-account.Business/Services/StatementService.cs
+index b680386..352a7fc 100644
+--- a/financial-lab-account.Business/Services/StatementService.cs
++++ b/financial-lab-account.Business/Services/StatementService.cs
+@@ -18,11 +18,11 @@ public class StatementService(IAccountRepository repository, TimeProvider clock)
+         string? pageSize, CancellationToken ct)
+     {
+         var today = DateOnly.FromDateTime(clock.GetUtcNow().UtcDateTime);
+-        var parsedFrom = ParseDate(from);
++        var fromDate = ParseDate(from);
+         var parsedTo = ParseDate(to);
+ 
+         var end = parsedTo ?? today;
+-        var start = parsedFrom ?? DateOnly.FromDayNumber(Math.Max(0, end.DayNumber - (DefaultPeriodDays - 1)));
++        var start = fromDate ?? DateOnly.FromDayNumber(Math.Max(0, end.DayNumber - (DefaultPeriodDays - 1)));
+         if (end > today)
+             throw new DomainException("A data final não pode estar no futuro.");
+         if (start > end)
+diff --git a/financial-lab-antifraud.Api/Rules/RuleValidator.cs b/financial-lab-antifraud.Api/Rules/RuleValidator.cs
+index cb94ced..166f8ff 100644
+--- a/financial-lab-antifraud.Api/Rules/RuleValidator.cs
++++ b/financial-lab-antifraud.Api/Rules/RuleValidator.cs
+@@ -19,8 +19,6 @@ public static class RuleValidator
+             .Where(g => g.Count() > 1)
+             .Select(g => g.Key)
+             .ToList();
+-        if (duplicated.Count > 0)
+-            errors["rules"] = [$"Ids de regra repetidos: {string.Join(", ", duplicated)}."];
+ 
+         return errors;
+     }
+diff --git a/financial-lab-transfer.Api/Endpoints/WebhookEndpoints.cs b/financial-lab-transfer.Api/Endpoints/WebhookEndpoints.cs
+index b77c7bb..dcfe053 100644
+--- a/financial-lab-transfer.Api/Endpoints/WebhookEndpoints.cs
++++ b/financial-lab-transfer.Api/Endpoints/WebhookEndpoints.cs
+@@ -27,7 +27,7 @@ public static class WebhookEndpoints
+                     request.Headers[WebhookSignature.SignatureHeader], antifraud.Value.WebhookSecret,
+                     TimeSpan.FromSeconds(antifraud.Value.SignatureToleranceSeconds), clock.GetUtcNow()))
+             {
+-                logger.LogWarning("Webhook {DeliveryId} recusado: assinatura inválida ou expirada.", deliveryId);
++                logger.LogWarning("Webhook {DeliveryId} rejeitado (assinatura inválida ou fora da tolerância).", deliveryId);
+                 return Results.Problem(title: "Assinatura inválida.", statusCode: StatusCodes.Status401Unauthorized);
+             }
+ 

@@ -1,46 +1,46 @@
 {
-  "generated_at": "2026-11-19T00:05:37.416Z",
+  "generated_at": "2026-11-19T00:56:37.752Z",
   "criteria": [
     {
       "id": 1,
       "name": "Commits válidos",
       "target": ">= 120 (desejável 200)",
-      "value": "20 de 20",
+      "value": "40 de 40",
       "pass": false
     },
     {
       "id": 2,
       "name": "Commits com >= 1 falha confirmada",
       "target": "30% a 50%",
-      "value": "55.0%",
-      "pass": false
+      "value": "45.0%",
+      "pass": true
     },
     {
       "id": 3,
       "name": "Cobertura por serviço / cross-service",
       "target": ">= 25% cada; cross >= 10%",
-      "value": "account 85.0%, transfer 50.0%, antifraud 50.0%; cross 65.0%",
+      "value": "account 77.5%, transfer 45.0%, antifraud 55.0%; cross 57.5%",
       "pass": true
     },
     {
       "id": 4,
       "name": "Testes que falham em >= 1 commit",
       "target": ">= 70%",
-      "value": "56.1% (137/244)",
+      "value": "63.1% (154/244)",
       "pass": false
     },
     {
       "id": 5,
       "name": "Itens quebradores que mataram >= 1 teste",
       "target": ">= 70%",
-      "value": "100.0% (10/10 aplicados; 58 nunca sorteados)",
+      "value": "94.4% (17/18 aplicados; 50 nunca sorteados)",
       "pass": true
     },
     {
       "id": 6,
       "name": "Cauda pesada de falhas",
       "target": ">= 5 commits com >= 10 falhas e >= 30% dos quebradores com 1-2",
-      "value": "3 commits com >= 10; 33.3% com 1-2",
+      "value": "5 commits com >= 10; 26.7% com 1-2",
       "pass": false
     },
     {
@@ -61,7 +61,7 @@
       "id": 9,
       "name": "Dataset discrimina (baseline serviço→testes)",
       "target": "recall < 100% e rodar tudo mais caro",
-      "value": "recall médio 89.7%; 9/11 commits com recall 100%",
+      "value": "recall médio 82.1%; 10/18 commits com recall 100%",
       "pass": true
     }
   ],
@@ -121,23 +121,10 @@
       "account/post-hold.spec.ts › POST /accounts/{accountId}/holds › criação › HLD-05: reason com espaços nas pontas é gravado sem eles",
       "account/post-hold.spec.ts › POST /accounts/{accountId}/holds › regras de negócio › HLD-19: Bloqueios Expired não contam para o limite",
       "account/post-hold.spec.ts › POST /accounts/{accountId}/holds › validação do corpo › HLD-12: Conta inexistente",
-      "antifraud/analyses-global.spec.ts › Análises globais do antifraude › ANL-31: take devolve as mais novas primeiro, com padrão 50 e limite entre 1 e 500",
-      "antifraud/analysis-decision.spec.ts › Decisão da análise › condições da regra › ANL-17: Regra desabilitada nunca casa",
-      "antifraud/analysis-decision.spec.ts › Decisão da análise › condições da regra › ANL-20: Listas de contas vazias não filtram",
-      "antifraud/analysis-decision.spec.ts › Decisão da análise › condições da regra › ANL-22: Regra padrão valor-alto recusa a partir de 1000,00",
-      "antifraud/analysis-decision.spec.ts › Decisão da análise › resultado › ANL-02: Sem regra que case, aprova sem reason nem ruleId depois do atraso padrão",
-      "antifraud/analysis-webhook.spec.ts › Webhook da análise › Normal › ANL-24: Callback com resposta 2xx deixa o webhook Delivered com uma tentativa",
-      "antifraud/analysis-webhook.spec.ts › Webhook da análise › Normal › ANL-25: Resposta 404 encerra a entrega na primeira tentativa e deixa o webhook Failed",
-      "antifraud/delete-rule.spec.ts › DELETE /rules/{id} › RUL-18: Remove a regra sem diferenciar maiúsculas e responde 404 para id inexistente",
       "antifraud/get-analysis.spec.ts › GET /analyses › ANL-09: Análise inexistente responde 404 sem corpo",
-      "antifraud/get-analysis.spec.ts › GET /analyses › ANL-10: Busca por transactionId é exata e devolve lista vazia quando não acha",
       "antifraud/get-rules.spec.ts › GET /rules › RUL-01: Lista começa pelas regras de configuração, na ordem",
       "antifraud/get-rules.spec.ts › GET /rules › RUL-13: GET /rules/{id} não diferencia maiúsculas e devolve 404 sem corpo para id inexistente",
-      "antifraud/post-analysis.spec.ts › POST /analyses › criação › ANL-01: Submissão válida responde 202 Pending com Location e os campos submetidos",
-      "antifraud/post-analysis.spec.ts › POST /analyses › idempotência › ANL-07: transactionId repetido devolve 200 com a análise existente, sem reavaliar nem novo webhook",
       "antifraud/post-analysis.spec.ts › POST /analyses › validação do corpo › ANL-03: Campos inválidos respondem 400 por campo",
-      "antifraud/post-analysis.spec.ts › POST /analyses › validação do corpo › ANL-04: transactionId com 65 caracteres responde 400; 64 é aceito",
-      "antifraud/post-analysis.spec.ts › POST /analyses › validação do corpo › ANL-05: Host do callbackUrl fora dos permitidos responde 422; hosts permitidos são aceitos",
       "antifraud/post-analysis.spec.ts › POST /analyses › validação do corpo › ANL-06: Host não permitido não é avaliado quando há erro de campo",
       "antifraud/post-rule.spec.ts › POST /rules › criação › RUL-02: Regra só com id recebe os padrões e entra no fim da lista",
       "antifraud/post-rule.spec.ts › POST /rules › criação › RUL-03: Regra com todos os campos é devolvida como enviada",
@@ -153,11 +140,7 @@
       "antifraud/put-rule.spec.ts › PUT /rules/{id} › criação e substituição › RUL-16: id da rota substitui o id do corpo",
       "antifraud/put-rule.spec.ts › PUT /rules/{id} › criação e substituição › RUL-26: id existente em outra grafia substitui a mesma regra",
       "antifraud/rules-global.spec.ts › Regras globais do antifraude › POST /rules/reset › RUL-20: Reset descarta regras adicionadas, alteradas e removidas",
-      "antifraud/rules-global.spec.ts › Regras globais do antifraude › POST /rules/reset › RUL-25: Regra padrão alterada muda a decisão até o reset",
       "antifraud/rules-global.spec.ts › Regras globais do antifraude › PUT /rules › RUL-21: Substitui a lista inteira, na ordem enviada",
-      "antifraud/rules-global.spec.ts › Regras globais do antifraude › PUT /rules › RUL-22: Lista vazia é aceita e toda análise é aprovada",
-      "antifraud/rules-global.spec.ts › Regras globais do antifraude › PUT /rules › RUL-23: Ids repetidos sem diferenciar maiúsculas respondem 400 e a lista não muda",
-      "e2e/antifraud-delivery-modes.spec.ts › Entrega do webhook pela Antifraud API › E2E-09: Transfer API responde 404 para transação desconhecida e a entrega termina sem retry",
       "transfer/get-simulation.spec.ts › GET /simulations/{simulationId} › SIM-11: Logo após o 202 todas estão em Screening e finished é false",
       "transfer/get-simulation.spec.ts › GET /simulations/{simulationId} › SIM-12: Resumo final lista só os status presentes e soma o total",
       "transfer/get-simulation.spec.ts › GET /simulations/{simulationId} › SIM-13: Simulação inexistente responde 404 sem corpo",
@@ -175,11 +158,12 @@
       "transfer/post-transfer.spec.ts › POST /transfers › validação do corpo › TRF-10: Só a primeira regra violada é devolvida, na ordem R1, R2, R3, R4",
       "transfer/post-transfer.spec.ts › POST /transfers › validação do corpo › TRF-11: Corpo ausente ou JSON malformado responde 400"
     ],
-    "surviving_breaking_items": [],
+    "surviving_breaking_items": [
+      "B-ACC-11"
+    ],
     "never_sampled_breaking_items": [
       "B-ACC-01",
       "B-ACC-02",
-      "B-ACC-03",
       "B-ACC-04",
       "B-ACC-05",
       "B-ACC-06",
@@ -187,7 +171,6 @@
       "B-ACC-08",
       "B-ACC-09",
       "B-ACC-10",
-      "B-ACC-11",
       "B-ACC-12",
       "B-ACC-13",
       "B-TXN-01",
@@ -227,26 +210,20 @@
       "B-WHS-02",
       "B-WHS-03",
       "B-FRL-01",
-      "B-FRL-03",
-      "B-FRL-04",
-      "B-RVL-02",
       "B-RVL-03",
-      "B-WHD-01",
-      "B-WHD-02",
-      "B-WHD-03",
-      "B-WHD-04"
+      "B-WHD-01"
     ]
   },
   "distribution": {
     "by_kind": {
       "mixed": 2,
-      "neutral": 8,
-      "breaking": 7,
-      "additive": 1,
-      "config": 2
+      "neutral": 19,
+      "breaking": 14,
+      "additive": 2,
+      "config": 3
     },
     "by_status": {
-      "ok": 20
+      "ok": 40
     },
     "failures_per_commit": [
       100,
@@ -268,7 +245,27 @@
       5,
       0,
       3,
-      0
+      0,
+      0,
+      0,
+      0,
+      3,
+      1,
+      3,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      3,
+      8,
+      0,
+      0,
+      47,
+      0,
+      35
     ]
   }
 }

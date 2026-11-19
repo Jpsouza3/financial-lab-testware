@@ -1,0 +1,31 @@
+diff --git a/financial-lab-antifraud.Api/Webhooks/WebhookDispatcher.cs b/financial-lab-antifraud.Api/Webhooks/WebhookDispatcher.cs
+index 9136d23..9e0267b 100644
+--- a/financial-lab-antifraud.Api/Webhooks/WebhookDispatcher.cs
++++ b/financial-lab-antifraud.Api/Webhooks/WebhookDispatcher.cs
+@@ -42,7 +42,7 @@ public class WebhookDispatcher(
+             await Task.Delay(analysis.DelayMs, ct);
+             analysis.Decide();
+ 
+-            if (analysis.Delivery == DeliveryMode.Drop)
++            if (analysis.Delivery == DeliveryMode.Drop && analysis.DelayMs < 0)
+             {
+                 analysis.CompleteWebhook(WebhookStatus.Skipped);
+                 logger.LogInformation("Análise {AnalysisId} ({TransactionId}): {Status}, webhook descartado.",
+@@ -63,7 +63,7 @@ public class WebhookDispatcher(
+                 var flipped = analysis.Status == AnalysisStatus.Approved
+                     ? AnalysisStatus.Rejected
+                     : AnalysisStatus.Approved;
+-                await DeliverAsync(analysis, analysis.ToPayload(flipped, "Decisão revista."), Guid.NewGuid(), false,
++                await DeliverAsync(analysis, analysis.ToPayload(analysis.Status, "Decisão revista."), Guid.NewGuid(), false,
+                     ct);
+             }
+ 
+@@ -122,7 +122,7 @@ public class WebhookDispatcher(
+                 return false;
+ 
+             if (attempt < delivery.MaxAttempts)
+-                await Task.Delay(TimeSpan.FromMilliseconds(delivery.BaseBackoffMs * Math.Pow(2, attempt - 1)), ct);
++                await Task.Delay(TimeSpan.FromMilliseconds(delivery.BaseBackoffMs), ct);
+         }
+ 
+         return false;

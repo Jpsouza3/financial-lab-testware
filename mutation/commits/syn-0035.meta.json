@@ -1,0 +1,24 @@
+{
+  "id": "syn-0035",
+  "seq": 35,
+  "seed": 2014,
+  "recipe": "multi-break",
+  "commit_kind": "breaking",
+  "catalog_ids": [
+    "B-WHD-02",
+    "B-WHD-04",
+    "B-WHD-03"
+  ],
+  "changed_files": [
+    "financial-lab-antifraud.Api/Webhooks/WebhookDispatcher.cs"
+  ],
+  "changed_services": [
+    "antifraud"
+  ],
+  "files_changed_count": 1,
+  "lines_added": 3,
+  "lines_removed": 3,
+  "lines_changed": 6,
+  "base_sha": "bf20772106e19f1a64edc272aed89b20ad04d0ec",
+  "generated_at": "2026-11-19T00:05:51.104Z"
+}

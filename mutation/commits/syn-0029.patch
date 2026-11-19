@@ -1,0 +1,70 @@
+diff --git a/financial-lab-antifraud.Api/Webhooks/WebhookDispatcher.cs b/financial-lab-antifraud.Api/Webhooks/WebhookDispatcher.cs
+index 9136d23..1e92e14 100644
+--- a/financial-lab-antifraud.Api/Webhooks/WebhookDispatcher.cs
++++ b/financial-lab-antifraud.Api/Webhooks/WebhookDispatcher.cs
+@@ -60,10 +60,10 @@ public class WebhookDispatcher(
+ 
+             if (analysis.Delivery == DeliveryMode.Flip)
+             {
+-                var flipped = analysis.Status == AnalysisStatus.Approved
++                var reversed = analysis.Status == AnalysisStatus.Approved
+                     ? AnalysisStatus.Rejected
+                     : AnalysisStatus.Approved;
+-                await DeliverAsync(analysis, analysis.ToPayload(flipped, "Decisão revista."), Guid.NewGuid(), false,
++                await DeliverAsync(analysis, analysis.ToPayload(reversed, "Decisão revista."), Guid.NewGuid(), false,
+                     ct);
+             }
+ 
+diff --git a/financial-lab-transfer.Api/Endpoints/WebhookEndpoints.cs b/financial-lab-transfer.Api/Endpoints/WebhookEndpoints.cs
+index b77c7bb..dcfe053 100644
+--- a/financial-lab-transfer.Api/Endpoints/WebhookEndpoints.cs
++++ b/financial-lab-transfer.Api/Endpoints/WebhookEndpoints.cs
+@@ -27,7 +27,7 @@ public static class WebhookEndpoints
+                     request.Headers[WebhookSignature.SignatureHeader], antifraud.Value.WebhookSecret,
+                     TimeSpan.FromSeconds(antifraud.Value.SignatureToleranceSeconds), clock.GetUtcNow()))
+             {
+-                logger.LogWarning("Webhook {DeliveryId} recusado: assinatura inválida ou expirada.", deliveryId);
++                logger.LogWarning("Webhook {DeliveryId} rejeitado (assinatura inválida ou fora da tolerância).", deliveryId);
+                 return Results.Problem(title: "Assinatura inválida.", statusCode: StatusCodes.Status401Unauthorized);
+             }
+ 
+diff --git a/financial-lab-transfer.Api/Webhooks/WebhookSignature.cs b/financial-lab-transfer.Api/Webhooks/WebhookSignature.cs
+index 3272e9d..443ad48 100644
+--- a/financial-lab-transfer.Api/Webhooks/WebhookSignature.cs
++++ b/financial-lab-transfer.Api/Webhooks/WebhookSignature.cs
+@@ -17,9 +17,11 @@ public static class WebhookSignature
+         if (Math.Abs(now.ToUnixTimeSeconds() - unix) > tolerance.TotalSeconds)
+             return false;
+ 
+-        var expected = "sha256=" + Convert.ToHexStringLower(HMACSHA256.HashData(
+-            Encoding.UTF8.GetBytes(secret), Encoding.UTF8.GetBytes($"{timestamp}.{body}")));
++        var expected = Sign(secret, Encoding.UTF8.GetBytes($"{timestamp}.{body}"));
+         return CryptographicOperations.FixedTimeEquals(Encoding.UTF8.GetBytes(expected),
+             Encoding.UTF8.GetBytes(signature));
+     }
++
++    private static string Sign(string secret, byte[] message)
++        => "sha256=" + Convert.ToHexStringLower(HMACSHA256.HashData(Encoding.UTF8.GetBytes(secret), message));
+ }
+diff --git a/financial-lab-transfer.Business/Services/TransferService.cs b/financial-lab-transfer.Business/Services/TransferService.cs
+index 75884c6..2b27927 100644
+--- a/financial-lab-transfer.Business/Services/TransferService.cs
++++ b/financial-lab-transfer.Business/Services/TransferService.cs
+@@ -10,6 +10,7 @@ public class TransferService(ITransferRepository repository, IAccountGateway acc
+     public const string RejectedByAntifraudReason = "Recusada pelo antifraude.";
+     public const string ScreeningTimeoutReason = "O antifraude não respondeu a tempo.";
+ 
++    /// <summary>Cria as transferências e pede a análise antifraude de cada uma.</summary>
+     public async Task<IReadOnlyList<Transfer>> CreateAsync(IReadOnlyList<TransferRequest> requests,
+         CancellationToken ct)
+     {
+@@ -124,6 +125,9 @@ public class TransferService(ITransferRepository repository, IAccountGateway acc
+                 transfer.RejectRefund(reason);
+         }, ct);
+ 
++    private static bool IsFinal(Transfer transfer)
++        => transfer.Status is TransferStatus.Completed or TransferStatus.Failed or TransferStatus.Refunded;
++
+     private async Task<Transfer?> HandleAsync(Guid accountId, string endToEndId,
+         Func<Transfer, TransferLeg, Task> apply, CancellationToken ct)
+     {

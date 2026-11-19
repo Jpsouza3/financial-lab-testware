@@ -1,0 +1,32 @@
+{
+  "id": "syn-0036",
+  "seq": 36,
+  "seed": 2015,
+  "recipe": "neutral-refactor",
+  "commit_kind": "neutral",
+  "catalog_ids": [
+    "N-04c",
+    "N-02c",
+    "N-03a",
+    "N-08b",
+    "N-04e"
+  ],
+  "changed_files": [
+    "financial-lab-account.Business/Services/BalanceHoldService.cs",
+    "financial-lab-account.Business/Services/Cpf.cs",
+    "financial-lab-account.Business/Services/StatementService.cs",
+    "financial-lab-antifraud.Api/Models/FraudRule.cs",
+    "financial-lab-transfer.Business/Services/TransferService.cs"
+  ],
+  "changed_services": [
+    "account",
+    "transfer",
+    "antifraud"
+  ],
+  "files_changed_count": 5,
+  "lines_added": 7,
+  "lines_removed": 2,
+  "lines_changed": 9,
+  "base_sha": "bf20772106e19f1a64edc272aed89b20ad04d0ec",
+  "generated_at": "2026-11-19T00:05:51.133Z"
+}

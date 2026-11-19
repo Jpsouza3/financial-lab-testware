@@ -1,0 +1,30 @@
+{
+  "id": "syn-0029",
+  "seq": 29,
+  "seed": 2008,
+  "recipe": "neutral-refactor",
+  "commit_kind": "neutral",
+  "catalog_ids": [
+    "N-02c",
+    "N-01e",
+    "N-02a",
+    "N-04b",
+    "N-05c"
+  ],
+  "changed_files": [
+    "financial-lab-antifraud.Api/Webhooks/WebhookDispatcher.cs",
+    "financial-lab-transfer.Api/Endpoints/WebhookEndpoints.cs",
+    "financial-lab-transfer.Api/Webhooks/WebhookSignature.cs",
+    "financial-lab-transfer.Business/Services/TransferService.cs"
+  ],
+  "changed_services": [
+    "transfer",
+    "antifraud"
+  ],
+  "files_changed_count": 4,
+  "lines_added": 11,
+  "lines_removed": 5,
+  "lines_changed": 16,
+  "base_sha": "bf20772106e19f1a64edc272aed89b20ad04d0ec",
+  "generated_at": "2026-11-19T00:05:50.837Z"
+}

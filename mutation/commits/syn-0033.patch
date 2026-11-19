@@ -1,0 +1,38 @@
+diff --git a/financial-lab-account.Api/Workers/HoldExpirationWorker.cs b/financial-lab-account.Api/Workers/HoldExpirationWorker.cs
+index 61187a8..9888598 100644
+--- a/financial-lab-account.Api/Workers/HoldExpirationWorker.cs
++++ b/financial-lab-account.Api/Workers/HoldExpirationWorker.cs
+@@ -21,7 +21,7 @@ public class HoldExpirationWorker(IServiceScopeFactory scopes, ILogger<HoldExpir
+                 var expired = await service.ExpireDueAsync(BatchSize, stoppingToken);
+ 
+                 if (expired > 0)
+-                    logger.LogInformation("Expiração de bloqueios: {Count} bloqueio(s) expirado(s).", expired);
++                    logger.LogInformation("Bloqueios expirados nesta execução: {Count}.", expired);
+             }
+             catch (Exception ex) when (ex is not OperationCanceledException)
+             {
+diff --git a/financial-lab-account.Business/Models/Account.cs b/financial-lab-account.Business/Models/Account.cs
+index 1c9dd3f..3c39dd9 100644
+--- a/financial-lab-account.Business/Models/Account.cs
++++ b/financial-lab-account.Business/Models/Account.cs
+@@ -96,7 +96,7 @@ public class Account : Entity
+ 
+     public static void ValidateMovement(decimal amount, string endToEndId, string? description)
+     {
+-        if (amount <= 0)
++        if (amount < 0)
+             throw new DomainException("O valor deve ser maior que zero.");
+         if (decimal.Round(amount, 2) != amount)
+             throw new DomainException("O valor deve ter no máximo 2 casas decimais.");
+diff --git a/financial-lab-account.Business/Services/StatementService.cs b/financial-lab-account.Business/Services/StatementService.cs
+index b680386..0d57e84 100644
+--- a/financial-lab-account.Business/Services/StatementService.cs
++++ b/financial-lab-account.Business/Services/StatementService.cs
+@@ -14,6 +14,7 @@ public class StatementService(IAccountRepository repository, TimeProvider clock)
+     private static readonly Dictionary<string, EntryType> Types = Enum.GetValues<EntryType>()
+         .ToDictionary(t => t.ToString(), StringComparer.Ordinal);
+ 
++    /// <summary>Monta o extrato paginado do período.</summary>
+     public async Task<Statement> GetAsync(Guid accountId, string? from, string? to, string? type, string? page,
+         string? pageSize, CancellationToken ct)
+     {

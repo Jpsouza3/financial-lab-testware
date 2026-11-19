@@ -1,0 +1,13 @@
+diff --git a/financial-lab-antifraud.Api/Webhooks/WebhookDispatcher.cs b/financial-lab-antifraud.Api/Webhooks/WebhookDispatcher.cs
+index 9136d23..791e937 100644
+--- a/financial-lab-antifraud.Api/Webhooks/WebhookDispatcher.cs
++++ b/financial-lab-antifraud.Api/Webhooks/WebhookDispatcher.cs
+@@ -42,7 +42,7 @@ public class WebhookDispatcher(
+             await Task.Delay(analysis.DelayMs, ct);
+             analysis.Decide();
+ 
+-            if (analysis.Delivery == DeliveryMode.Drop)
++            if (analysis.Delivery == DeliveryMode.Drop && analysis.DelayMs < 0)
+             {
+                 analysis.CompleteWebhook(WebhookStatus.Skipped);
+                 logger.LogInformation("Análise {AnalysisId} ({TransactionId}): {Status}, webhook descartado.",

@@ -1,0 +1,4722 @@
+{
+  "id": "syn-0025",
+  "kind": "synthetic",
+  "status": "ok",
+  "sut_sha": "bf20772106e19f1a64edc272aed89b20ad04d0ec",
+  "testware_sha": "5d7b7b615e03176591ec3ee7a2ed12762867994d",
+  "suite_tag": "suite-T0",
+  "started_at": "2026-11-19T00:14:15.124Z",
+  "finished_at": "2026-11-19T00:18:28.315Z",
+  "build_ms": 30363,
+  "suite_ms": 199917,
+  "stack_healthy": true,
+  "af_default_delay_ms": null,
+  "rebuilt_images": [
+    "flmut/account-api:syn-0025",
+    "flmut/transfer-api:syn-0025",
+    "flmut/antifraud-api:syn-0025"
+  ],
+  "meta": {
+    "id": "syn-0025",
+    "seq": 25,
+    "seed": 2004,
+    "recipe": "single-break",
+    "commit_kind": "breaking",
+    "catalog_ids": [
+      "B-RVL-02",
+      "N-05c",
+      "N-01a"
+    ],
+    "changed_files": [
+      "financial-lab-account.Business/Services/StatementService.cs",
+      "financial-lab-antifraud.Api/Rules/RuleValidator.cs",
+      "financial-lab-transfer.Api/Endpoints/WebhookEndpoints.cs"
+    ],
+    "changed_services": [
+      "account",
+      "transfer",
+      "antifraud"
+    ],
+    "files_changed_count": 3,
+    "lines_added": 3,
+    "lines_removed": 5,
+    "lines_changed": 8,
+    "base_sha": "bf20772106e19f1a64edc272aed89b20ad04d0ec",
+    "generated_at": "2026-11-19T00:05:50.606Z"
+  },
+  "summary": {
+    "total": 245,
+    "passed": 243,
+    "failed": 1,
+    "skipped": 1,
+    "flaky": 0
+  },
+  "tests": [
+    {
+      "test_id": "account/delete-hold.spec.ts › DELETE /accounts/{accountId}/holds/{holdId} › liberação › REL-01: Liberar bloqueio Active",
+      "file": "account/delete-hold.spec.ts",
+      "line": 88,
+      "title": "DELETE /accounts/{accountId}/holds/{holdId} › liberação › REL-01: Liberar bloqueio Active",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:liberar-bloqueio-saldo"
+      ],
+      "spec_id": "liberar-bloqueio-saldo",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 2270,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "account/delete-hold.spec.ts › DELETE /accounts/{accountId}/holds/{holdId} › liberação › REL-02: Liberar um de vários bloqueios só devolve o valor dele",
+      "file": "account/delete-hold.spec.ts",
+      "line": 109,
+      "title": "DELETE /accounts/{accountId}/holds/{holdId} › liberação › REL-02: Liberar um de vários bloqueios só devolve o valor dele",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:liberar-bloqueio-saldo"
+      ],
+      "spec_id": "liberar-bloqueio-saldo",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 2261,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "account/delete-hold.spec.ts › DELETE /accounts/{accountId}/holds/{holdId} › liberação › REL-03: Liberação repetida devolve o mesmo corpo sem novo efeito",
+      "file": "account/delete-hold.spec.ts",
+      "line": 124,
+      "title": "DELETE /accounts/{accountId}/holds/{holdId} › liberação › REL-03: Liberação repetida devolve o mesmo corpo sem novo efeito",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:liberar-bloqueio-saldo"
+      ],
+      "spec_id": "liberar-bloqueio-saldo",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 2218,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "account/delete-hold.spec.ts › DELETE /accounts/{accountId}/holds/{holdId} › liberação › REL-04: Conta Blocked pode ter bloqueio liberado",
+      "file": "account/delete-hold.spec.ts",
+      "line": 136,
+      "title": "DELETE /accounts/{accountId}/holds/{holdId} › liberação › REL-04: Conta Blocked pode ter bloqueio liberado",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:liberar-bloqueio-saldo"
+      ],
+      "spec_id": "liberar-bloqueio-saldo",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 2172,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "account/delete-hold.spec.ts › DELETE /accounts/{accountId}/holds/{holdId} › liberação › REL-05: Liberação não gera lançamento no extrato",
+      "file": "account/delete-hold.spec.ts",
+      "line": 151,
+      "title": "DELETE /accounts/{accountId}/holds/{holdId} › liberação › REL-05: Liberação não gera lançamento no extrato",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:liberar-bloqueio-saldo"
+      ],
+      "spec_id": "liberar-bloqueio-saldo",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 299,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "account/delete-hold.spec.ts › DELETE /accounts/{accountId}/holds/{holdId} › liberação › REL-06: Liberar abre vaga no limite de 5 bloqueios ativos",
+      "file": "account/delete-hold.spec.ts",
+      "line": 161,
+      "title": "DELETE /accounts/{accountId}/holds/{holdId} › liberação › REL-06: Liberar abre vaga no limite de 5 bloqueios ativos",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:liberar-bloqueio-saldo"
+      ],
+      "spec_id": "liberar-bloqueio-saldo",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 228,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "account/delete-hold.spec.ts › DELETE /accounts/{accountId}/holds/{holdId} › liberação › REL-07: Liberar o último bloqueio ativo remove o impedimento de encerrar",
+      "file": "account/delete-hold.spec.ts",
+      "line": 178,
+      "title": "DELETE /accounts/{accountId}/holds/{holdId} › liberação › REL-07: Liberar o último bloqueio ativo remove o impedimento de encerrar",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:liberar-bloqueio-saldo"
+      ],
+      "spec_id": "liberar-bloqueio-saldo",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 172,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "account/delete-hold.spec.ts › DELETE /accounts/{accountId}/holds/{holdId} › não encontrado › REL-08: accountId ou holdId que não é guid",
+      "file": "account/delete-hold.spec.ts",
+      "line": 197,
+      "title": "DELETE /accounts/{accountId}/holds/{holdId} › não encontrado › REL-08: accountId ou holdId que não é guid",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:liberar-bloqueio-saldo"
+      ],
+      "spec_id": "liberar-bloqueio-saldo",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 104,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "account/delete-hold.spec.ts › DELETE /accounts/{accountId}/holds/{holdId} › não encontrado › REL-09: Conta inexistente",
+      "file": "account/delete-hold.spec.ts",
+      "line": 216,
+      "title": "DELETE /accounts/{accountId}/holds/{holdId} › não encontrado › REL-09: Conta inexistente",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:liberar-bloqueio-saldo"
+      ],
+      "spec_id": "liberar-bloqueio-saldo",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 29,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "account/delete-hold.spec.ts › DELETE /accounts/{accountId}/holds/{holdId} › não encontrado › REL-10: Bloqueio inexistente",
+      "file": "account/delete-hold.spec.ts",
+      "line": 220,
+      "title": "DELETE /accounts/{accountId}/holds/{holdId} › não encontrado › REL-10: Bloqueio inexistente",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:liberar-bloqueio-saldo"
+      ],
+      "spec_id": "liberar-bloqueio-saldo",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 62,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "account/delete-hold.spec.ts › DELETE /accounts/{accountId}/holds/{holdId} › não encontrado › REL-11: Bloqueio de outra conta não é liberado",
+      "file": "account/delete-hold.spec.ts",
+      "line": 226,
+      "title": "DELETE /accounts/{accountId}/holds/{holdId} › não encontrado › REL-11: Bloqueio de outra conta não é liberado",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:liberar-bloqueio-saldo"
+      ],
+      "spec_id": "liberar-bloqueio-saldo",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 151,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "account/delete-hold.spec.ts › DELETE /accounts/{accountId}/holds/{holdId} › expiração › REL-12: Bloqueio vencido expira em até ~5 s com o mesmo efeito da liberação",
+      "file": "account/delete-hold.spec.ts",
+      "line": 242,
+      "title": "DELETE /accounts/{accountId}/holds/{holdId} › expiração › REL-12: Bloqueio vencido expira em até ~5 s com o mesmo efeito da liberação",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:liberar-bloqueio-saldo"
+      ],
+      "spec_id": "liberar-bloqueio-saldo",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 15512,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "account/delete-hold.spec.ts › DELETE /accounts/{accountId}/holds/{holdId} › expiração › REL-13: Vários bloqueios vencidos ao mesmo tempo expiram juntos",
+      "file": "account/delete-hold.spec.ts",
+      "line": 258,
+      "title": "DELETE /accounts/{accountId}/holds/{holdId} › expiração › REL-13: Vários bloqueios vencidos ao mesmo tempo expiram juntos",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:liberar-bloqueio-saldo"
+      ],
+      "spec_id": "liberar-bloqueio-saldo",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 16073,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "account/delete-hold.spec.ts › DELETE /accounts/{accountId}/holds/{holdId} › expiração › REL-14: Bloqueio Expired não pode ser liberado",
+      "file": "account/delete-hold.spec.ts",
+      "line": 275,
+      "title": "DELETE /accounts/{accountId}/holds/{holdId} › expiração › REL-14: Bloqueio Expired não pode ser liberado",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:liberar-bloqueio-saldo"
+      ],
+      "spec_id": "liberar-bloqueio-saldo",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 15472,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "account/delete-hold.spec.ts › DELETE /accounts/{accountId}/holds/{holdId} › expiração › REL-15: Bloqueio liberado antes do vencimento não volta a mudar",
+      "file": "account/delete-hold.spec.ts",
+      "line": 288,
+      "title": "DELETE /accounts/{accountId}/holds/{holdId} › expiração › REL-15: Bloqueio liberado antes do vencimento não volta a mudar",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:liberar-bloqueio-saldo"
+      ],
+      "spec_id": "liberar-bloqueio-saldo",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 18040,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "account/get-account.spec.ts › GET /accounts/{accountId} › OPN-25: Conta devolve os dados da abertura",
+      "file": "account/get-account.spec.ts",
+      "line": 15,
+      "title": "GET /accounts/{accountId} › OPN-25: Conta devolve os dados da abertura",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:abrir-conta"
+      ],
+      "spec_id": "abrir-conta",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 113,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "account/get-account.spec.ts › GET /accounts/{accountId} › OPN-26: Conta devolve saldos e status atualizados",
+      "file": "account/get-account.spec.ts",
+      "line": 21,
+      "title": "GET /accounts/{accountId} › OPN-26: Conta devolve saldos e status atualizados",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:abrir-conta"
+      ],
+      "spec_id": "abrir-conta",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 139,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "account/get-account.spec.ts › GET /accounts/{accountId} › OPN-27: Conta inexistente",
+      "file": "account/get-account.spec.ts",
+      "line": 44,
+      "title": "GET /accounts/{accountId} › OPN-27: Conta inexistente",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:abrir-conta"
+      ],
+      "spec_id": "abrir-conta",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 17,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "account/get-statement.spec.ts › GET /accounts/{accountId}/statement › consulta › STM-01: Extrato sem parâmetros usa os padrões",
+      "file": "account/get-statement.spec.ts",
+      "line": 65,
+      "title": "GET /accounts/{accountId}/statement › consulta › STM-01: Extrato sem parâmetros usa os padrões",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:extrato-conta"
+      ],
+      "spec_id": "extrato-conta",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 35,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "account/get-statement.spec.ts › GET /accounts/{accountId}/statement › consulta › STM-02: Débitos e créditos de transferências em ordem decrescente",
+      "file": "account/get-statement.spec.ts",
+      "line": 86,
+      "title": "GET /accounts/{accountId}/statement › consulta › STM-02: Débitos e créditos de transferências em ordem decrescente",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:extrato-conta"
+      ],
+      "spec_id": "extrato-conta",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 3331,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "account/get-statement.spec.ts › GET /accounts/{accountId}/statement › consulta › STM-03: Filtro Debit afeta itens e totais, mas não os saldos de abertura e fechamento",
+      "file": "account/get-statement.spec.ts",
+      "line": 108,
+      "title": "GET /accounts/{accountId}/statement › consulta › STM-03: Filtro Debit afeta itens e totais, mas não os saldos de abertura e fechamento",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:extrato-conta"
+      ],
+      "spec_id": "extrato-conta",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 3297,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "account/get-statement.spec.ts › GET /accounts/{accountId}/statement › consulta › STM-04: Filtro Credit afeta itens e totais, mas não os saldos de abertura e fechamento",
+      "file": "account/get-statement.spec.ts",
+      "line": 120,
+      "title": "GET /accounts/{accountId}/statement › consulta › STM-04: Filtro Credit afeta itens e totais, mas não os saldos de abertura e fechamento",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:extrato-conta"
+      ],
+      "spec_id": "extrato-conta",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 2938,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "account/get-statement.spec.ts › GET /accounts/{accountId}/statement › consulta › STM-05: Total de itens que não é múltiplo do tamanho da página",
+      "file": "account/get-statement.spec.ts",
+      "line": 131,
+      "title": "GET /accounts/{accountId}/statement › consulta › STM-05: Total de itens que não é múltiplo do tamanho da página",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:extrato-conta"
+      ],
+      "spec_id": "extrato-conta",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 1733,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "account/get-statement.spec.ts › GET /accounts/{accountId}/statement › consulta › STM-06: pageSize 1 pagina um lançamento por página na ordem decrescente",
+      "file": "account/get-statement.spec.ts",
+      "line": 150,
+      "title": "GET /accounts/{accountId}/statement › consulta › STM-06: pageSize 1 pagina um lançamento por página na ordem decrescente",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:extrato-conta"
+      ],
+      "spec_id": "extrato-conta",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 1687,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "account/get-statement.spec.ts › GET /accounts/{accountId}/statement › consulta › STM-07: Página além da última devolve itens vazios e totais preenchidos",
+      "file": "account/get-statement.spec.ts",
+      "line": 165,
+      "title": "GET /accounts/{accountId}/statement › consulta › STM-07: Página além da última devolve itens vazios e totais preenchidos",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:extrato-conta"
+      ],
+      "spec_id": "extrato-conta",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 1682,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "account/get-statement.spec.ts › GET /accounts/{accountId}/statement › consulta › STM-08: Conta sem lançamentos",
+      "file": "account/get-statement.spec.ts",
+      "line": 175,
+      "title": "GET /accounts/{accountId}/statement › consulta › STM-08: Conta sem lançamentos",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:extrato-conta"
+      ],
+      "spec_id": "extrato-conta",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 29,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "account/get-statement.spec.ts › GET /accounts/{accountId}/statement › consulta › STM-09: Período sem lançamentos fecha com o saldo de abertura",
+      "file": "account/get-statement.spec.ts",
+      "line": 184,
+      "title": "GET /accounts/{accountId}/statement › consulta › STM-09: Período sem lançamentos fecha com o saldo de abertura",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:extrato-conta"
+      ],
+      "spec_id": "extrato-conta",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 35,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "account/get-statement.spec.ts › GET /accounts/{accountId}/statement › consulta › STM-10: Período de um dia (from = to = hoje) inclui os lançamentos do dia",
+      "file": "account/get-statement.spec.ts",
+      "line": 194,
+      "title": "GET /accounts/{accountId}/statement › consulta › STM-10: Período de um dia (from = to = hoje) inclui os lançamentos do dia",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:extrato-conta"
+      ],
+      "spec_id": "extrato-conta",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 26,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "account/get-statement.spec.ts › GET /accounts/{accountId}/statement › consulta › STM-11: Padrões quando só from ou só to é informado",
+      "file": "account/get-statement.spec.ts",
+      "line": 204,
+      "title": "GET /accounts/{accountId}/statement › consulta › STM-11: Padrões quando só from ou só to é informado",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:extrato-conta"
+      ],
+      "spec_id": "extrato-conta",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 42,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "account/get-statement.spec.ts › GET /accounts/{accountId}/statement › consulta › STM-12: Conta Blocked ou Closed continua tendo extrato; bloqueios e status não aparecem",
+      "file": "account/get-statement.spec.ts",
+      "line": 223,
+      "title": "GET /accounts/{accountId}/statement › consulta › STM-12: Conta Blocked ou Closed continua tendo extrato; bloqueios e status não aparecem",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:extrato-conta"
+      ],
+      "spec_id": "extrato-conta",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 73,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "account/get-statement.spec.ts › GET /accounts/{accountId}/statement › consulta › STM-13: Débito recusado não gera lançamento",
+      "file": "account/get-statement.spec.ts",
+      "line": 241,
+      "title": "GET /accounts/{accountId}/statement › consulta › STM-13: Débito recusado não gera lançamento",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:extrato-conta"
+      ],
+      "spec_id": "extrato-conta",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 848,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "account/get-statement.spec.ts › GET /accounts/{accountId}/statement › concorrência › STM-23: Créditos simultâneos na mesma conta geram lançamentos com saldos encadeados",
+      "file": "account/get-statement.spec.ts",
+      "line": 257,
+      "title": "GET /accounts/{accountId}/statement › concorrência › STM-23: Créditos simultâneos na mesma conta geram lançamentos com saldos encadeados",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:extrato-conta"
+      ],
+      "spec_id": "extrato-conta",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 1001,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "account/get-statement.spec.ts › GET /accounts/{accountId}/statement › validação dos parâmetros › STM-14: from ou to fora do formato yyyy-MM-dd ou inexistente",
+      "file": "account/get-statement.spec.ts",
+      "line": 278,
+      "title": "GET /accounts/{accountId}/statement › validação dos parâmetros › STM-14: from ou to fora do formato yyyy-MM-dd ou inexistente",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:extrato-conta"
+      ],
+      "spec_id": "extrato-conta",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 141,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "account/get-statement.spec.ts › GET /accounts/{accountId}/statement › validação dos parâmetros › STM-15: Data final no futuro",
+      "file": "account/get-statement.spec.ts",
+      "line": 295,
+      "title": "GET /accounts/{accountId}/statement › validação dos parâmetros › STM-15: Data final no futuro",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:extrato-conta"
+      ],
+      "spec_id": "extrato-conta",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 46,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "account/get-statement.spec.ts › GET /accounts/{accountId}/statement › validação dos parâmetros › STM-16: Data inicial posterior à final",
+      "file": "account/get-statement.spec.ts",
+      "line": 310,
+      "title": "GET /accounts/{accountId}/statement › validação dos parâmetros › STM-16: Data inicial posterior à final",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:extrato-conta"
+      ],
+      "spec_id": "extrato-conta",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 46,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "account/get-statement.spec.ts › GET /accounts/{accountId}/statement › validação dos parâmetros › STM-17: Período máximo de 90 dias, contando from e to",
+      "file": "account/get-statement.spec.ts",
+      "line": 317,
+      "title": "GET /accounts/{accountId}/statement › validação dos parâmetros › STM-17: Período máximo de 90 dias, contando from e to",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:extrato-conta"
+      ],
+      "spec_id": "extrato-conta",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 55,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "account/get-statement.spec.ts › GET /accounts/{accountId}/statement › validação dos parâmetros › STM-18: type fora de Credit ou Debit",
+      "file": "account/get-statement.spec.ts",
+      "line": 342,
+      "title": "GET /accounts/{accountId}/statement › validação dos parâmetros › STM-18: type fora de Credit ou Debit",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:extrato-conta"
+      ],
+      "spec_id": "extrato-conta",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 40,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "account/get-statement.spec.ts › GET /accounts/{accountId}/statement › validação dos parâmetros › STM-19: page menor que 1 ou não inteira",
+      "file": "account/get-statement.spec.ts",
+      "line": 352,
+      "title": "GET /accounts/{accountId}/statement › validação dos parâmetros › STM-19: page menor que 1 ou não inteira",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:extrato-conta"
+      ],
+      "spec_id": "extrato-conta",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 48,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "account/get-statement.spec.ts › GET /accounts/{accountId}/statement › validação dos parâmetros › STM-20: pageSize fora de 1 a 100",
+      "file": "account/get-statement.spec.ts",
+      "line": 366,
+      "title": "GET /accounts/{accountId}/statement › validação dos parâmetros › STM-20: pageSize fora de 1 a 100",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:extrato-conta"
+      ],
+      "spec_id": "extrato-conta",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 84,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "account/get-statement.spec.ts › GET /accounts/{accountId}/statement › validação dos parâmetros › STM-21: Conta inexistente",
+      "file": "account/get-statement.spec.ts",
+      "line": 382,
+      "title": "GET /accounts/{accountId}/statement › validação dos parâmetros › STM-21: Conta inexistente",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:extrato-conta"
+      ],
+      "spec_id": "extrato-conta",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 16,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "account/get-statement.spec.ts › GET /accounts/{accountId}/statement › validação dos parâmetros › STM-22: Ordem de avaliação das regras",
+      "file": "account/get-statement.spec.ts",
+      "line": 386,
+      "title": "GET /accounts/{accountId}/statement › validação dos parâmetros › STM-22: Ordem de avaliação das regras",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:extrato-conta"
+      ],
+      "spec_id": "extrato-conta",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 76,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "account/patch-account-status.spec.ts › PATCH /accounts/{accountId}/status › transições › STS-01: Bloquear conta Active",
+      "file": "account/patch-account-status.spec.ts",
+      "line": 58,
+      "title": "PATCH /accounts/{accountId}/status › transições › STS-01: Bloquear conta Active",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:alterar-status-conta"
+      ],
+      "spec_id": "alterar-status-conta",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 73,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "account/patch-account-status.spec.ts › PATCH /accounts/{accountId}/status › transições › STS-02: Desbloquear sem reason limpa o statusReason",
+      "file": "account/patch-account-status.spec.ts",
+      "line": 72,
+      "title": "PATCH /accounts/{accountId}/status › transições › STS-02: Desbloquear sem reason limpa o statusReason",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:alterar-status-conta"
+      ],
+      "spec_id": "alterar-status-conta",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 90,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "account/patch-account-status.spec.ts › PATCH /accounts/{accountId}/status › transições › STS-03: Desbloquear com reason grava o novo motivo",
+      "file": "account/patch-account-status.spec.ts",
+      "line": 84,
+      "title": "PATCH /accounts/{accountId}/status › transições › STS-03: Desbloquear com reason grava o novo motivo",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:alterar-status-conta"
+      ],
+      "spec_id": "alterar-status-conta",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 80,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "account/patch-account-status.spec.ts › PATCH /accounts/{accountId}/status › transições › STS-04: Encerrar conta Active com saldo zero",
+      "file": "account/patch-account-status.spec.ts",
+      "line": 93,
+      "title": "PATCH /accounts/{accountId}/status › transições › STS-04: Encerrar conta Active com saldo zero",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:alterar-status-conta"
+      ],
+      "spec_id": "alterar-status-conta",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 63,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "account/patch-account-status.spec.ts › PATCH /accounts/{accountId}/status › transições › STS-05: Encerrar conta Blocked com saldo zero",
+      "file": "account/patch-account-status.spec.ts",
+      "line": 104,
+      "title": "PATCH /accounts/{accountId}/status › transições › STS-05: Encerrar conta Blocked com saldo zero",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:alterar-status-conta"
+      ],
+      "spec_id": "alterar-status-conta",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 98,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "account/patch-account-status.spec.ts › PATCH /accounts/{accountId}/status › transições › STS-06: Zerar o saldo com débito igual ao disponível e encerrar",
+      "file": "account/patch-account-status.spec.ts",
+      "line": 114,
+      "title": "PATCH /accounts/{accountId}/status › transições › STS-06: Zerar o saldo com débito igual ao disponível e encerrar",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:alterar-status-conta"
+      ],
+      "spec_id": "alterar-status-conta",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 876,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "account/patch-account-status.spec.ts › PATCH /accounts/{accountId}/status › status igual ao atual › STS-07: Active → Active responde changed false sem gravar",
+      "file": "account/patch-account-status.spec.ts",
+      "line": 136,
+      "title": "PATCH /accounts/{accountId}/status › status igual ao atual › STS-07: Active → Active responde changed false sem gravar",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:alterar-status-conta"
+      ],
+      "spec_id": "alterar-status-conta",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 83,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "account/patch-account-status.spec.ts › PATCH /accounts/{accountId}/status › status igual ao atual › STS-08: Blocked → Blocked com outro reason não altera motivo, data nem version",
+      "file": "account/patch-account-status.spec.ts",
+      "line": 156,
+      "title": "PATCH /accounts/{accountId}/status › status igual ao atual › STS-08: Blocked → Blocked com outro reason não altera motivo, data nem version",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:alterar-status-conta"
+      ],
+      "spec_id": "alterar-status-conta",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 82,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "account/patch-account-status.spec.ts › PATCH /accounts/{accountId}/status › validação do corpo › STS-09: status ausente ou fora do enum",
+      "file": "account/patch-account-status.spec.ts",
+      "line": 180,
+      "title": "PATCH /accounts/{accountId}/status › validação do corpo › STS-09: status ausente ou fora do enum",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:alterar-status-conta"
+      ],
+      "spec_id": "alterar-status-conta",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 89,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "account/patch-account-status.spec.ts › PATCH /accounts/{accountId}/status › validação do corpo › STS-10: Blocked ou Closed sem reason",
+      "file": "account/patch-account-status.spec.ts",
+      "line": 202,
+      "title": "PATCH /accounts/{accountId}/status › validação do corpo › STS-10: Blocked ou Closed sem reason",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:alterar-status-conta"
+      ],
+      "spec_id": "alterar-status-conta",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 101,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "account/patch-account-status.spec.ts › PATCH /accounts/{accountId}/status › validação do corpo › STS-11: reason fora de 5 a 200 caracteres",
+      "file": "account/patch-account-status.spec.ts",
+      "line": 217,
+      "title": "PATCH /accounts/{accountId}/status › validação do corpo › STS-11: reason fora de 5 a 200 caracteres",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:alterar-status-conta"
+      ],
+      "spec_id": "alterar-status-conta",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 89,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "account/patch-account-status.spec.ts › PATCH /accounts/{accountId}/status › validação do corpo › STS-12: reason com espaços nas pontas é gravado sem eles",
+      "file": "account/patch-account-status.spec.ts",
+      "line": 244,
+      "title": "PATCH /accounts/{accountId}/status › validação do corpo › STS-12: reason com espaços nas pontas é gravado sem eles",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:alterar-status-conta"
+      ],
+      "spec_id": "alterar-status-conta",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 31,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "account/patch-account-status.spec.ts › PATCH /accounts/{accountId}/status › validação do corpo › STS-13: Conta inexistente",
+      "file": "account/patch-account-status.spec.ts",
+      "line": 254,
+      "title": "PATCH /accounts/{accountId}/status › validação do corpo › STS-13: Conta inexistente",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:alterar-status-conta"
+      ],
+      "spec_id": "alterar-status-conta",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 12,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "account/patch-account-status.spec.ts › PATCH /accounts/{accountId}/status › regras de negócio › STS-14: Conta Closed não muda de status",
+      "file": "account/patch-account-status.spec.ts",
+      "line": 262,
+      "title": "PATCH /accounts/{accountId}/status › regras de negócio › STS-14: Conta Closed não muda de status",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:alterar-status-conta"
+      ],
+      "spec_id": "alterar-status-conta",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 85,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "account/patch-account-status.spec.ts › PATCH /accounts/{accountId}/status › regras de negócio › STS-15: Encerrar conta com bloqueio de saldo ativo",
+      "file": "account/patch-account-status.spec.ts",
+      "line": 276,
+      "title": "PATCH /accounts/{accountId}/status › regras de negócio › STS-15: Encerrar conta com bloqueio de saldo ativo",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:alterar-status-conta"
+      ],
+      "spec_id": "alterar-status-conta",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 47,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "account/patch-account-status.spec.ts › PATCH /accounts/{accountId}/status › regras de negócio › STS-16: Encerrar conta com saldo de 0,01",
+      "file": "account/patch-account-status.spec.ts",
+      "line": 287,
+      "title": "PATCH /accounts/{accountId}/status › regras de negócio › STS-16: Encerrar conta com saldo de 0,01",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:alterar-status-conta"
+      ],
+      "spec_id": "alterar-status-conta",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 49,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "account/patch-account-status.spec.ts › PATCH /accounts/{accountId}/status › regras de negócio › STS-17: Bloquear conta com saldo e bloqueio ativo é permitido",
+      "file": "account/patch-account-status.spec.ts",
+      "line": 298,
+      "title": "PATCH /accounts/{accountId}/status › regras de negócio › STS-17: Bloquear conta com saldo e bloqueio ativo é permitido",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:alterar-status-conta"
+      ],
+      "spec_id": "alterar-status-conta",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 67,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "account/patch-account-status.spec.ts › PATCH /accounts/{accountId}/status › regras de negócio › STS-18: Ordem de avaliação das regras",
+      "file": "account/patch-account-status.spec.ts",
+      "line": 309,
+      "title": "PATCH /accounts/{accountId}/status › regras de negócio › STS-18: Ordem de avaliação das regras",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:alterar-status-conta"
+      ],
+      "spec_id": "alterar-status-conta",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 141,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "account/patch-account-status.spec.ts › PATCH /accounts/{accountId}/status › movimentação por status › STS-19: Origem Blocked não é debitada",
+      "file": "account/patch-account-status.spec.ts",
+      "line": 335,
+      "title": "PATCH /accounts/{accountId}/status › movimentação por status › STS-19: Origem Blocked não é debitada",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:alterar-status-conta"
+      ],
+      "spec_id": "alterar-status-conta",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 907,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "account/patch-account-status.spec.ts › PATCH /accounts/{accountId}/status › movimentação por status › STS-20: Destino Blocked é creditado",
+      "file": "account/patch-account-status.spec.ts",
+      "line": 350,
+      "title": "PATCH /accounts/{accountId}/status › movimentação por status › STS-20: Destino Blocked é creditado",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:alterar-status-conta"
+      ],
+      "spec_id": "alterar-status-conta",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 877,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "account/patch-account-status.spec.ts › PATCH /accounts/{accountId}/status › movimentação por status › STS-21: Destino Closed recusa o crédito e a origem é estornada",
+      "file": "account/patch-account-status.spec.ts",
+      "line": 365,
+      "title": "PATCH /accounts/{accountId}/status › movimentação por status › STS-21: Destino Closed recusa o crédito e a origem é estornada",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:alterar-status-conta"
+      ],
+      "spec_id": "alterar-status-conta",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 850,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "account/patch-account-status.spec.ts › PATCH /accounts/{accountId}/status › movimentação por status › STS-22: Origem Closed não é debitada",
+      "file": "account/patch-account-status.spec.ts",
+      "line": 380,
+      "title": "PATCH /accounts/{accountId}/status › movimentação por status › STS-22: Origem Closed não é debitada",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:alterar-status-conta"
+      ],
+      "spec_id": "alterar-status-conta",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 850,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "account/patch-account-status.spec.ts › PATCH /accounts/{accountId}/status › movimentação por status › STS-23: Mudanças de status não alteram saldo nem extrato",
+      "file": "account/patch-account-status.spec.ts",
+      "line": 392,
+      "title": "PATCH /accounts/{accountId}/status › movimentação por status › STS-23: Mudanças de status não alteram saldo nem extrato",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:alterar-status-conta"
+      ],
+      "spec_id": "alterar-status-conta",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 84,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "account/post-account.spec.ts › POST /accounts › abertura › OPN-01: Abrir conta só com nome e CPF",
+      "file": "account/post-account.spec.ts",
+      "line": 49,
+      "title": "POST /accounts › abertura › OPN-01: Abrir conta só com nome e CPF",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:abrir-conta"
+      ],
+      "spec_id": "abrir-conta",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 62,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "account/post-account.spec.ts › POST /accounts › abertura › OPN-02: Abrir conta com depósito inicial gera um crédito \"Depósito inicial\"",
+      "file": "account/post-account.spec.ts",
+      "line": 73,
+      "title": "POST /accounts › abertura › OPN-02: Abrir conta com depósito inicial gera um crédito \"Depósito inicial\"",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:abrir-conta"
+      ],
+      "spec_id": "abrir-conta",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 54,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "account/post-account.spec.ts › POST /accounts › abertura › OPN-03: Depósito inicial no limite de 5000.00 é aceito",
+      "file": "account/post-account.spec.ts",
+      "line": 98,
+      "title": "POST /accounts › abertura › OPN-03: Depósito inicial no limite de 5000.00 é aceito",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:abrir-conta"
+      ],
+      "spec_id": "abrir-conta",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 34,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "account/post-account.spec.ts › POST /accounts › abertura › OPN-04: Depósito inicial 0 explícito não gera lançamento",
+      "file": "account/post-account.spec.ts",
+      "line": 108,
+      "title": "POST /accounts › abertura › OPN-04: Depósito inicial 0 explícito não gera lançamento",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:abrir-conta"
+      ],
+      "spec_id": "abrir-conta",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 64,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "account/post-account.spec.ts › POST /accounts › abertura › OPN-05: Nome é normalizado e aceita acentos, hífen e apóstrofo",
+      "file": "account/post-account.spec.ts",
+      "line": 117,
+      "title": "POST /accounts › abertura › OPN-05: Nome é normalizado e aceita acentos, hífen e apóstrofo",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:abrir-conta"
+      ],
+      "spec_id": "abrir-conta",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 77,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "account/post-account.spec.ts › POST /accounts › abertura › OPN-06: Agência 0002 tem numeração própria e sequencial",
+      "file": "account/post-account.spec.ts",
+      "line": 133,
+      "title": "POST /accounts › abertura › OPN-06: Agência 0002 tem numeração própria e sequencial",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:abrir-conta"
+      ],
+      "spec_id": "abrir-conta",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 42,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "account/post-account.spec.ts › POST /accounts › abertura › OPN-07: Duas aberturas simultâneas na mesma agência recebem números diferentes",
+      "file": "account/post-account.spec.ts",
+      "line": 148,
+      "title": "POST /accounts › abertura › OPN-07: Duas aberturas simultâneas na mesma agência recebem números diferentes",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:abrir-conta"
+      ],
+      "spec_id": "abrir-conta",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 48,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "account/post-account.spec.ts › POST /accounts › validação do corpo › OPN-08: name ausente ou vazio",
+      "file": "account/post-account.spec.ts",
+      "line": 159,
+      "title": "POST /accounts › validação do corpo › OPN-08: name ausente ou vazio",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:abrir-conta"
+      ],
+      "spec_id": "abrir-conta",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 74,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "account/post-account.spec.ts › POST /accounts › validação do corpo › OPN-09: name normalizado fora de 3 a 150 caracteres",
+      "file": "account/post-account.spec.ts",
+      "line": 176,
+      "title": "POST /accounts › validação do corpo › OPN-09: name normalizado fora de 3 a 150 caracteres",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:abrir-conta"
+      ],
+      "spec_id": "abrir-conta",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 136,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "account/post-account.spec.ts › POST /accounts › validação do corpo › OPN-10: name com dígito ou símbolo",
+      "file": "account/post-account.spec.ts",
+      "line": 192,
+      "title": "POST /accounts › validação do corpo › OPN-10: name com dígito ou símbolo",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:abrir-conta"
+      ],
+      "spec_id": "abrir-conta",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 52,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "account/post-account.spec.ts › POST /accounts › validação do corpo › OPN-11: document ausente ou fora do formato de 11 dígitos",
+      "file": "account/post-account.spec.ts",
+      "line": 200,
+      "title": "POST /accounts › validação do corpo › OPN-11: document ausente ou fora do formato de 11 dígitos",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:abrir-conta"
+      ],
+      "spec_id": "abrir-conta",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 69,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "account/post-account.spec.ts › POST /accounts › validação do corpo › OPN-12: document com dígito verificador inválido",
+      "file": "account/post-account.spec.ts",
+      "line": 222,
+      "title": "POST /accounts › validação do corpo › OPN-12: document com dígito verificador inválido",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:abrir-conta"
+      ],
+      "spec_id": "abrir-conta",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 33,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "account/post-account.spec.ts › POST /accounts › validação do corpo › OPN-13: document com sequência repetida",
+      "file": "account/post-account.spec.ts",
+      "line": 237,
+      "title": "POST /accounts › validação do corpo › OPN-13: document com sequência repetida",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:abrir-conta"
+      ],
+      "spec_id": "abrir-conta",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 40,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "account/post-account.spec.ts › POST /accounts › validação do corpo › OPN-14: CPF cujo cálculo do 1º dígito dá resto 10 tem dígito 0",
+      "file": "account/post-account.spec.ts",
+      "line": 246,
+      "title": "POST /accounts › validação do corpo › OPN-14: CPF cujo cálculo do 1º dígito dá resto 10 tem dígito 0",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:abrir-conta"
+      ],
+      "spec_id": "abrir-conta",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 37,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "account/post-account.spec.ts › POST /accounts › validação do corpo › OPN-15: CPF cujo cálculo do 2º dígito dá resto 10 tem dígito 0",
+      "file": "account/post-account.spec.ts",
+      "line": 261,
+      "title": "POST /accounts › validação do corpo › OPN-15: CPF cujo cálculo do 2º dígito dá resto 10 tem dígito 0",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:abrir-conta"
+      ],
+      "spec_id": "abrir-conta",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 34,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "account/post-account.spec.ts › POST /accounts › validação do corpo › OPN-16: branch que não tem 4 dígitos",
+      "file": "account/post-account.spec.ts",
+      "line": 276,
+      "title": "POST /accounts › validação do corpo › OPN-16: branch que não tem 4 dígitos",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:abrir-conta"
+      ],
+      "spec_id": "abrir-conta",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 149,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "account/post-account.spec.ts › POST /accounts › validação do corpo › OPN-17: branch de 4 dígitos inexistente",
+      "file": "account/post-account.spec.ts",
+      "line": 286,
+      "title": "POST /accounts › validação do corpo › OPN-17: branch de 4 dígitos inexistente",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:abrir-conta"
+      ],
+      "spec_id": "abrir-conta",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 64,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "account/post-account.spec.ts › POST /accounts › validação do corpo › OPN-18: initialDeposit negativo ou acima de 5000.00",
+      "file": "account/post-account.spec.ts",
+      "line": 296,
+      "title": "POST /accounts › validação do corpo › OPN-18: initialDeposit negativo ou acima de 5000.00",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:abrir-conta"
+      ],
+      "spec_id": "abrir-conta",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 174,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "account/post-account.spec.ts › POST /accounts › validação do corpo › OPN-19: initialDeposit com mais de 2 casas decimais",
+      "file": "account/post-account.spec.ts",
+      "line": 306,
+      "title": "POST /accounts › validação do corpo › OPN-19: initialDeposit com mais de 2 casas decimais",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:abrir-conta"
+      ],
+      "spec_id": "abrir-conta",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 69,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "account/post-account.spec.ts › POST /accounts › validação do corpo › OPN-20: Ordem de avaliação das validações",
+      "file": "account/post-account.spec.ts",
+      "line": 322,
+      "title": "POST /accounts › validação do corpo › OPN-20: Ordem de avaliação das validações",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:abrir-conta"
+      ],
+      "spec_id": "abrir-conta",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 96,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "account/post-account.spec.ts › POST /accounts › documento já usado › OPN-21: CPF com conta Active",
+      "file": "account/post-account.spec.ts",
+      "line": 342,
+      "title": "POST /accounts › documento já usado › OPN-21: CPF com conta Active",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:abrir-conta"
+      ],
+      "spec_id": "abrir-conta",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 46,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "account/post-account.spec.ts › POST /accounts › documento já usado › OPN-22: CPF com conta Blocked",
+      "file": "account/post-account.spec.ts",
+      "line": 351,
+      "title": "POST /accounts › documento já usado › OPN-22: CPF com conta Blocked",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:abrir-conta"
+      ],
+      "spec_id": "abrir-conta",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 50,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "account/post-account.spec.ts › POST /accounts › documento já usado › OPN-23: CPF só com conta Closed pode abrir outra conta",
+      "file": "account/post-account.spec.ts",
+      "line": 357,
+      "title": "POST /accounts › documento já usado › OPN-23: CPF só com conta Closed pode abrir outra conta",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:abrir-conta"
+      ],
+      "spec_id": "abrir-conta",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 107,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "account/post-account.spec.ts › POST /accounts › documento já usado › OPN-24: Agência inexistente vem antes do CPF duplicado",
+      "file": "account/post-account.spec.ts",
+      "line": 371,
+      "title": "POST /accounts › documento já usado › OPN-24: Agência inexistente vem antes do CPF duplicado",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:abrir-conta"
+      ],
+      "spec_id": "abrir-conta",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 60,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "account/post-hold.spec.ts › POST /accounts/{accountId}/holds › criação › HLD-01: Criar bloqueio sem expiração em conta Active com saldo",
+      "file": "account/post-hold.spec.ts",
+      "line": 53,
+      "title": "POST /accounts/{accountId}/holds › criação › HLD-01: Criar bloqueio sem expiração em conta Active com saldo",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:criar-bloqueio-saldo"
+      ],
+      "spec_id": "criar-bloqueio-saldo",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 126,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "account/post-hold.spec.ts › POST /accounts/{accountId}/holds › criação › HLD-02: Criar bloqueio com expiresAt válido",
+      "file": "account/post-hold.spec.ts",
+      "line": 79,
+      "title": "POST /accounts/{accountId}/holds › criação › HLD-02: Criar bloqueio com expiresAt válido",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:criar-bloqueio-saldo"
+      ],
+      "spec_id": "criar-bloqueio-saldo",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 131,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "account/post-hold.spec.ts › POST /accounts/{accountId}/holds › criação › HLD-03: Bloqueio com amount igual ao availableBalance zera o disponível",
+      "file": "account/post-hold.spec.ts",
+      "line": 98,
+      "title": "POST /accounts/{accountId}/holds › criação › HLD-03: Bloqueio com amount igual ao availableBalance zera o disponível",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:criar-bloqueio-saldo"
+      ],
+      "spec_id": "criar-bloqueio-saldo",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 75,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "account/post-hold.spec.ts › POST /accounts/{accountId}/holds › criação › HLD-04: Conta Blocked aceita bloqueio de saldo",
+      "file": "account/post-hold.spec.ts",
+      "line": 110,
+      "title": "POST /accounts/{accountId}/holds › criação › HLD-04: Conta Blocked aceita bloqueio de saldo",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:criar-bloqueio-saldo"
+      ],
+      "spec_id": "criar-bloqueio-saldo",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 81,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "account/post-hold.spec.ts › POST /accounts/{accountId}/holds › criação › HLD-05: reason com espaços nas pontas é gravado sem eles",
+      "file": "account/post-hold.spec.ts",
+      "line": 123,
+      "title": "POST /accounts/{accountId}/holds › criação › HLD-05: reason com espaços nas pontas é gravado sem eles",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:criar-bloqueio-saldo"
+      ],
+      "spec_id": "criar-bloqueio-saldo",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 54,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "account/post-hold.spec.ts › POST /accounts/{accountId}/holds › criação › HLD-06: Mesma reference em outra conta cria outro bloqueio",
+      "file": "account/post-hold.spec.ts",
+      "line": 132,
+      "title": "POST /accounts/{accountId}/holds › criação › HLD-06: Mesma reference em outra conta cria outro bloqueio",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:criar-bloqueio-saldo"
+      ],
+      "spec_id": "criar-bloqueio-saldo",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 198,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "account/post-hold.spec.ts › POST /accounts/{accountId}/holds › validação do corpo › HLD-07: reference inválida",
+      "file": "account/post-hold.spec.ts",
+      "line": 163,
+      "title": "POST /accounts/{accountId}/holds › validação do corpo › HLD-07: reference inválida",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:criar-bloqueio-saldo"
+      ],
+      "spec_id": "criar-bloqueio-saldo",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 304,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "account/post-hold.spec.ts › POST /accounts/{accountId}/holds › validação do corpo › HLD-08: amount ausente, zero ou negativo",
+      "file": "account/post-hold.spec.ts",
+      "line": 194,
+      "title": "POST /accounts/{accountId}/holds › validação do corpo › HLD-08: amount ausente, zero ou negativo",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:criar-bloqueio-saldo"
+      ],
+      "spec_id": "criar-bloqueio-saldo",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 98,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "account/post-hold.spec.ts › POST /accounts/{accountId}/holds › validação do corpo › HLD-09: amount com mais de 2 casas decimais",
+      "file": "account/post-hold.spec.ts",
+      "line": 219,
+      "title": "POST /accounts/{accountId}/holds › validação do corpo › HLD-09: amount com mais de 2 casas decimais",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:criar-bloqueio-saldo"
+      ],
+      "spec_id": "criar-bloqueio-saldo",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 120,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "account/post-hold.spec.ts › POST /accounts/{accountId}/holds › validação do corpo › HLD-10: reason ausente ou fora de 5 a 200 caracteres",
+      "file": "account/post-hold.spec.ts",
+      "line": 238,
+      "title": "POST /accounts/{accountId}/holds › validação do corpo › HLD-10: reason ausente ou fora de 5 a 200 caracteres",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:criar-bloqueio-saldo"
+      ],
+      "spec_id": "criar-bloqueio-saldo",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 142,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "account/post-hold.spec.ts › POST /accounts/{accountId}/holds › validação do corpo › HLD-10: reason \"   abc   \" (3 caracteres após o trim)",
+      "file": "account/post-hold.spec.ts",
+      "line": 266,
+      "title": "POST /accounts/{accountId}/holds › validação do corpo › HLD-10: reason \"   abc   \" (3 caracteres após o trim)",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:criar-bloqueio-saldo"
+      ],
+      "spec_id": "criar-bloqueio-saldo",
+      "service_tag": "account",
+      "result": "skipped",
+      "flaky": false,
+      "duration_ms": 0,
+      "runs": [
+        "skipped"
+      ]
+    },
+    {
+      "test_id": "account/post-hold.spec.ts › POST /accounts/{accountId}/holds › validação do corpo › HLD-11: expiresAt fora da janela de 10 s a 90 dias",
+      "file": "account/post-hold.spec.ts",
+      "line": 268,
+      "title": "POST /accounts/{accountId}/holds › validação do corpo › HLD-11: expiresAt fora da janela de 10 s a 90 dias",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:criar-bloqueio-saldo"
+      ],
+      "spec_id": "criar-bloqueio-saldo",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 109,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "account/post-hold.spec.ts › POST /accounts/{accountId}/holds › validação do corpo › HLD-12: Conta inexistente",
+      "file": "account/post-hold.spec.ts",
+      "line": 287,
+      "title": "POST /accounts/{accountId}/holds › validação do corpo › HLD-12: Conta inexistente",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:criar-bloqueio-saldo"
+      ],
+      "spec_id": "criar-bloqueio-saldo",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 21,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "account/post-hold.spec.ts › POST /accounts/{accountId}/holds › idempotência › HLD-13: Repetição com mesma reference e mesmo amount devolve o bloqueio original",
+      "file": "account/post-hold.spec.ts",
+      "line": 294,
+      "title": "POST /accounts/{accountId}/holds › idempotência › HLD-13: Repetição com mesma reference e mesmo amount devolve o bloqueio original",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:criar-bloqueio-saldo"
+      ],
+      "spec_id": "criar-bloqueio-saldo",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 78,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "account/post-hold.spec.ts › POST /accounts/{accountId}/holds › idempotência › HLD-14: Repetição devolve 200 mesmo sem saldo disponível agora",
+      "file": "account/post-hold.spec.ts",
+      "line": 318,
+      "title": "POST /accounts/{accountId}/holds › idempotência › HLD-14: Repetição devolve 200 mesmo sem saldo disponível agora",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:criar-bloqueio-saldo"
+      ],
+      "spec_id": "criar-bloqueio-saldo",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 112,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "account/post-hold.spec.ts › POST /accounts/{accountId}/holds › idempotência › HLD-15: Repetição devolve o bloqueio no estado atual (Expired)",
+      "file": "account/post-hold.spec.ts",
+      "line": 333,
+      "title": "POST /accounts/{accountId}/holds › idempotência › HLD-15: Repetição devolve o bloqueio no estado atual (Expired)",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:criar-bloqueio-saldo"
+      ],
+      "spec_id": "criar-bloqueio-saldo",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 17244,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "account/post-hold.spec.ts › POST /accounts/{accountId}/holds › idempotência › HLD-16: reference já usada com outro amount",
+      "file": "account/post-hold.spec.ts",
+      "line": 352,
+      "title": "POST /accounts/{accountId}/holds › idempotência › HLD-16: reference já usada com outro amount",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:criar-bloqueio-saldo"
+      ],
+      "spec_id": "criar-bloqueio-saldo",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 69,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "account/post-hold.spec.ts › POST /accounts/{accountId}/holds › regras de negócio › HLD-17: Conta Closed não aceita bloqueio",
+      "file": "account/post-hold.spec.ts",
+      "line": 366,
+      "title": "POST /accounts/{accountId}/holds › regras de negócio › HLD-17: Conta Closed não aceita bloqueio",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:criar-bloqueio-saldo"
+      ],
+      "spec_id": "criar-bloqueio-saldo",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 57,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "account/post-hold.spec.ts › POST /accounts/{accountId}/holds › regras de negócio › HLD-18: Limite de 5 bloqueios Active",
+      "file": "account/post-hold.spec.ts",
+      "line": 375,
+      "title": "POST /accounts/{accountId}/holds › regras de negócio › HLD-18: Limite de 5 bloqueios Active",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:criar-bloqueio-saldo"
+      ],
+      "spec_id": "criar-bloqueio-saldo",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 181,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "account/post-hold.spec.ts › POST /accounts/{accountId}/holds › regras de negócio › HLD-19: Bloqueios Expired não contam para o limite",
+      "file": "account/post-hold.spec.ts",
+      "line": 391,
+      "title": "POST /accounts/{accountId}/holds › regras de negócio › HLD-19: Bloqueios Expired não contam para o limite",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:criar-bloqueio-saldo"
+      ],
+      "spec_id": "criar-bloqueio-saldo",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 17337,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "account/post-hold.spec.ts › POST /accounts/{accountId}/holds › regras de negócio › HLD-20: amount maior que o availableBalance",
+      "file": "account/post-hold.spec.ts",
+      "line": 407,
+      "title": "POST /accounts/{accountId}/holds › regras de negócio › HLD-20: amount maior que o availableBalance",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:criar-bloqueio-saldo"
+      ],
+      "spec_id": "criar-bloqueio-saldo",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 208,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "account/post-hold.spec.ts › POST /accounts/{accountId}/holds › regras de negócio › HLD-21: Débito maior que o availableBalance é recusado com bloqueio ativo",
+      "file": "account/post-hold.spec.ts",
+      "line": 436,
+      "title": "POST /accounts/{accountId}/holds › regras de negócio › HLD-21: Débito maior que o availableBalance é recusado com bloqueio ativo",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:criar-bloqueio-saldo"
+      ],
+      "spec_id": "criar-bloqueio-saldo",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 2146,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "account/post-hold.spec.ts › POST /accounts/{accountId}/holds › regras de negócio › HLD-22: Ordem de avaliação das regras",
+      "file": "account/post-hold.spec.ts",
+      "line": 472,
+      "title": "POST /accounts/{accountId}/holds › regras de negócio › HLD-22: Ordem de avaliação das regras",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:criar-bloqueio-saldo"
+      ],
+      "spec_id": "criar-bloqueio-saldo",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 124,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "account/post-hold.spec.ts › POST /accounts/{accountId}/holds › regras de negócio › HLD-22: Ordem de avaliação das regras (conta Closed + amount > availableBalance)",
+      "file": "account/post-hold.spec.ts",
+      "line": 501,
+      "title": "POST /accounts/{accountId}/holds › regras de negócio › HLD-22: Ordem de avaliação das regras (conta Closed + amount > availableBalance)",
+      "project": "api",
+      "tags": [
+        "@account",
+        "@spec:criar-bloqueio-saldo"
+      ],
+      "spec_id": "criar-bloqueio-saldo",
+      "service_tag": "account",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 35,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "antifraud/analysis-decision.spec.ts › Decisão da análise › resultado › ANL-02: Sem regra que case, aprova sem reason nem ruleId depois do atraso padrão",
+      "file": "antifraud/analysis-decision.spec.ts",
+      "line": 35,
+      "title": "Decisão da análise › resultado › ANL-02: Sem regra que case, aprova sem reason nem ruleId depois do atraso padrão",
+      "project": "api",
+      "tags": [
+        "@antifraud",
+        "@spec:analises-antifraude"
+      ],
+      "spec_id": "analises-antifraude",
+      "service_tag": "antifraud",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 340,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "antifraud/analysis-decision.spec.ts › Decisão da análise › resultado › ANL-11: Regra Rejected usa a reason da regra ou \"Recusada pela regra {id}.\"",
+      "file": "antifraud/analysis-decision.spec.ts",
+      "line": 44,
+      "title": "Decisão da análise › resultado › ANL-11: Regra Rejected usa a reason da regra ou \"Recusada pela regra {id}.\"",
+      "project": "api",
+      "tags": [
+        "@antifraud",
+        "@spec:analises-antifraude"
+      ],
+      "spec_id": "analises-antifraude",
+      "service_tag": "antifraud",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 373,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "antifraud/analysis-decision.spec.ts › Decisão da análise › resultado › ANL-12: Regra Approved preenche ruleId e usa a reason da regra, que pode ser null",
+      "file": "antifraud/analysis-decision.spec.ts",
+      "line": 59,
+      "title": "Decisão da análise › resultado › ANL-12: Regra Approved preenche ruleId e usa a reason da regra, que pode ser null",
+      "project": "api",
+      "tags": [
+        "@antifraud",
+        "@spec:analises-antifraude"
+      ],
+      "spec_id": "analises-antifraude",
+      "service_tag": "antifraud",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 370,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "antifraud/analysis-decision.spec.ts › Decisão da análise › resultado › ANL-23: Fica Pending durante delayMs e decide depois dele",
+      "file": "antifraud/analysis-decision.spec.ts",
+      "line": 74,
+      "title": "Decisão da análise › resultado › ANL-23: Fica Pending durante delayMs e decide depois dele",
+      "project": "api",
+      "tags": [
+        "@antifraud",
+        "@spec:analises-antifraude"
+      ],
+      "spec_id": "analises-antifraude",
+      "service_tag": "antifraud",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 2405,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "antifraud/analysis-decision.spec.ts › Decisão da análise › condições da regra › ANL-13: minAmount casa a partir do valor exato",
+      "file": "antifraud/analysis-decision.spec.ts",
+      "line": 103,
+      "title": "Decisão da análise › condições da regra › ANL-13: minAmount casa a partir do valor exato",
+      "project": "api",
+      "tags": [
+        "@antifraud",
+        "@spec:analises-antifraude"
+      ],
+      "spec_id": "analises-antifraude",
+      "service_tag": "antifraud",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 376,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "antifraud/analysis-decision.spec.ts › Decisão da análise › condições da regra › ANL-14: maxAmount casa até o valor exato",
+      "file": "antifraud/analysis-decision.spec.ts",
+      "line": 118,
+      "title": "Decisão da análise › condições da regra › ANL-14: maxAmount casa até o valor exato",
+      "project": "api",
+      "tags": [
+        "@antifraud",
+        "@spec:analises-antifraude"
+      ],
+      "spec_id": "analises-antifraude",
+      "service_tag": "antifraud",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 354,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "antifraud/analysis-decision.spec.ts › Decisão da análise › condições da regra › ANL-15: minAmount igual a maxAmount casa só o valor exato",
+      "file": "antifraud/analysis-decision.spec.ts",
+      "line": 133,
+      "title": "Decisão da análise › condições da regra › ANL-15: minAmount igual a maxAmount casa só o valor exato",
+      "project": "api",
+      "tags": [
+        "@antifraud",
+        "@spec:analises-antifraude"
+      ],
+      "spec_id": "analises-antifraude",
+      "service_tag": "antifraud",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 356,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "antifraud/analysis-decision.spec.ts › Decisão da análise › condições da regra › ANL-16: descriptionContains não diferencia maiúsculas e não casa sem descrição",
+      "file": "antifraud/analysis-decision.spec.ts",
+      "line": 148,
+      "title": "Decisão da análise › condições da regra › ANL-16: descriptionContains não diferencia maiúsculas e não casa sem descrição",
+      "project": "api",
+      "tags": [
+        "@antifraud",
+        "@spec:analises-antifraude"
+      ],
+      "spec_id": "analises-antifraude",
+      "service_tag": "antifraud",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 396,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "antifraud/analysis-decision.spec.ts › Decisão da análise › condições da regra › ANL-17: Regra desabilitada nunca casa",
+      "file": "antifraud/analysis-decision.spec.ts",
+      "line": 171,
+      "title": "Decisão da análise › condições da regra › ANL-17: Regra desabilitada nunca casa",
+      "project": "api",
+      "tags": [
+        "@antifraud",
+        "@spec:analises-antifraude"
+      ],
+      "spec_id": "analises-antifraude",
+      "service_tag": "antifraud",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 347,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "antifraud/analysis-decision.spec.ts › Decisão da análise › condições da regra › ANL-18: sourceAccountIds filtra pela conta de origem, não pela de destino",
+      "file": "antifraud/analysis-decision.spec.ts",
+      "line": 185,
+      "title": "Decisão da análise › condições da regra › ANL-18: sourceAccountIds filtra pela conta de origem, não pela de destino",
+      "project": "api",
+      "tags": [
+        "@antifraud",
+        "@spec:analises-antifraude"
+      ],
+      "spec_id": "analises-antifraude",
+      "service_tag": "antifraud",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 356,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "antifraud/analysis-decision.spec.ts › Decisão da análise › condições da regra › ANL-19: destinationAccountIds filtra pela conta de destino, não pela de origem",
+      "file": "antifraud/analysis-decision.spec.ts",
+      "line": 198,
+      "title": "Decisão da análise › condições da regra › ANL-19: destinationAccountIds filtra pela conta de destino, não pela de origem",
+      "project": "api",
+      "tags": [
+        "@antifraud",
+        "@spec:analises-antifraude"
+      ],
+      "spec_id": "analises-antifraude",
+      "service_tag": "antifraud",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 371,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "antifraud/analysis-decision.spec.ts › Decisão da análise › condições da regra › ANL-20: Listas de contas vazias não filtram",
+      "file": "antifraud/analysis-decision.spec.ts",
+      "line": 211,
+      "title": "Decisão da análise › condições da regra › ANL-20: Listas de contas vazias não filtram",
+      "project": "api",
+      "tags": [
+        "@antifraud",
+        "@spec:analises-antifraude"
+      ],
+      "spec_id": "analises-antifraude",
+      "service_tag": "antifraud",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 337,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "antifraud/analysis-decision.spec.ts › Decisão da análise › condições da regra › ANL-21: A primeira regra habilitada que casa decide",
+      "file": "antifraud/analysis-decision.spec.ts",
+      "line": 224,
+      "title": "Decisão da análise › condições da regra › ANL-21: A primeira regra habilitada que casa decide",
+      "project": "api",
+      "tags": [
+        "@antifraud",
+        "@spec:analises-antifraude"
+      ],
+      "spec_id": "analises-antifraude",
+      "service_tag": "antifraud",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 355,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "antifraud/analysis-decision.spec.ts › Decisão da análise › condições da regra › ANL-22: Regra padrão valor-alto recusa a partir de 1000,00",
+      "file": "antifraud/analysis-decision.spec.ts",
+      "line": 238,
+      "title": "Decisão da análise › condições da regra › ANL-22: Regra padrão valor-alto recusa a partir de 1000,00",
+      "project": "api",
+      "tags": [
+        "@antifraud",
+        "@spec:analises-antifraude"
+      ],
+      "spec_id": "analises-antifraude",
+      "service_tag": "antifraud",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 334,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "antifraud/analysis-webhook.spec.ts › Webhook da análise › Normal › ANL-24: Callback com resposta 2xx deixa o webhook Delivered com uma tentativa",
+      "file": "antifraud/analysis-webhook.spec.ts",
+      "line": 38,
+      "title": "Webhook da análise › Normal › ANL-24: Callback com resposta 2xx deixa o webhook Delivered com uma tentativa",
+      "project": "api",
+      "tags": [
+        "@antifraud",
+        "@spec:analises-antifraude"
+      ],
+      "spec_id": "analises-antifraude",
+      "service_tag": "antifraud",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 2401,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "antifraud/analysis-webhook.spec.ts › Webhook da análise › Normal › ANL-25: Resposta 404 encerra a entrega na primeira tentativa e deixa o webhook Failed",
+      "file": "antifraud/analysis-webhook.spec.ts",
+      "line": 56,
+      "title": "Webhook da análise › Normal › ANL-25: Resposta 404 encerra a entrega na primeira tentativa e deixa o webhook Failed",
+      "project": "api",
+      "tags": [
+        "@antifraud",
+        "@spec:analises-antifraude"
+      ],
+      "spec_id": "analises-antifraude",
+      "service_tag": "antifraud",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 728,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "antifraud/analysis-webhook.spec.ts › Webhook da análise › Normal › ANL-26: Erro de rede é repetido até 5 tentativas na mesma entrega, com espera exponencial",
+      "file": "antifraud/analysis-webhook.spec.ts",
+      "line": 68,
+      "title": "Webhook da análise › Normal › ANL-26: Erro de rede é repetido até 5 tentativas na mesma entrega, com espera exponencial",
+      "project": "api",
+      "tags": [
+        "@antifraud",
+        "@spec:analises-antifraude"
+      ],
+      "spec_id": "analises-antifraude",
+      "service_tag": "antifraud",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 3800,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "antifraud/analysis-webhook.spec.ts › Webhook da análise › modos de entrega › ANL-27: Duplicate envia uma segunda entrega com o mesmo deliveryId e a mesma decisão",
+      "file": "antifraud/analysis-webhook.spec.ts",
+      "line": 99,
+      "title": "Webhook da análise › modos de entrega › ANL-27: Duplicate envia uma segunda entrega com o mesmo deliveryId e a mesma decisão",
+      "project": "api",
+      "tags": [
+        "@antifraud",
+        "@spec:analises-antifraude"
+      ],
+      "spec_id": "analises-antifraude",
+      "service_tag": "antifraud",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 758,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "antifraud/analysis-webhook.spec.ts › Webhook da análise › modos de entrega › ANL-28: Drop não chama o callback e deixa o webhook Skipped",
+      "file": "antifraud/analysis-webhook.spec.ts",
+      "line": 116,
+      "title": "Webhook da análise › modos de entrega › ANL-28: Drop não chama o callback e deixa o webhook Skipped",
+      "project": "api",
+      "tags": [
+        "@antifraud",
+        "@spec:analises-antifraude"
+      ],
+      "spec_id": "analises-antifraude",
+      "service_tag": "antifraud",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 358,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "antifraud/analysis-webhook.spec.ts › Webhook da análise › modos de entrega › ANL-29: InvalidSignature é recusado pela Transfer API com 401, sem retry",
+      "file": "antifraud/analysis-webhook.spec.ts",
+      "line": 128,
+      "title": "Webhook da análise › modos de entrega › ANL-29: InvalidSignature é recusado pela Transfer API com 401, sem retry",
+      "project": "api",
+      "tags": [
+        "@antifraud",
+        "@spec:analises-antifraude"
+      ],
+      "spec_id": "analises-antifraude",
+      "service_tag": "antifraud",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 729,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "antifraud/analysis-webhook.spec.ts › Webhook da análise › modos de entrega › ANL-30: Flip envia outra entrega com a decisão oposta e novo deliveryId, sem mudar o status",
+      "file": "antifraud/analysis-webhook.spec.ts",
+      "line": 140,
+      "title": "Webhook da análise › modos de entrega › ANL-30: Flip envia outra entrega com a decisão oposta e novo deliveryId, sem mudar o status",
+      "project": "api",
+      "tags": [
+        "@antifraud",
+        "@spec:analises-antifraude"
+      ],
+      "spec_id": "analises-antifraude",
+      "service_tag": "antifraud",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 760,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "antifraud/delete-rule.spec.ts › DELETE /rules/{id} › RUL-18: Remove a regra sem diferenciar maiúsculas e responde 404 para id inexistente",
+      "file": "antifraud/delete-rule.spec.ts",
+      "line": 19,
+      "title": "DELETE /rules/{id} › RUL-18: Remove a regra sem diferenciar maiúsculas e responde 404 para id inexistente",
+      "project": "api",
+      "tags": [
+        "@antifraud",
+        "@spec:regras-antifraude"
+      ],
+      "spec_id": "regras-antifraude",
+      "service_tag": "antifraud",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 378,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "antifraud/get-analysis.spec.ts › GET /analyses › ANL-09: Análise inexistente responde 404 sem corpo",
+      "file": "antifraud/get-analysis.spec.ts",
+      "line": 16,
+      "title": "GET /analyses › ANL-09: Análise inexistente responde 404 sem corpo",
+      "project": "api",
+      "tags": [
+        "@antifraud",
+        "@spec:analises-antifraude"
+      ],
+      "spec_id": "analises-antifraude",
+      "service_tag": "antifraud",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 8,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "antifraud/get-analysis.spec.ts › GET /analyses › ANL-10: Busca por transactionId é exata e devolve lista vazia quando não acha",
+      "file": "antifraud/get-analysis.spec.ts",
+      "line": 23,
+      "title": "GET /analyses › ANL-10: Busca por transactionId é exata e devolve lista vazia quando não acha",
+      "project": "api",
+      "tags": [
+        "@antifraud",
+        "@spec:analises-antifraude"
+      ],
+      "spec_id": "analises-antifraude",
+      "service_tag": "antifraud",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 46,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "antifraud/get-rules.spec.ts › GET /rules › RUL-01: Lista começa pelas regras de configuração, na ordem",
+      "file": "antifraud/get-rules.spec.ts",
+      "line": 19,
+      "title": "GET /rules › RUL-01: Lista começa pelas regras de configuração, na ordem",
+      "project": "api",
+      "tags": [
+        "@antifraud",
+        "@spec:regras-antifraude"
+      ],
+      "spec_id": "regras-antifraude",
+      "service_tag": "antifraud",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 11,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "antifraud/get-rules.spec.ts › GET /rules › RUL-13: GET /rules/{id} não diferencia maiúsculas e devolve 404 sem corpo para id inexistente",
+      "file": "antifraud/get-rules.spec.ts",
+      "line": 25,
+      "title": "GET /rules › RUL-13: GET /rules/{id} não diferencia maiúsculas e devolve 404 sem corpo para id inexistente",
+      "project": "api",
+      "tags": [
+        "@antifraud",
+        "@spec:regras-antifraude"
+      ],
+      "spec_id": "regras-antifraude",
+      "service_tag": "antifraud",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 45,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "antifraud/post-analysis.spec.ts › POST /analyses › criação › ANL-01: Submissão válida responde 202 Pending com Location e os campos submetidos",
+      "file": "antifraud/post-analysis.spec.ts",
+      "line": 50,
+      "title": "POST /analyses › criação › ANL-01: Submissão válida responde 202 Pending com Location e os campos submetidos",
+      "project": "api",
+      "tags": [
+        "@antifraud",
+        "@spec:analises-antifraude"
+      ],
+      "spec_id": "analises-antifraude",
+      "service_tag": "antifraud",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 23,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "antifraud/post-analysis.spec.ts › POST /analyses › validação do corpo › ANL-03: Campos inválidos respondem 400 por campo",
+      "file": "antifraud/post-analysis.spec.ts",
+      "line": 77,
+      "title": "POST /analyses › validação do corpo › ANL-03: Campos inválidos respondem 400 por campo",
+      "project": "api",
+      "tags": [
+        "@antifraud",
+        "@spec:analises-antifraude"
+      ],
+      "spec_id": "analises-antifraude",
+      "service_tag": "antifraud",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 152,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "antifraud/post-analysis.spec.ts › POST /analyses › validação do corpo › ANL-04: transactionId com 65 caracteres responde 400; 64 é aceito",
+      "file": "antifraud/post-analysis.spec.ts",
+      "line": 112,
+      "title": "POST /analyses › validação do corpo › ANL-04: transactionId com 65 caracteres responde 400; 64 é aceito",
+      "project": "api",
+      "tags": [
+        "@antifraud",
+        "@spec:analises-antifraude"
+      ],
+      "spec_id": "analises-antifraude",
+      "service_tag": "antifraud",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 33,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "antifraud/post-analysis.spec.ts › POST /analyses › validação do corpo › ANL-05: Host do callbackUrl fora dos permitidos responde 422; hosts permitidos são aceitos",
+      "file": "antifraud/post-analysis.spec.ts",
+      "line": 124,
+      "title": "POST /analyses › validação do corpo › ANL-05: Host do callbackUrl fora dos permitidos responde 422; hosts permitidos são aceitos",
+      "project": "api",
+      "tags": [
+        "@antifraud",
+        "@spec:analises-antifraude"
+      ],
+      "spec_id": "analises-antifraude",
+      "service_tag": "antifraud",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 39,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "antifraud/post-analysis.spec.ts › POST /analyses › validação do corpo › ANL-06: Host não permitido não é avaliado quando há erro de campo",
+      "file": "antifraud/post-analysis.spec.ts",
+      "line": 143,
+      "title": "POST /analyses › validação do corpo › ANL-06: Host não permitido não é avaliado quando há erro de campo",
+      "project": "api",
+      "tags": [
+        "@antifraud",
+        "@spec:analises-antifraude"
+      ],
+      "spec_id": "analises-antifraude",
+      "service_tag": "antifraud",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 11,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "antifraud/post-analysis.spec.ts › POST /analyses › idempotência › ANL-07: transactionId repetido devolve 200 com a análise existente, sem reavaliar nem novo webhook",
+      "file": "antifraud/post-analysis.spec.ts",
+      "line": 151,
+      "title": "POST /analyses › idempotência › ANL-07: transactionId repetido devolve 200 com a análise existente, sem reavaliar nem novo webhook",
+      "project": "api",
+      "tags": [
+        "@antifraud",
+        "@spec:analises-antifraude"
+      ],
+      "spec_id": "analises-antifraude",
+      "service_tag": "antifraud",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 2253,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "antifraud/post-analysis.spec.ts › POST /analyses › falhas simuladas › ANL-08: submitFailures responde 503 nas N primeiras submissões de cada transação e depois 202",
+      "file": "antifraud/post-analysis.spec.ts",
+      "line": 191,
+      "title": "POST /analyses › falhas simuladas › ANL-08: submitFailures responde 503 nas N primeiras submissões de cada transação e depois 202",
+      "project": "api",
+      "tags": [
+        "@antifraud",
+        "@spec:analises-antifraude"
+      ],
+      "spec_id": "analises-antifraude",
+      "service_tag": "antifraud",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 63,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "antifraud/post-rule.spec.ts › POST /rules › criação › RUL-02: Regra só com id recebe os padrões e entra no fim da lista",
+      "file": "antifraud/post-rule.spec.ts",
+      "line": 57,
+      "title": "POST /rules › criação › RUL-02: Regra só com id recebe os padrões e entra no fim da lista",
+      "project": "api",
+      "tags": [
+        "@antifraud",
+        "@spec:regras-antifraude"
+      ],
+      "spec_id": "regras-antifraude",
+      "service_tag": "antifraud",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 48,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "antifraud/post-rule.spec.ts › POST /rules › criação › RUL-03: Regra com todos os campos é devolvida como enviada",
+      "file": "antifraud/post-rule.spec.ts",
+      "line": 96,
+      "title": "POST /rules › criação › RUL-03: Regra com todos os campos é devolvida como enviada",
+      "project": "api",
+      "tags": [
+        "@antifraud",
+        "@spec:regras-antifraude"
+      ],
+      "spec_id": "regras-antifraude",
+      "service_tag": "antifraud",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 15,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "antifraud/post-rule.spec.ts › POST /rules › criação › RUL-04: id já existente, sem diferenciar maiúsculas, responde 409 e não altera a regra",
+      "file": "antifraud/post-rule.spec.ts",
+      "line": 119,
+      "title": "POST /rules › criação › RUL-04: id já existente, sem diferenciar maiúsculas, responde 409 e não altera a regra",
+      "project": "api",
+      "tags": [
+        "@antifraud",
+        "@spec:regras-antifraude"
+      ],
+      "spec_id": "regras-antifraude",
+      "service_tag": "antifraud",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 26,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "antifraud/post-rule.spec.ts › POST /rules › validação do corpo › RUL-05: id ausente, vazio ou só espaços responde 400",
+      "file": "antifraud/post-rule.spec.ts",
+      "line": 137,
+      "title": "POST /rules › validação do corpo › RUL-05: id ausente, vazio ou só espaços responde 400",
+      "project": "api",
+      "tags": [
+        "@antifraud",
+        "@spec:regras-antifraude"
+      ],
+      "spec_id": "regras-antifraude",
+      "service_tag": "antifraud",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 21,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "antifraud/post-rule.spec.ts › POST /rules › validação do corpo › RUL-06: id com 65 caracteres responde 400; 64 é aceito",
+      "file": "antifraud/post-rule.spec.ts",
+      "line": 150,
+      "title": "POST /rules › validação do corpo › RUL-06: id com 65 caracteres responde 400; 64 é aceito",
+      "project": "api",
+      "tags": [
+        "@antifraud",
+        "@spec:regras-antifraude"
+      ],
+      "spec_id": "regras-antifraude",
+      "service_tag": "antifraud",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 22,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "antifraud/post-rule.spec.ts › POST /rules › validação do corpo › RUL-07: minAmount e maxAmount negativos respondem 400; 0 é aceito",
+      "file": "antifraud/post-rule.spec.ts",
+      "line": 162,
+      "title": "POST /rules › validação do corpo › RUL-07: minAmount e maxAmount negativos respondem 400; 0 é aceito",
+      "project": "api",
+      "tags": [
+        "@antifraud",
+        "@spec:regras-antifraude"
+      ],
+      "spec_id": "regras-antifraude",
+      "service_tag": "antifraud",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 43,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "antifraud/post-rule.spec.ts › POST /rules › validação do corpo › RUL-08: minAmount maior que maxAmount responde 400; minAmount igual a maxAmount é aceito",
+      "file": "antifraud/post-rule.spec.ts",
+      "line": 180,
+      "title": "POST /rules › validação do corpo › RUL-08: minAmount maior que maxAmount responde 400; minAmount igual a maxAmount é aceito",
+      "project": "api",
+      "tags": [
+        "@antifraud",
+        "@spec:regras-antifraude"
+      ],
+      "spec_id": "regras-antifraude",
+      "service_tag": "antifraud",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 29,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "antifraud/post-rule.spec.ts › POST /rules › validação do corpo › RUL-09: delayMs fora de 0 a 120000 responde 400; os limites são aceitos",
+      "file": "antifraud/post-rule.spec.ts",
+      "line": 192,
+      "title": "POST /rules › validação do corpo › RUL-09: delayMs fora de 0 a 120000 responde 400; os limites são aceitos",
+      "project": "api",
+      "tags": [
+        "@antifraud",
+        "@spec:regras-antifraude"
+      ],
+      "spec_id": "regras-antifraude",
+      "service_tag": "antifraud",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 66,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "antifraud/post-rule.spec.ts › POST /rules › validação do corpo › RUL-10: submitFailures fora de 0 a 20 responde 400; os limites são aceitos",
+      "file": "antifraud/post-rule.spec.ts",
+      "line": 208,
+      "title": "POST /rules › validação do corpo › RUL-10: submitFailures fora de 0 a 20 responde 400; os limites são aceitos",
+      "project": "api",
+      "tags": [
+        "@antifraud",
+        "@spec:regras-antifraude"
+      ],
+      "spec_id": "regras-antifraude",
+      "service_tag": "antifraud",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 48,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "antifraud/post-rule.spec.ts › POST /rules › validação do corpo › RUL-11: Todos os erros de validação vêm juntos em errors",
+      "file": "antifraud/post-rule.spec.ts",
+      "line": 224,
+      "title": "POST /rules › validação do corpo › RUL-11: Todos os erros de validação vêm juntos em errors",
+      "project": "api",
+      "tags": [
+        "@antifraud",
+        "@spec:regras-antifraude"
+      ],
+      "spec_id": "regras-antifraude",
+      "service_tag": "antifraud",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 8,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "antifraud/post-rule.spec.ts › POST /rules › validação do corpo › RUL-12: decision ou delivery desconhecido e JSON malformado respondem 400",
+      "file": "antifraud/post-rule.spec.ts",
+      "line": 238,
+      "title": "POST /rules › validação do corpo › RUL-12: decision ou delivery desconhecido e JSON malformado respondem 400",
+      "project": "api",
+      "tags": [
+        "@antifraud",
+        "@spec:regras-antifraude"
+      ],
+      "spec_id": "regras-antifraude",
+      "service_tag": "antifraud",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 70,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "antifraud/put-rule.spec.ts › PUT /rules/{id} › criação e substituição › RUL-14: id novo cria a regra no fim da lista com 201",
+      "file": "antifraud/put-rule.spec.ts",
+      "line": 40,
+      "title": "PUT /rules/{id} › criação e substituição › RUL-14: id novo cria a regra no fim da lista com 201",
+      "project": "api",
+      "tags": [
+        "@antifraud",
+        "@spec:regras-antifraude"
+      ],
+      "spec_id": "regras-antifraude",
+      "service_tag": "antifraud",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 34,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "antifraud/put-rule.spec.ts › PUT /rules/{id} › criação e substituição › RUL-15: id existente substitui a regra inteira na mesma posição com 200",
+      "file": "antifraud/put-rule.spec.ts",
+      "line": 53,
+      "title": "PUT /rules/{id} › criação e substituição › RUL-15: id existente substitui a regra inteira na mesma posição com 200",
+      "project": "api",
+      "tags": [
+        "@antifraud",
+        "@spec:regras-antifraude"
+      ],
+      "spec_id": "regras-antifraude",
+      "service_tag": "antifraud",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 46,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "antifraud/put-rule.spec.ts › PUT /rules/{id} › criação e substituição › RUL-16: id da rota substitui o id do corpo",
+      "file": "antifraud/put-rule.spec.ts",
+      "line": 77,
+      "title": "PUT /rules/{id} › criação e substituição › RUL-16: id da rota substitui o id do corpo",
+      "project": "api",
+      "tags": [
+        "@antifraud",
+        "@spec:regras-antifraude"
+      ],
+      "spec_id": "regras-antifraude",
+      "service_tag": "antifraud",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 18,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "antifraud/put-rule.spec.ts › PUT /rules/{id} › criação e substituição › RUL-26: id existente em outra grafia substitui a mesma regra",
+      "file": "antifraud/put-rule.spec.ts",
+      "line": 91,
+      "title": "PUT /rules/{id} › criação e substituição › RUL-26: id existente em outra grafia substitui a mesma regra",
+      "project": "api",
+      "tags": [
+        "@antifraud",
+        "@spec:regras-antifraude"
+      ],
+      "spec_id": "regras-antifraude",
+      "service_tag": "antifraud",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 28,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "antifraud/put-rule.spec.ts › PUT /rules/{id} › validação › RUL-17: corpo inválido responde 400 e não altera a regra existente",
+      "file": "antifraud/put-rule.spec.ts",
+      "line": 108,
+      "title": "PUT /rules/{id} › validação › RUL-17: corpo inválido responde 400 e não altera a regra existente",
+      "project": "api",
+      "tags": [
+        "@antifraud",
+        "@spec:regras-antifraude"
+      ],
+      "spec_id": "regras-antifraude",
+      "service_tag": "antifraud",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 30,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "antifraud/put-rule.spec.ts › PUT /rules/{id} › efeito nas análises › RUL-19: Regra alterada só afeta análises submetidas depois",
+      "file": "antifraud/put-rule.spec.ts",
+      "line": 130,
+      "title": "PUT /rules/{id} › efeito nas análises › RUL-19: Regra alterada só afeta análises submetidas depois",
+      "project": "api",
+      "tags": [
+        "@antifraud",
+        "@spec:regras-antifraude"
+      ],
+      "spec_id": "regras-antifraude",
+      "service_tag": "antifraud",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 2395,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "e2e/antifraud-delivery-modes.spec.ts › Entregas anômalas do webhook do antifraude › E2E-05: Duplicate Approved: a mesma entrega chega duas vezes e a origem é debitada uma vez",
+      "file": "e2e/antifraud-delivery-modes.spec.ts",
+      "line": 27,
+      "title": "Entregas anômalas do webhook do antifraude › E2E-05: Duplicate Approved: a mesma entrega chega duas vezes e a origem é debitada uma vez",
+      "project": "api",
+      "tags": [
+        "@e2e",
+        "@spec:webhook-antifraude"
+      ],
+      "spec_id": "webhook-antifraude",
+      "service_tag": "e2e",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 5797,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "e2e/antifraud-delivery-modes.spec.ts › Entregas anômalas do webhook do antifraude › E2E-06: Duplicate Rejected: a segunda entrega não muda a recusa",
+      "file": "e2e/antifraud-delivery-modes.spec.ts",
+      "line": 58,
+      "title": "Entregas anômalas do webhook do antifraude › E2E-06: Duplicate Rejected: a segunda entrega não muda a recusa",
+      "project": "api",
+      "tags": [
+        "@e2e",
+        "@spec:webhook-antifraude"
+      ],
+      "spec_id": "webhook-antifraude",
+      "service_tag": "e2e",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 2786,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "e2e/antifraud-delivery-modes.spec.ts › Entregas anômalas do webhook do antifraude › E2E-07: Flip Approved → Rejected: vale a aprovação e a transferência termina Completed",
+      "file": "e2e/antifraud-delivery-modes.spec.ts",
+      "line": 77,
+      "title": "Entregas anômalas do webhook do antifraude › E2E-07: Flip Approved → Rejected: vale a aprovação e a transferência termina Completed",
+      "project": "api",
+      "tags": [
+        "@e2e",
+        "@spec:webhook-antifraude"
+      ],
+      "spec_id": "webhook-antifraude",
+      "service_tag": "e2e",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 921,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "e2e/antifraud-delivery-modes.spec.ts › Entregas anômalas do webhook do antifraude › E2E-08: Flip Rejected → Approved: vale a recusa e nada é debitado",
+      "file": "e2e/antifraud-delivery-modes.spec.ts",
+      "line": 98,
+      "title": "Entregas anômalas do webhook do antifraude › E2E-08: Flip Rejected → Approved: vale a recusa e nada é debitado",
+      "project": "api",
+      "tags": [
+        "@e2e",
+        "@spec:webhook-antifraude"
+      ],
+      "spec_id": "webhook-antifraude",
+      "service_tag": "e2e",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 3449,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "e2e/antifraud-delivery-modes.spec.ts › Entrega do webhook pela Antifraud API › E2E-09: Transfer API responde 404 para transação desconhecida e a entrega termina sem retry",
+      "file": "e2e/antifraud-delivery-modes.spec.ts",
+      "line": 132,
+      "title": "Entrega do webhook pela Antifraud API › E2E-09: Transfer API responde 404 para transação desconhecida e a entrega termina sem retry",
+      "project": "api",
+      "tags": [
+        "@e2e",
+        "@spec:analises-antifraude"
+      ],
+      "spec_id": "analises-antifraude",
+      "service_tag": "e2e",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 387,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "e2e/antifraud-delivery-modes.spec.ts › Entrega do webhook pela Antifraud API › E2E-10: Falha de rede é repetida 5 vezes com backoff exponencial e a entrega termina Failed",
+      "file": "e2e/antifraud-delivery-modes.spec.ts",
+      "line": 144,
+      "title": "Entrega do webhook pela Antifraud API › E2E-10: Falha de rede é repetida 5 vezes com backoff exponencial e a entrega termina Failed",
+      "project": "api",
+      "tags": [
+        "@e2e",
+        "@spec:analises-antifraude"
+      ],
+      "spec_id": "analises-antifraude",
+      "service_tag": "e2e",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 3875,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "e2e/transfer-final-statuses.spec.ts › Transferência ponta a ponta: status finais › E2E-01: Aprovada pelo antifraude padrão termina Completed com débito e crédito",
+      "file": "e2e/transfer-final-statuses.spec.ts",
+      "line": 27,
+      "title": "Transferência ponta a ponta: status finais › E2E-01: Aprovada pelo antifraude padrão termina Completed com débito e crédito",
+      "project": "api",
+      "tags": [
+        "@e2e",
+        "@spec:criar-transferencia"
+      ],
+      "spec_id": "criar-transferencia",
+      "service_tag": "e2e",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 451,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "e2e/transfer-final-statuses.spec.ts › Transferência ponta a ponta: status finais › E2E-02: Recusada por regra termina FraudRejected com o motivo da regra e sem movimentação",
+      "file": "e2e/transfer-final-statuses.spec.ts",
+      "line": 64,
+      "title": "Transferência ponta a ponta: status finais › E2E-02: Recusada por regra termina FraudRejected com o motivo da regra e sem movimentação",
+      "project": "api",
+      "tags": [
+        "@e2e",
+        "@spec:criar-transferencia"
+      ],
+      "spec_id": "criar-transferencia",
+      "service_tag": "e2e",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 3600,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "e2e/transfer-final-statuses.spec.ts › Transferência ponta a ponta: status finais › E2E-03: Débito recusado termina Failed sem movimentar nenhuma conta",
+      "file": "e2e/transfer-final-statuses.spec.ts",
+      "line": 84,
+      "title": "Transferência ponta a ponta: status finais › E2E-03: Débito recusado termina Failed sem movimentar nenhuma conta",
+      "project": "api",
+      "tags": [
+        "@e2e",
+        "@spec:criar-transferencia"
+      ],
+      "spec_id": "criar-transferencia",
+      "service_tag": "e2e",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 7192,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "e2e/transfer-final-statuses.spec.ts › Transferência ponta a ponta: status finais › E2E-04: Crédito recusado (destino Closed) estorna para a origem e termina Refunded",
+      "file": "e2e/transfer-final-statuses.spec.ts",
+      "line": 108,
+      "title": "Transferência ponta a ponta: status finais › E2E-04: Crédito recusado (destino Closed) estorna para a origem e termina Refunded",
+      "project": "api",
+      "tags": [
+        "@e2e",
+        "@spec:criar-transferencia"
+      ],
+      "spec_id": "criar-transferencia",
+      "service_tag": "e2e",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 3715,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "transfer/get-simulation.spec.ts › GET /simulations/{simulationId} › SIM-11: Logo após o 202 todas estão em Screening e finished é false",
+      "file": "transfer/get-simulation.spec.ts",
+      "line": 21,
+      "title": "GET /simulations/{simulationId} › SIM-11: Logo após o 202 todas estão em Screening e finished é false",
+      "project": "api",
+      "tags": [
+        "@transfer",
+        "@spec:simulacao-transferencias"
+      ],
+      "spec_id": "simulacao-transferencias",
+      "service_tag": "transfer",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 15820,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "transfer/get-simulation.spec.ts › GET /simulations/{simulationId} › SIM-12: Resumo final lista só os status presentes e soma o total",
+      "file": "transfer/get-simulation.spec.ts",
+      "line": 42,
+      "title": "GET /simulations/{simulationId} › SIM-12: Resumo final lista só os status presentes e soma o total",
+      "project": "api",
+      "tags": [
+        "@transfer",
+        "@spec:simulacao-transferencias"
+      ],
+      "spec_id": "simulacao-transferencias",
+      "service_tag": "transfer",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 605,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "transfer/get-simulation.spec.ts › GET /simulations/{simulationId} › SIM-13: Simulação inexistente responde 404 sem corpo",
+      "file": "transfer/get-simulation.spec.ts",
+      "line": 60,
+      "title": "GET /simulations/{simulationId} › SIM-13: Simulação inexistente responde 404 sem corpo",
+      "project": "api",
+      "tags": [
+        "@transfer",
+        "@spec:simulacao-transferencias"
+      ],
+      "spec_id": "simulacao-transferencias",
+      "service_tag": "transfer",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 19,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "transfer/get-transfer.spec.ts › GET /transfers/{transferId} › TRF-28: Devolve a transferência criada com os mesmos dados do 202",
+      "file": "transfer/get-transfer.spec.ts",
+      "line": 14,
+      "title": "GET /transfers/{transferId} › TRF-28: Devolve a transferência criada com os mesmos dados do 202",
+      "project": "api",
+      "tags": [
+        "@transfer",
+        "@spec:criar-transferencia"
+      ],
+      "spec_id": "criar-transferencia",
+      "service_tag": "transfer",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 3910,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "transfer/get-transfer.spec.ts › GET /transfers/{transferId} › TRF-29: Transferência inexistente responde 404 sem corpo",
+      "file": "transfer/get-transfer.spec.ts",
+      "line": 40,
+      "title": "GET /transfers/{transferId} › TRF-29: Transferência inexistente responde 404 sem corpo",
+      "project": "api",
+      "tags": [
+        "@transfer",
+        "@spec:criar-transferencia"
+      ],
+      "spec_id": "criar-transferencia",
+      "service_tag": "transfer",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 30,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "transfer/get-transfers.spec.ts › GET /transfers › TRF-30: Filtro por simulationId devolve só as transferências da simulação, da mais nova para a mais antiga",
+      "file": "transfer/get-transfers.spec.ts",
+      "line": 20,
+      "title": "GET /transfers › TRF-30: Filtro por simulationId devolve só as transferências da simulação, da mais nova para a mais antiga",
+      "project": "api",
+      "tags": [
+        "@transfer",
+        "@spec:criar-transferencia"
+      ],
+      "spec_id": "criar-transferencia",
+      "service_tag": "transfer",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 600,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "transfer/get-transfers.spec.ts › GET /transfers › TRF-31: Filtro por status devolve só transferências nesse status",
+      "file": "transfer/get-transfers.spec.ts",
+      "line": 40,
+      "title": "GET /transfers › TRF-31: Filtro por status devolve só transferências nesse status",
+      "project": "api",
+      "tags": [
+        "@transfer",
+        "@spec:criar-transferencia"
+      ],
+      "spec_id": "criar-transferencia",
+      "service_tag": "transfer",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 909,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "transfer/get-transfers.spec.ts › GET /transfers › TRF-32: take padrão 50, limitado entre 1 e 500",
+      "file": "transfer/get-transfers.spec.ts",
+      "line": 67,
+      "title": "GET /transfers › TRF-32: take padrão 50, limitado entre 1 e 500",
+      "project": "api",
+      "tags": [
+        "@transfer",
+        "@spec:criar-transferencia"
+      ],
+      "spec_id": "criar-transferencia",
+      "service_tag": "transfer",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 12035,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "transfer/post-antifraud-webhook.spec.ts › POST /webhooks/antifraud › decisão em Screening › WHK-01: Approved leva a Debiting e a transferência segue até Completed",
+      "file": "transfer/post-antifraud-webhook.spec.ts",
+      "line": 46,
+      "title": "POST /webhooks/antifraud › decisão em Screening › WHK-01: Approved leva a Debiting e a transferência segue até Completed",
+      "project": "api",
+      "tags": [
+        "@transfer",
+        "@spec:webhook-antifraude"
+      ],
+      "spec_id": "webhook-antifraude",
+      "service_tag": "transfer",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 2758,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "transfer/post-antifraud-webhook.spec.ts › POST /webhooks/antifraud › decisão em Screening › WHK-02: Rejected com reason leva a FraudRejected com esse motivo e não movimenta as contas",
+      "file": "transfer/post-antifraud-webhook.spec.ts",
+      "line": 74,
+      "title": "POST /webhooks/antifraud › decisão em Screening › WHK-02: Rejected com reason leva a FraudRejected com esse motivo e não movimenta as contas",
+      "project": "api",
+      "tags": [
+        "@transfer",
+        "@spec:webhook-antifraude"
+      ],
+      "spec_id": "webhook-antifraude",
+      "service_tag": "transfer",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 4361,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "transfer/post-antifraud-webhook.spec.ts › POST /webhooks/antifraud › decisão em Screening › WHK-03: Rejected sem reason usa 'Recusada pelo antifraude.'",
+      "file": "transfer/post-antifraud-webhook.spec.ts",
+      "line": 94,
+      "title": "POST /webhooks/antifraud › decisão em Screening › WHK-03: Rejected sem reason usa 'Recusada pelo antifraude.'",
+      "project": "api",
+      "tags": [
+        "@transfer",
+        "@spec:webhook-antifraude"
+      ],
+      "spec_id": "webhook-antifraude",
+      "service_tag": "transfer",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 969,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "transfer/post-antifraud-webhook.spec.ts › POST /webhooks/antifraud › assinatura › WHK-04: Header de timestamp ou de assinatura ausente responde 401 e não muda a transferência",
+      "file": "transfer/post-antifraud-webhook.spec.ts",
+      "line": 120,
+      "title": "POST /webhooks/antifraud › assinatura › WHK-04: Header de timestamp ou de assinatura ausente responde 401 e não muda a transferência",
+      "project": "api",
+      "tags": [
+        "@transfer",
+        "@spec:webhook-antifraude"
+      ],
+      "spec_id": "webhook-antifraude",
+      "service_tag": "transfer",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 119,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "transfer/post-antifraud-webhook.spec.ts › POST /webhooks/antifraud › assinatura › WHK-05: Assinatura que não confere responde 401 e não muda a transferência",
+      "file": "transfer/post-antifraud-webhook.spec.ts",
+      "line": 143,
+      "title": "POST /webhooks/antifraud › assinatura › WHK-05: Assinatura que não confere responde 401 e não muda a transferência",
+      "project": "api",
+      "tags": [
+        "@transfer",
+        "@spec:webhook-antifraude"
+      ],
+      "spec_id": "webhook-antifraude",
+      "service_tag": "transfer",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 301,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "transfer/post-antifraud-webhook.spec.ts › POST /webhooks/antifraud › assinatura › WHK-06: Timestamp não numérico ou fora da tolerância de 300 s responde 401",
+      "file": "transfer/post-antifraud-webhook.spec.ts",
+      "line": 181,
+      "title": "POST /webhooks/antifraud › assinatura › WHK-06: Timestamp não numérico ou fora da tolerância de 300 s responde 401",
+      "project": "api",
+      "tags": [
+        "@transfer",
+        "@spec:webhook-antifraude"
+      ],
+      "spec_id": "webhook-antifraude",
+      "service_tag": "transfer",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 127,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "transfer/post-antifraud-webhook.spec.ts › POST /webhooks/antifraud › assinatura › WHK-07: Assinatura é verificada antes do corpo e da transferência",
+      "file": "transfer/post-antifraud-webhook.spec.ts",
+      "line": 215,
+      "title": "POST /webhooks/antifraud › assinatura › WHK-07: Assinatura é verificada antes do corpo e da transferência",
+      "project": "api",
+      "tags": [
+        "@transfer",
+        "@spec:webhook-antifraude"
+      ],
+      "spec_id": "webhook-antifraude",
+      "service_tag": "transfer",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 83,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "transfer/post-antifraud-webhook.spec.ts › POST /webhooks/antifraud › payload › WHK-08: Payload inválido assinado corretamente responde 400 e não muda a transferência",
+      "file": "transfer/post-antifraud-webhook.spec.ts",
+      "line": 235,
+      "title": "POST /webhooks/antifraud › payload › WHK-08: Payload inválido assinado corretamente responde 400 e não muda a transferência",
+      "project": "api",
+      "tags": [
+        "@transfer",
+        "@spec:webhook-antifraude"
+      ],
+      "spec_id": "webhook-antifraude",
+      "service_tag": "transfer",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 190,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "transfer/post-antifraud-webhook.spec.ts › POST /webhooks/antifraud › transferência inexistente › WHK-09: transactionId sem transferência responde 404 sem corpo",
+      "file": "transfer/post-antifraud-webhook.spec.ts",
+      "line": 270,
+      "title": "POST /webhooks/antifraud › transferência inexistente › WHK-09: transactionId sem transferência responde 404 sem corpo",
+      "project": "api",
+      "tags": [
+        "@transfer",
+        "@spec:webhook-antifraude"
+      ],
+      "spec_id": "webhook-antifraude",
+      "service_tag": "transfer",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 42,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "transfer/post-antifraud-webhook.spec.ts › POST /webhooks/antifraud › transferência inexistente › WHK-10: refundEndToEndId de uma transferência estornada responde 404 e não muda nada",
+      "file": "transfer/post-antifraud-webhook.spec.ts",
+      "line": 284,
+      "title": "POST /webhooks/antifraud › transferência inexistente › WHK-10: refundEndToEndId de uma transferência estornada responde 404 e não muda nada",
+      "project": "api",
+      "tags": [
+        "@transfer",
+        "@spec:webhook-antifraude"
+      ],
+      "spec_id": "webhook-antifraude",
+      "service_tag": "transfer",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 14741,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "transfer/post-antifraud-webhook.spec.ts › POST /webhooks/antifraud › idempotência e decisão fora de Screening › WHK-11: Webhook Approved repetido não gera segundo débito",
+      "file": "transfer/post-antifraud-webhook.spec.ts",
+      "line": 303,
+      "title": "POST /webhooks/antifraud › idempotência e decisão fora de Screening › WHK-11: Webhook Approved repetido não gera segundo débito",
+      "project": "api",
+      "tags": [
+        "@transfer",
+        "@spec:webhook-antifraude"
+      ],
+      "spec_id": "webhook-antifraude",
+      "service_tag": "transfer",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 9789,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "transfer/post-antifraud-webhook.spec.ts › POST /webhooks/antifraud › idempotência e decisão fora de Screening › WHK-12: Approved depois de Rejected é ignorado e nada é debitado",
+      "file": "transfer/post-antifraud-webhook.spec.ts",
+      "line": 339,
+      "title": "POST /webhooks/antifraud › idempotência e decisão fora de Screening › WHK-12: Approved depois de Rejected é ignorado e nada é debitado",
+      "project": "api",
+      "tags": [
+        "@transfer",
+        "@spec:webhook-antifraude"
+      ],
+      "spec_id": "webhook-antifraude",
+      "service_tag": "transfer",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 3107,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "transfer/post-antifraud-webhook.spec.ts › POST /webhooks/antifraud › idempotência e decisão fora de Screening › WHK-13: Rejected depois de Approved é ignorado e a transferência termina Completed",
+      "file": "transfer/post-antifraud-webhook.spec.ts",
+      "line": 366,
+      "title": "POST /webhooks/antifraud › idempotência e decisão fora de Screening › WHK-13: Rejected depois de Approved é ignorado e a transferência termina Completed",
+      "project": "api",
+      "tags": [
+        "@transfer",
+        "@spec:webhook-antifraude"
+      ],
+      "spec_id": "webhook-antifraude",
+      "service_tag": "transfer",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 7661,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "transfer/post-simulation.spec.ts › POST /simulations › criação › SIM-01: Gera N transferências entre as contas informadas e todas completam",
+      "file": "transfer/post-simulation.spec.ts",
+      "line": 32,
+      "title": "POST /simulations › criação › SIM-01: Gera N transferências entre as contas informadas e todas completam",
+      "project": "api",
+      "tags": [
+        "@transfer",
+        "@spec:simulacao-transferencias"
+      ],
+      "spec_id": "simulacao-transferencias",
+      "service_tag": "transfer",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 5104,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "transfer/post-simulation.spec.ts › POST /simulations › criação › SIM-02: minAmount = maxAmount = 0,01 gera todas as transferências com 0,01",
+      "file": "transfer/post-simulation.spec.ts",
+      "line": 55,
+      "title": "POST /simulations › criação › SIM-02: minAmount = maxAmount = 0,01 gera todas as transferências com 0,01",
+      "project": "api",
+      "tags": [
+        "@transfer",
+        "@spec:simulacao-transferencias"
+      ],
+      "spec_id": "simulacao-transferencias",
+      "service_tag": "transfer",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 4867,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "transfer/post-simulation.spec.ts › POST /simulations › criação › SIM-03: transfers = 1 gera uma única transferência 'Simulação 1/1'",
+      "file": "transfer/post-simulation.spec.ts",
+      "line": 66,
+      "title": "POST /simulations › criação › SIM-03: transfers = 1 gera uma única transferência 'Simulação 1/1'",
+      "project": "api",
+      "tags": [
+        "@transfer",
+        "@spec:simulacao-transferencias"
+      ],
+      "spec_id": "simulacao-transferencias",
+      "service_tag": "transfer",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 570,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "transfer/post-simulation.spec.ts › POST /simulations › criação › SIM-04: Ids repetidos com 2 contas distintas são aceitos",
+      "file": "transfer/post-simulation.spec.ts",
+      "line": 77,
+      "title": "POST /simulations › criação › SIM-04: Ids repetidos com 2 contas distintas são aceitos",
+      "project": "api",
+      "tags": [
+        "@transfer",
+        "@spec:simulacao-transferencias"
+      ],
+      "spec_id": "simulacao-transferencias",
+      "service_tag": "transfer",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 590,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "transfer/post-simulation.spec.ts › POST /simulations › criação › SIM-05: Contas inexistentes geram transferências Failed ou Refunded e conservam o saldo da conta real",
+      "file": "transfer/post-simulation.spec.ts",
+      "line": 87,
+      "title": "POST /simulations › criação › SIM-05: Contas inexistentes geram transferências Failed ou Refunded e conservam o saldo da conta real",
+      "project": "api",
+      "tags": [
+        "@transfer",
+        "@spec:simulacao-transferencias"
+      ],
+      "spec_id": "simulacao-transferencias",
+      "service_tag": "transfer",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 588,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "transfer/post-simulation.spec.ts › POST /simulations › criação › SIM-06: Saldo limitado gera falhas por saldo insuficiente sem criar nem destruir dinheiro",
+      "file": "transfer/post-simulation.spec.ts",
+      "line": 110,
+      "title": "POST /simulations › criação › SIM-06: Saldo limitado gera falhas por saldo insuficiente sem criar nem destruir dinheiro",
+      "project": "api",
+      "tags": [
+        "@transfer",
+        "@spec:simulacao-transferencias"
+      ],
+      "spec_id": "simulacao-transferencias",
+      "service_tag": "transfer",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 1626,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "transfer/post-simulation.spec.ts › POST /simulations › validação do corpo › SIM-07: transfers ausente, menor que 1 ou maior que 1000 responde 400",
+      "file": "transfer/post-simulation.spec.ts",
+      "line": 135,
+      "title": "POST /simulations › validação do corpo › SIM-07: transfers ausente, menor que 1 ou maior que 1000 responde 400",
+      "project": "api",
+      "tags": [
+        "@transfer",
+        "@spec:simulacao-transferencias"
+      ],
+      "spec_id": "simulacao-transferencias",
+      "service_tag": "transfer",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 132,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "transfer/post-simulation.spec.ts › POST /simulations › validação do corpo › SIM-08: Intervalo com mínimo abaixo de 0,01 ou máximo abaixo do mínimo responde 400",
+      "file": "transfer/post-simulation.spec.ts",
+      "line": 153,
+      "title": "POST /simulations › validação do corpo › SIM-08: Intervalo com mínimo abaixo de 0,01 ou máximo abaixo do mínimo responde 400",
+      "project": "api",
+      "tags": [
+        "@transfer",
+        "@spec:simulacao-transferencias"
+      ],
+      "spec_id": "simulacao-transferencias",
+      "service_tag": "transfer",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 110,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "transfer/post-simulation.spec.ts › POST /simulations › validação do corpo › SIM-09: Menos de duas contas distintas responde 400",
+      "file": "transfer/post-simulation.spec.ts",
+      "line": 174,
+      "title": "POST /simulations › validação do corpo › SIM-09: Menos de duas contas distintas responde 400",
+      "project": "api",
+      "tags": [
+        "@transfer",
+        "@spec:simulacao-transferencias"
+      ],
+      "spec_id": "simulacao-transferencias",
+      "service_tag": "transfer",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 67,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "transfer/post-simulation.spec.ts › POST /simulations › validação do corpo › SIM-10: Só a primeira regra violada é devolvida, na ordem R1, R2, R3",
+      "file": "transfer/post-simulation.spec.ts",
+      "line": 194,
+      "title": "POST /simulations › validação do corpo › SIM-10: Só a primeira regra violada é devolvida, na ordem R1, R2, R3",
+      "project": "api",
+      "tags": [
+        "@transfer",
+        "@spec:simulacao-transferencias"
+      ],
+      "spec_id": "simulacao-transferencias",
+      "service_tag": "transfer",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 38,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "transfer/post-transfer.spec.ts › POST /transfers › criação › TRF-01: Transferência aprovada termina Completed com débito na origem e crédito no destino",
+      "file": "transfer/post-transfer.spec.ts",
+      "line": 39,
+      "title": "POST /transfers › criação › TRF-01: Transferência aprovada termina Completed com débito na origem e crédito no destino",
+      "project": "api",
+      "tags": [
+        "@transfer",
+        "@spec:criar-transferencia"
+      ],
+      "spec_id": "criar-transferencia",
+      "service_tag": "transfer",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 1005,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "transfer/post-transfer.spec.ts › POST /transfers › criação › TRF-02: Sem description grava null e completa",
+      "file": "transfer/post-transfer.spec.ts",
+      "line": 97,
+      "title": "POST /transfers › criação › TRF-02: Sem description grava null e completa",
+      "project": "api",
+      "tags": [
+        "@transfer",
+        "@spec:criar-transferencia"
+      ],
+      "spec_id": "criar-transferencia",
+      "service_tag": "transfer",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 918,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "transfer/post-transfer.spec.ts › POST /transfers › criação › TRF-03: amount igual ao availableBalance da origem é aceito e zera a origem",
+      "file": "transfer/post-transfer.spec.ts",
+      "line": 108,
+      "title": "POST /transfers › criação › TRF-03: amount igual ao availableBalance da origem é aceito e zera a origem",
+      "project": "api",
+      "tags": [
+        "@transfer",
+        "@spec:criar-transferencia"
+      ],
+      "spec_id": "criar-transferencia",
+      "service_tag": "transfer",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 925,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "transfer/post-transfer.spec.ts › POST /transfers › criação › TRF-04: amount mínimo de 0,01 é aceito e movimenta um centavo",
+      "file": "transfer/post-transfer.spec.ts",
+      "line": 131,
+      "title": "POST /transfers › criação › TRF-04: amount mínimo de 0,01 é aceito e movimenta um centavo",
+      "project": "api",
+      "tags": [
+        "@transfer",
+        "@spec:criar-transferencia"
+      ],
+      "spec_id": "criar-transferencia",
+      "service_tag": "transfer",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 886,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "transfer/post-transfer.spec.ts › POST /transfers › criação › TRF-05: description com 140 caracteres é aceita e gravada sem corte",
+      "file": "transfer/post-transfer.spec.ts",
+      "line": 144,
+      "title": "POST /transfers › criação › TRF-05: description com 140 caracteres é aceita e gravada sem corte",
+      "project": "api",
+      "tags": [
+        "@transfer",
+        "@spec:criar-transferencia"
+      ],
+      "spec_id": "criar-transferencia",
+      "service_tag": "transfer",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 843,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "transfer/post-transfer.spec.ts › POST /transfers › validação do corpo › TRF-06: Origem igual ao destino, inclusive ambos ausentes, responde 400",
+      "file": "transfer/post-transfer.spec.ts",
+      "line": 159,
+      "title": "POST /transfers › validação do corpo › TRF-06: Origem igual ao destino, inclusive ambos ausentes, responde 400",
+      "project": "api",
+      "tags": [
+        "@transfer",
+        "@spec:criar-transferencia"
+      ],
+      "spec_id": "criar-transferencia",
+      "service_tag": "transfer",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 54,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "transfer/post-transfer.spec.ts › POST /transfers › validação do corpo › TRF-07: amount ausente, zero ou negativo responde 400",
+      "file": "transfer/post-transfer.spec.ts",
+      "line": 179,
+      "title": "POST /transfers › validação do corpo › TRF-07: amount ausente, zero ou negativo responde 400",
+      "project": "api",
+      "tags": [
+        "@transfer",
+        "@spec:criar-transferencia"
+      ],
+      "spec_id": "criar-transferencia",
+      "service_tag": "transfer",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 70,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "transfer/post-transfer.spec.ts › POST /transfers › validação do corpo › TRF-08: amount com mais de 2 casas decimais responde 400",
+      "file": "transfer/post-transfer.spec.ts",
+      "line": 201,
+      "title": "POST /transfers › validação do corpo › TRF-08: amount com mais de 2 casas decimais responde 400",
+      "project": "api",
+      "tags": [
+        "@transfer",
+        "@spec:criar-transferencia"
+      ],
+      "spec_id": "criar-transferencia",
+      "service_tag": "transfer",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 68,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "transfer/post-transfer.spec.ts › POST /transfers › validação do corpo › TRF-09: description com 141 caracteres responde 400",
+      "file": "transfer/post-transfer.spec.ts",
+      "line": 220,
+      "title": "POST /transfers › validação do corpo › TRF-09: description com 141 caracteres responde 400",
+      "project": "api",
+      "tags": [
+        "@transfer",
+        "@spec:criar-transferencia"
+      ],
+      "spec_id": "criar-transferencia",
+      "service_tag": "transfer",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 49,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "transfer/post-transfer.spec.ts › POST /transfers › validação do corpo › TRF-10: Só a primeira regra violada é devolvida, na ordem R1, R2, R3, R4",
+      "file": "transfer/post-transfer.spec.ts",
+      "line": 240,
+      "title": "POST /transfers › validação do corpo › TRF-10: Só a primeira regra violada é devolvida, na ordem R1, R2, R3, R4",
+      "project": "api",
+      "tags": [
+        "@transfer",
+        "@spec:criar-transferencia"
+      ],
+      "spec_id": "criar-transferencia",
+      "service_tag": "transfer",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 52,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "transfer/post-transfer.spec.ts › POST /transfers › validação do corpo › TRF-11: Corpo ausente ou JSON malformado responde 400",
+      "file": "transfer/post-transfer.spec.ts",
+      "line": 276,
+      "title": "POST /transfers › validação do corpo › TRF-11: Corpo ausente ou JSON malformado responde 400",
+      "project": "api",
+      "tags": [
+        "@transfer",
+        "@spec:criar-transferencia"
+      ],
+      "spec_id": "criar-transferencia",
+      "service_tag": "transfer",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 41,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "transfer/post-transfer.spec.ts › POST /transfers › processamento › TRF-12: Valor a partir de 1000,00 é recusado pelo antifraude padrão e 999,99 passa",
+      "file": "transfer/post-transfer.spec.ts",
+      "line": 287,
+      "title": "POST /transfers › processamento › TRF-12: Valor a partir de 1000,00 é recusado pelo antifraude padrão e 999,99 passa",
+      "project": "api",
+      "tags": [
+        "@transfer",
+        "@spec:criar-transferencia"
+      ],
+      "spec_id": "criar-transferencia",
+      "service_tag": "transfer",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 1715,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "transfer/post-transfer.spec.ts › POST /transfers › processamento › TRF-13: Recusa do antifraude grava o motivo da regra e não movimenta",
+      "file": "transfer/post-transfer.spec.ts",
+      "line": 318,
+      "title": "POST /transfers › processamento › TRF-13: Recusa do antifraude grava o motivo da regra e não movimenta",
+      "project": "api",
+      "tags": [
+        "@transfer",
+        "@spec:criar-transferencia"
+      ],
+      "spec_id": "criar-transferencia",
+      "service_tag": "transfer",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 865,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "transfer/post-transfer.spec.ts › POST /transfers › processamento › TRF-14: Recusa por regra sem motivo grava o motivo padrão do antifraude com o id da regra",
+      "file": "transfer/post-transfer.spec.ts",
+      "line": 339,
+      "title": "POST /transfers › processamento › TRF-14: Recusa por regra sem motivo grava o motivo padrão do antifraude com o id da regra",
+      "project": "api",
+      "tags": [
+        "@transfer",
+        "@spec:criar-transferencia"
+      ],
+      "spec_id": "criar-transferencia",
+      "service_tag": "transfer",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 829,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "transfer/post-transfer.spec.ts › POST /transfers › processamento › TRF-15: failureReason maior que 400 caracteres é truncado em 400",
+      "file": "transfer/post-transfer.spec.ts",
+      "line": 353,
+      "title": "POST /transfers › processamento › TRF-15: failureReason maior que 400 caracteres é truncado em 400",
+      "project": "api",
+      "tags": [
+        "@transfer",
+        "@spec:criar-transferencia"
+      ],
+      "spec_id": "criar-transferencia",
+      "service_tag": "transfer",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 831,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "transfer/post-transfer.spec.ts › POST /transfers › processamento › TRF-16: Antifraude sem decisão a tempo termina FraudRejected por timeout",
+      "file": "transfer/post-transfer.spec.ts",
+      "line": 370,
+      "title": "POST /transfers › processamento › TRF-16: Antifraude sem decisão a tempo termina FraudRejected por timeout",
+      "project": "api",
+      "tags": [
+        "@transfer",
+        "@spec:criar-transferencia"
+      ],
+      "spec_id": "criar-transferencia",
+      "service_tag": "transfer",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 63961,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "transfer/post-transfer.spec.ts › POST /transfers › processamento › TRF-17: Origem inexistente termina Failed sem movimento no destino",
+      "file": "transfer/post-transfer.spec.ts",
+      "line": 395,
+      "title": "POST /transfers › processamento › TRF-17: Origem inexistente termina Failed sem movimento no destino",
+      "project": "api",
+      "tags": [
+        "@transfer",
+        "@spec:criar-transferencia"
+      ],
+      "spec_id": "criar-transferencia",
+      "service_tag": "transfer",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 833,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "transfer/post-transfer.spec.ts › POST /transfers › processamento › TRF-18: Origem Closed termina Failed",
+      "file": "transfer/post-transfer.spec.ts",
+      "line": 405,
+      "title": "POST /transfers › processamento › TRF-18: Origem Closed termina Failed",
+      "project": "api",
+      "tags": [
+        "@transfer",
+        "@spec:criar-transferencia"
+      ],
+      "spec_id": "criar-transferencia",
+      "service_tag": "transfer",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 860,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "transfer/post-transfer.spec.ts › POST /transfers › processamento › TRF-19: Origem Blocked termina Failed e mantém o saldo",
+      "file": "transfer/post-transfer.spec.ts",
+      "line": 415,
+      "title": "POST /transfers › processamento › TRF-19: Origem Blocked termina Failed e mantém o saldo",
+      "project": "api",
+      "tags": [
+        "@transfer",
+        "@spec:criar-transferencia"
+      ],
+      "spec_id": "criar-transferencia",
+      "service_tag": "transfer",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 847,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "transfer/post-transfer.spec.ts › POST /transfers › processamento › TRF-20: amount maior que o availableBalance termina Failed por saldo insuficiente",
+      "file": "transfer/post-transfer.spec.ts",
+      "line": 427,
+      "title": "POST /transfers › processamento › TRF-20: amount maior que o availableBalance termina Failed por saldo insuficiente",
+      "project": "api",
+      "tags": [
+        "@transfer",
+        "@spec:criar-transferencia"
+      ],
+      "spec_id": "criar-transferencia",
+      "service_tag": "transfer",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 1709,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "transfer/post-transfer.spec.ts › POST /transfers › processamento › TRF-21: Destino inexistente estorna a origem e termina Refunded",
+      "file": "transfer/post-transfer.spec.ts",
+      "line": 462,
+      "title": "POST /transfers › processamento › TRF-21: Destino inexistente estorna a origem e termina Refunded",
+      "project": "api",
+      "tags": [
+        "@transfer",
+        "@spec:criar-transferencia"
+      ],
+      "spec_id": "criar-transferencia",
+      "service_tag": "transfer",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 881,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "transfer/post-transfer.spec.ts › POST /transfers › processamento › TRF-22: Destino Closed estorna a origem e termina Refunded",
+      "file": "transfer/post-transfer.spec.ts",
+      "line": 506,
+      "title": "POST /transfers › processamento › TRF-22: Destino Closed estorna a origem e termina Refunded",
+      "project": "api",
+      "tags": [
+        "@transfer",
+        "@spec:criar-transferencia"
+      ],
+      "spec_id": "criar-transferencia",
+      "service_tag": "transfer",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 846,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "transfer/post-transfer.spec.ts › POST /transfers › processamento › TRF-23: Destino Blocked recebe o crédito normalmente",
+      "file": "transfer/post-transfer.spec.ts",
+      "line": 524,
+      "title": "POST /transfers › processamento › TRF-23: Destino Blocked recebe o crédito normalmente",
+      "project": "api",
+      "tags": [
+        "@transfer",
+        "@spec:criar-transferencia"
+      ],
+      "spec_id": "criar-transferencia",
+      "service_tag": "transfer",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 839,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "transfer/post-transfer.spec.ts › POST /transfers › processamento › TRF-24: Origem e destino inexistentes terminam Failed pelo motivo da origem",
+      "file": "transfer/post-transfer.spec.ts",
+      "line": 534,
+      "title": "POST /transfers › processamento › TRF-24: Origem e destino inexistentes terminam Failed pelo motivo da origem",
+      "project": "api",
+      "tags": [
+        "@transfer",
+        "@spec:criar-transferencia"
+      ],
+      "spec_id": "criar-transferencia",
+      "service_tag": "transfer",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 801,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "transfer/post-transfer.spec.ts › POST /transfers › processamento › TRF-25: Origem ou destino ausente (ou guid vazio) é recusado na criação (R5, R6)",
+      "file": "transfer/post-transfer.spec.ts",
+      "line": 542,
+      "title": "POST /transfers › processamento › TRF-25: Origem ou destino ausente (ou guid vazio) é recusado na criação (R5, R6)",
+      "project": "api",
+      "tags": [
+        "@transfer",
+        "@spec:criar-transferencia"
+      ],
+      "spec_id": "criar-transferencia",
+      "service_tag": "transfer",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 56,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "transfer/post-transfer.spec.ts › POST /transfers › idempotência › TRF-26: Duas requisições iguais criam duas transferências independentes",
+      "file": "transfer/post-transfer.spec.ts",
+      "line": 561,
+      "title": "POST /transfers › idempotência › TRF-26: Duas requisições iguais criam duas transferências independentes",
+      "project": "api",
+      "tags": [
+        "@transfer",
+        "@spec:criar-transferencia"
+      ],
+      "spec_id": "criar-transferencia",
+      "service_tag": "transfer",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 862,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "transfer/post-transfer.spec.ts › POST /transfers › idempotência › TRF-27: Webhook de aprovação repetido não gera débito nem crédito duplicado",
+      "file": "transfer/post-transfer.spec.ts",
+      "line": 581,
+      "title": "POST /transfers › idempotência › TRF-27: Webhook de aprovação repetido não gera débito nem crédito duplicado",
+      "project": "api",
+      "tags": [
+        "@transfer",
+        "@spec:criar-transferencia"
+      ],
+      "spec_id": "criar-transferencia",
+      "service_tag": "transfer",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 897,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "transfer/reconciliation.spec.ts › Reconciliação do antifraude › webhook descartado (Drop) › REC-01: Análise Approved com webhook descartado chega a Completed pela reconciliação",
+      "file": "transfer/reconciliation.spec.ts",
+      "line": 64,
+      "title": "Reconciliação do antifraude › webhook descartado (Drop) › REC-01: Análise Approved com webhook descartado chega a Completed pela reconciliação",
+      "project": "api",
+      "tags": [
+        "@transfer",
+        "@spec:reconciliacao-antifraude"
+      ],
+      "spec_id": "reconciliacao-antifraude",
+      "service_tag": "transfer",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 16060,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "transfer/reconciliation.spec.ts › Reconciliação do antifraude › webhook descartado (Drop) › REC-02: Análise Rejected com webhook descartado fica FraudRejected com o reason da análise",
+      "file": "transfer/reconciliation.spec.ts",
+      "line": 89,
+      "title": "Reconciliação do antifraude › webhook descartado (Drop) › REC-02: Análise Rejected com webhook descartado fica FraudRejected com o reason da análise",
+      "project": "api",
+      "tags": [
+        "@transfer",
+        "@spec:reconciliacao-antifraude"
+      ],
+      "spec_id": "reconciliacao-antifraude",
+      "service_tag": "transfer",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 17743,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "transfer/reconciliation.spec.ts › Reconciliação do antifraude › webhook com assinatura inválida (InvalidSignature) › REC-03: Transfer API recusa o webhook com 401, não muda a transferência e a reconciliação aprova",
+      "file": "transfer/reconciliation.spec.ts",
+      "line": 108,
+      "title": "Reconciliação do antifraude › webhook com assinatura inválida (InvalidSignature) › REC-03: Transfer API recusa o webhook com 401, não muda a transferência e a reconciliação aprova",
+      "project": "api",
+      "tags": [
+        "@transfer",
+        "@spec:reconciliacao-antifraude"
+      ],
+      "spec_id": "reconciliacao-antifraude",
+      "service_tag": "transfer",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 15151,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "transfer/reconciliation.spec.ts › Reconciliação do antifraude › webhook com assinatura inválida (InvalidSignature) › REC-04: Webhook Rejected com assinatura inválida vira FraudRejected pela reconciliação",
+      "file": "transfer/reconciliation.spec.ts",
+      "line": 136,
+      "title": "Reconciliação do antifraude › webhook com assinatura inválida (InvalidSignature) › REC-04: Webhook Rejected com assinatura inválida vira FraudRejected pela reconciliação",
+      "project": "api",
+      "tags": [
+        "@transfer",
+        "@spec:reconciliacao-antifraude"
+      ],
+      "spec_id": "reconciliacao-antifraude",
+      "service_tag": "transfer",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 14164,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "transfer/reconciliation.spec.ts › Reconciliação do antifraude › timeout fail-closed › REC-05: Análise ainda Pending aos 60 s leva a FraudRejected e o webhook atrasado é ignorado",
+      "file": "transfer/reconciliation.spec.ts",
+      "line": 153,
+      "title": "Reconciliação do antifraude › timeout fail-closed › REC-05: Análise ainda Pending aos 60 s leva a FraudRejected e o webhook atrasado é ignorado",
+      "project": "api",
+      "tags": [
+        "@transfer",
+        "@spec:reconciliacao-antifraude"
+      ],
+      "spec_id": "reconciliacao-antifraude",
+      "service_tag": "transfer",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 94077,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "transfer/reconciliation.spec.ts › Reconciliação do antifraude › envio da análise com falha (submitFailures) › REC-06: Até 5 falhas no envio: o retry do envio cria a análise e a transferência completa sem reconciliação",
+      "file": "transfer/reconciliation.spec.ts",
+      "line": 183,
+      "title": "Reconciliação do antifraude › envio da análise com falha (submitFailures) › REC-06: Até 5 falhas no envio: o retry do envio cria a análise e a transferência completa sem reconciliação",
+      "project": "api",
+      "tags": [
+        "@transfer",
+        "@spec:reconciliacao-antifraude"
+      ],
+      "spec_id": "reconciliacao-antifraude",
+      "service_tag": "transfer",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 3910,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "transfer/reconciliation.spec.ts › Reconciliação do antifraude › envio da análise com falha (submitFailures) › REC-07: Mais de 5 falhas no envio: a reconciliação reenvia a análise e a transferência completa",
+      "file": "transfer/reconciliation.spec.ts",
+      "line": 195,
+      "title": "Reconciliação do antifraude › envio da análise com falha (submitFailures) › REC-07: Mais de 5 falhas no envio: a reconciliação reenvia a análise e a transferência completa",
+      "project": "api",
+      "tags": [
+        "@transfer",
+        "@spec:reconciliacao-antifraude"
+      ],
+      "spec_id": "reconciliacao-antifraude",
+      "service_tag": "transfer",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 13776,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "antifraud/analyses-global.spec.ts › Análises globais do antifraude › ANL-31: take devolve as mais novas primeiro, com padrão 50 e limite entre 1 e 500",
+      "file": "antifraud/analyses-global.spec.ts",
+      "line": 39,
+      "title": "Análises globais do antifraude › ANL-31: take devolve as mais novas primeiro, com padrão 50 e limite entre 1 e 500",
+      "project": "global",
+      "tags": [
+        "@antifraud",
+        "@spec:analises-antifraude",
+        "@global"
+      ],
+      "spec_id": "analises-antifraude",
+      "service_tag": "antifraud",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 1285,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "antifraud/analyses-global.spec.ts › Análises globais do antifraude › ANL-32: DELETE /analyses apaga as análises e zera os contadores de submitFailures",
+      "file": "antifraud/analyses-global.spec.ts",
+      "line": 76,
+      "title": "Análises globais do antifraude › ANL-32: DELETE /analyses apaga as análises e zera os contadores de submitFailures",
+      "project": "global",
+      "tags": [
+        "@antifraud",
+        "@spec:analises-antifraude",
+        "@global"
+      ],
+      "spec_id": "analises-antifraude",
+      "service_tag": "antifraud",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 81,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "antifraud/rules-global.spec.ts › Regras globais do antifraude › POST /rules/reset › RUL-20: Reset descarta regras adicionadas, alteradas e removidas",
+      "file": "antifraud/rules-global.spec.ts",
+      "line": 37,
+      "title": "Regras globais do antifraude › POST /rules/reset › RUL-20: Reset descarta regras adicionadas, alteradas e removidas",
+      "project": "global",
+      "tags": [
+        "@antifraud",
+        "@spec:regras-antifraude",
+        "@global"
+      ],
+      "spec_id": "regras-antifraude",
+      "service_tag": "antifraud",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 46,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "antifraud/rules-global.spec.ts › Regras globais do antifraude › POST /rules/reset › RUL-25: Regra padrão alterada muda a decisão até o reset",
+      "file": "antifraud/rules-global.spec.ts",
+      "line": 61,
+      "title": "Regras globais do antifraude › POST /rules/reset › RUL-25: Regra padrão alterada muda a decisão até o reset",
+      "project": "global",
+      "tags": [
+        "@antifraud",
+        "@spec:regras-antifraude",
+        "@global"
+      ],
+      "spec_id": "regras-antifraude",
+      "service_tag": "antifraud",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 1004,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "antifraud/rules-global.spec.ts › Regras globais do antifraude › PUT /rules › RUL-21: Substitui a lista inteira, na ordem enviada",
+      "file": "antifraud/rules-global.spec.ts",
+      "line": 80,
+      "title": "Regras globais do antifraude › PUT /rules › RUL-21: Substitui a lista inteira, na ordem enviada",
+      "project": "global",
+      "tags": [
+        "@antifraud",
+        "@spec:regras-antifraude",
+        "@global"
+      ],
+      "spec_id": "regras-antifraude",
+      "service_tag": "antifraud",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 22,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "antifraud/rules-global.spec.ts › Regras globais do antifraude › PUT /rules › RUL-22: Lista vazia é aceita e toda análise é aprovada",
+      "file": "antifraud/rules-global.spec.ts",
+      "line": 96,
+      "title": "Regras globais do antifraude › PUT /rules › RUL-22: Lista vazia é aceita e toda análise é aprovada",
+      "project": "global",
+      "tags": [
+        "@antifraud",
+        "@spec:regras-antifraude",
+        "@global"
+      ],
+      "spec_id": "regras-antifraude",
+      "service_tag": "antifraud",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 354,
+      "runs": [
+        "passed"
+      ]
+    },
+    {
+      "test_id": "antifraud/rules-global.spec.ts › Regras globais do antifraude › PUT /rules › RUL-23: Ids repetidos sem diferenciar maiúsculas respondem 400 e a lista não muda",
+      "file": "antifraud/rules-global.spec.ts",
+      "line": 105,
+      "title": "Regras globais do antifraude › PUT /rules › RUL-23: Ids repetidos sem diferenciar maiúsculas respondem 400 e a lista não muda",
+      "project": "global",
+      "tags": [
+        "@antifraud",
+        "@spec:regras-antifraude",
+        "@global"
+      ],
+      "spec_id": "regras-antifraude",
+      "service_tag": "antifraud",
+      "result": "failed",
+      "flaky": false,
+      "duration_ms": 16,
+      "runs": [
+        "failed",
+        "failed",
+        "failed"
+      ],
+      "error": "Error: [{\"id\":\"af-3e308e36-0549-4a2c-9cd1-49943efe1023\",\"enabled\":true,\"decision\":\"Rejected\",\"reason\":null,\"minAmount\":null,\"maxAmount\":null,\"sourceAccountIds\":[\"dad742bd-79a1-448a-b05f-93d9f0e4f547\"],\"destinationAccountIds\":null,\"descriptionContains\":null,\"delayMs\":null,\"delivery\":\"Normal\",\"submitFailures\":0},{\"id\":\"outra-regra\",\"enabled\":true,\"decision\":\"Rejected\",\"reason\":null,\"minAmount\":null,\"maxAmount\":null,\"sourceAccountIds\":[\"01d0972e-3188-45a3-9d63-a5286b68c28e\"],\"destinationAccountIds\":null,\"descriptionContains\":null,\"delayMs\":null,\"delivery\":\"Normal\",\"submitFailures\":0},{\"id\":\"AF-3E"
+    },
+    {
+      "test_id": "antifraud/rules-global.spec.ts › Regras globais do antifraude › PUT /rules › RUL-24: Erros por regra usam o índice e nada é aplicado",
+      "file": "antifraud/rules-global.spec.ts",
+      "line": 118,
+      "title": "Regras globais do antifraude › PUT /rules › RUL-24: Erros por regra usam o índice e nada é aplicado",
+      "project": "global",
+      "tags": [
+        "@antifraud",
+        "@spec:regras-antifraude",
+        "@global"
+      ],
+      "spec_id": "regras-antifraude",
+      "service_tag": "antifraud",
+      "result": "passed",
+      "flaky": false,
+      "duration_ms": 122,
+      "runs": [
+        "passed"
+      ]
+    }
+  ]
+}

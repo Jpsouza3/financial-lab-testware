@@ -1,0 +1,27 @@
+diff --git a/financial-lab-account.Business/Services/BalanceHoldService.cs b/financial-lab-account.Business/Services/BalanceHoldService.cs
+index df78a2e..74483f4 100644
+--- a/financial-lab-account.Business/Services/BalanceHoldService.cs
++++ b/financial-lab-account.Business/Services/BalanceHoldService.cs
+@@ -1,7 +1,7 @@
+-using System.Text.RegularExpressions;
+ using financial_lab_account.Business.Exceptions;
+ using financial_lab_account.Business.Interfaces;
+ using financial_lab_account.Business.Models;
++using System.Text.RegularExpressions;
+ 
+ namespace financial_lab_account.Business.Services;
+ 
+diff --git a/financial-lab-antifraud.Api/Rules/RuleValidator.cs b/financial-lab-antifraud.Api/Rules/RuleValidator.cs
+index cb94ced..cd38df8 100644
+--- a/financial-lab-antifraud.Api/Rules/RuleValidator.cs
++++ b/financial-lab-antifraud.Api/Rules/RuleValidator.cs
+@@ -4,8 +4,8 @@ namespace financial_lab_antifraud.Api.Rules;
+ 
+ public static class RuleValidator
+ {
+-    public const int MaxIdLength = 64;
+     public const int MaxDelayMs = 120_000;
++    public const int MaxIdLength = 64;
+     public const int MaxSubmitFailures = 20;
+ 
+     public static Dictionary<string, string[]> Validate(IReadOnlyList<FraudRule> rules)

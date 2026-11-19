@@ -1,0 +1,65 @@
+diff --git a/financial-lab-account.Business/Services/BalanceHoldService.cs b/financial-lab-account.Business/Services/BalanceHoldService.cs
+index df78a2e..74483f4 100644
+--- a/financial-lab-account.Business/Services/BalanceHoldService.cs
++++ b/financial-lab-account.Business/Services/BalanceHoldService.cs
+@@ -1,7 +1,7 @@
+-using System.Text.RegularExpressions;
+ using financial_lab_account.Business.Exceptions;
+ using financial_lab_account.Business.Interfaces;
+ using financial_lab_account.Business.Models;
++using System.Text.RegularExpressions;
+ 
+ namespace financial_lab_account.Business.Services;
+ 
+diff --git a/financial-lab-account.Business/Services/Cpf.cs b/financial-lab-account.Business/Services/Cpf.cs
+index 7759005..423cb05 100644
+--- a/financial-lab-account.Business/Services/Cpf.cs
++++ b/financial-lab-account.Business/Services/Cpf.cs
+@@ -2,6 +2,7 @@ namespace financial_lab_account.Business.Services;
+ 
+ public static class Cpf
+ {
++    /// <summary>Valida um CPF sem máscara.</summary>
+     public static bool IsValid(string? value)
+     {
+         if (value is not { Length: 11 } || !value.All(char.IsAsciiDigit) || value.Distinct().Count() == 1)
+diff --git a/financial-lab-account.Business/Services/StatementService.cs b/financial-lab-account.Business/Services/StatementService.cs
+index b680386..260911d 100644
+--- a/financial-lab-account.Business/Services/StatementService.cs
++++ b/financial-lab-account.Business/Services/StatementService.cs
+@@ -9,8 +9,8 @@ public class StatementService(IAccountRepository repository, TimeProvider clock)
+ {
+     private const int MaxPeriodDays = 90;
+     private const int DefaultPeriodDays = 30;
+-    private const int DefaultPageSize = 20;
+     private const int MaxPageSize = 100;
++    private const int DefaultPageSize = 20;
+     private static readonly Dictionary<string, EntryType> Types = Enum.GetValues<EntryType>()
+         .ToDictionary(t => t.ToString(), StringComparer.Ordinal);
+ 
+diff --git a/financial-lab-antifraud.Api/Models/FraudRule.cs b/financial-lab-antifraud.Api/Models/FraudRule.cs
+index 17f4bb6..c7622bb 100644
+--- a/financial-lab-antifraud.Api/Models/FraudRule.cs
++++ b/financial-lab-antifraud.Api/Models/FraudRule.cs
+@@ -32,6 +32,7 @@ public class FraudRule
+     public DeliveryMode Delivery { get; set; } = DeliveryMode.Normal;
+     public int SubmitFailures { get; set; }
+ 
++    /// <summary>Verdadeiro quando todas as condições informadas casam com a análise.</summary>
+     public bool Matches(AnalysisRequest request)
+         => Enabled
+            && (MinAmount is null || request.Amount >= MinAmount)
+diff --git a/financial-lab-transfer.Business/Services/TransferService.cs b/financial-lab-transfer.Business/Services/TransferService.cs
+index 75884c6..e28c4c2 100644
+--- a/financial-lab-transfer.Business/Services/TransferService.cs
++++ b/financial-lab-transfer.Business/Services/TransferService.cs
+@@ -124,6 +124,9 @@ public class TransferService(ITransferRepository repository, IAccountGateway acc
+                 transfer.RejectRefund(reason);
+         }, ct);
+ 
++    private static bool IsFinal(Transfer transfer)
++        => transfer.Status is TransferStatus.Completed or TransferStatus.Failed or TransferStatus.Refunded;
++
+     private async Task<Transfer?> HandleAsync(Guid accountId, string endToEndId,
+         Func<Transfer, TransferLeg, Task> apply, CancellationToken ct)
+     {
